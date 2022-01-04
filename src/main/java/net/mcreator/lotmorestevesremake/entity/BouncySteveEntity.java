@@ -11,7 +11,6 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.common.MinecraftForge;
 
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
@@ -114,7 +113,8 @@ public class BouncySteveEntity extends LotmorestevesremakeModElements.ModElement
 
 	public static class CustomEntity extends MonsterEntity {
 		private static final DataParameter<Integer> DEATH_TICKS = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
-		private int deathTicks;
+		public int deathTicks;
+		public boolean wasOnGround;
 
 		public boolean isOnSameTeam(Entity entityIn) {
 			if (super.isOnSameTeam(entityIn))
@@ -135,33 +135,26 @@ public class BouncySteveEntity extends LotmorestevesremakeModElements.ModElement
 		protected void onDeathUpdate() {
 			this.deathTicks++;
 			this.setDeathTicksState(deathTicks);
-			if (deathTicks > 80) {
+			if (deathTicks % 5 == 0) {
 				this.playSound(SoundEvents.ENTITY_SLIME_DEATH, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 				if (world.isRemote) {
-					int i = 4;
-					for (int j = 0; j < i * 8; ++j) {
+					float i = (2 + deathTicks / 40) * this.getWidth() * 4;
+					for (int j = 0; j < i * 10; ++j) {
 						float f = this.rand.nextFloat() * ((float) Math.PI * 2F);
 						float f1 = this.rand.nextFloat() * 0.5F + 0.5F;
-						float f2 = MathHelper.sin(f) * (float) i * 0.5F * f1;
-						float f3 = MathHelper.cos(f) * (float) i * 0.5F * f1;
+						float f2 = MathHelper.sin(f) * (float) i * 0.5F * f1 * (rand.nextFloat() - 0.5f) * 2;
+						float f3 = MathHelper.cos(f) * (float) i * 0.5F * f1 * (rand.nextFloat() - 0.5f) * 2;
 						this.world.addParticle(ParticleTypes.ITEM_SLIME, this.getPosX() + (double) f2, this.getPosY(), this.getPosZ() + (double) f3,
-								0.0D, 0.0D, 0.0D);
+								0.0D, rand.nextFloat(), 0.0D);
 					}
 				}
+			}
+			if (deathTicks > 80) {
 				this.remove();
 			}
 		}
 
 		public boolean onLivingFall(float distance, float damageMultiplier) {
-			this.playSound(SoundEvents.ENTITY_SLIME_SQUISH, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-			if (world instanceof ServerWorld) {
-				for (int i = 0; i < 10; ++i) {
-					this.world.addParticle(ParticleTypes.SOUL, this.getPosXRandom(1.5), this.getPosY() + Math.random() / 4, this.getPosZRandom(1.5),
-							0.0D, 0.0D, 0.0D);
-				}
-			}
-			if (this.isAlive())
-				this.swingArm(Hand.MAIN_HAND);
 			return false;
 		}
 
@@ -225,8 +218,25 @@ public class BouncySteveEntity extends LotmorestevesremakeModElements.ModElement
 			}
 		}
 
-		public void livingTick() {
-			super.livingTick();
+		public void tick() {
+			super.tick();
+			if (this.onGround && !this.wasOnGround) {
+				this.playSound(SoundEvents.ENTITY_SLIME_SQUISH, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+				if (world.isRemote) {
+					float i = this.getWidth() * 6;
+					for (int j = 0; j < i * 8; ++j) {
+						float f = this.rand.nextFloat() * ((float) Math.PI * 2F);
+						float f1 = this.rand.nextFloat() * 0.5F + 0.5F;
+						float f2 = MathHelper.sin(f) * (float) i * 0.5F * f1;
+						float f3 = MathHelper.cos(f) * (float) i * 0.5F * f1;
+						this.world.addParticle(ParticleTypes.ITEM_SLIME, this.getPosX() + (double) f2, this.getPosY(), this.getPosZ() + (double) f3,
+								0.0D, 0.0D, 0.0D);
+					}
+				}
+				if (this.isAlive())
+					this.swingArm(Hand.MAIN_HAND);
+			}
+			this.wasOnGround = this.onGround;
 		}
 
 		private float getAttackDamage() {

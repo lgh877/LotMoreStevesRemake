@@ -1,0 +1,11 @@
+{
+  "_fv": 24,
+  "_type": "tab",
+  "definition": {
+    "name": "Weapons Of Steves",
+    "icon": {
+      "value": "Items.SLIME_BALL"
+    },
+    "showSearch": false
+  }
+}
