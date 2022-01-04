@@ -1,0 +1,20 @@
+{
+  "hostile_steve_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:steve_hurt",
+        "stream": false
+      }
+    ]
+  },
+  "bouncy_steve_death": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:bouncy_steve_death",
+        "stream": false
+      }
+    ]
+  }
+}

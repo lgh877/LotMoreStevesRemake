@@ -1,0 +1,17 @@
+{
+  "_fv": 24,
+  "_type": "tag",
+  "definition": {
+    "type": "Entities",
+    "items": [],
+    "blocks": [],
+    "functions": [],
+    "entities": [
+      {
+        "value": "CUSTOM:BouncySteve"
+      }
+    ],
+    "name": "we_are_steves",
+    "namespace": "mod"
+  }
+}

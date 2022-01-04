@@ -1,0 +1,145 @@
+{
+  "mod_elements": [
+    {
+      "name": "MeetTheSteves",
+      "type": "tab",
+      "sortid": 1,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "meet_the_steves"
+    },
+    {
+      "name": "SpawnInOverworldOnly",
+      "type": "procedure",
+      "sortid": 2,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "spawn_in_overworld_only",
+      "metadata": {
+        "return_type": "logic",
+        "dependencies": [
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BouncySteve",
+      "type": "livingentity",
+      "sortid": 2,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "bouncy_steve",
+      "path": "~/Mobs/BouncySteve"
+    },
+    {
+      "name": "WeAreSteves",
+      "type": "tag",
+      "sortid": 3,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "we_are_steves"
+    },
+    {
+      "name": "BouncySteveLootTable",
+      "type": "loottable",
+      "sortid": 4,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "bouncy_steve_loot_table",
+      "path": "~/Mobs/BouncySteve"
+    },
+    {
+      "name": "Dsaf",
+      "type": "procedure",
+      "sortid": 5,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "dsaf",
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "name": "y",
+            "type": "number"
+          },
+          {
+            "name": "z",
+            "type": "number"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/Mobs/BouncySteve"
+    }
+  ],
+  "variable_elements": [],
+  "sound_elements": [
+    {
+      "name": "hostile_steve_hurt",
+      "files": [
+        "steve_hurt"
+      ],
+      "category": "hostile",
+      "subtitle": ""
+    },
+    {
+      "name": "bouncy_steve_death",
+      "files": [
+        "bouncy_steve_death"
+      ],
+      "category": "hostile",
+      "subtitle": ""
+    }
+  ],
+  "language_map": {
+    "en_us": {
+      "subtitles.bouncy_steve_death": "",
+      "item.lotmorestevesremake.bouncy_steve_spawn_egg": "Bouncy Steve Spawn Egg",
+      "subtitles.hostile_steve_hurt": "",
+      "itemGroup.tabmeet_the_steves": "Meet The Steves!",
+      "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve"
+    }
+  },
+  "foldersRoot": {
+    "name": "~",
+    "children": [
+      {
+        "name": "Mobs",
+        "children": [
+          {
+            "name": "BouncySteve",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "workspaceSettings": {
+    "modid": "lotmorestevesremake",
+    "modName": "LotMoreStevesRemake",
+    "version": "1.0.0",
+    "author": "±ÔÇõ, MCreator",
+    "websiteURL": "https://mcreator.net",
+    "license": "Academic Free License v3.0",
+    "disableForgeVersionCheck": true,
+    "serverSideOnly": false,
+    "requiredMods": [],
+    "dependencies": [],
+    "dependants": [],
+    "mcreatorDependencies": [],
+    "currentGenerator": "forge-1.16.5",
+    "credits": "Created using mod maker MCreator - https://mcreator.net/about",
+    "modElementsPackage": "net.mcreator.lotmorestevesremake",
+    "lockBaseModFiles": false
+  },
+  "mcreatorVersion": 202100353117
+}
