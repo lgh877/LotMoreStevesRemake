@@ -1,8 +1,13 @@
 {
+  "advancements.gaining_slime_bomb_launcher_recipe.descr": "Kill the giant bouncy Steve",
   "subtitles.bouncy_steve_death": "",
+  "item.lotmorestevesremake.slime_bomb": "Slime Bomb Launcher",
   "item.lotmorestevesremake.bouncy_steve_spawn_egg": "Bouncy Steve Spawn Egg",
   "subtitles.hostile_steve_hurt": "",
+  "entity.lotmorestevesremake.giant_bouncy_steve": "Giant Bouncy Steve",
   "itemGroup.tabmeet_the_steves": "Meet The Steves!",
-  "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve",
-  "itemGroup.tabweapons_of_steves": "Weapons Of Steves"
+  "advancements.gaining_slime_bomb_launcher_recipe.title": "I love jelly!",
+  "item.lotmorestevesremake.giant_bouncy_steve_spawn_egg": "Giant Bouncy Steve Spawn Egg",
+  "itemGroup.tabweapons_of_steves": "Weapons Of Steves",
+  "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve"
 }

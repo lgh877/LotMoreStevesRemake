@@ -1,0 +1,49 @@
+{
+  "_fv": 24,
+  "_type": "rangeditem",
+  "definition": {
+    "renderType": 0,
+    "texture": "slime_bomb_launcher",
+    "customModelName": "Normal",
+    "name": "Slime Bomb Launcher",
+    "specialInfo": [],
+    "creativeTab": {
+      "value": "CUSTOM:WeaponsOfSteves"
+    },
+    "stackSize": 1,
+    "ammoItem": {
+      "value": "Items.SLIME_BALL"
+    },
+    "shootConstantly": false,
+    "usageCount": 100,
+    "actionSound": {
+      "value": "entity.slime.attack"
+    },
+    "hasGlow": false,
+    "animation": "bow",
+    "enableMeleeDamage": false,
+    "damageVsEntity": 0.0,
+    "onRangedItemUsed": {
+      "name": "SlimeBombRangedItemUsed"
+    },
+    "bulletPower": 1.0,
+    "bulletDamage": 2.0,
+    "bulletKnockback": 0,
+    "bulletParticles": false,
+    "bulletIgnitesFire": false,
+    "bulletItemTexture": {
+      "value": "Items.SLIME_BALL"
+    },
+    "bulletModel": "Default",
+    "customBulletModelTexture": "",
+    "onBulletHitsBlock": {
+      "name": "SlimeBombProjectileHitsLivingEntity"
+    },
+    "onBulletHitsEntity": {
+      "name": "SlimeBombProjectileHitsLivingEntity2"
+    },
+    "onBulletFlyingTick": {
+      "name": "SlimeBombWhileProjectileFlyingTick"
+    }
+  }
+}

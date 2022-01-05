@@ -9,6 +9,9 @@
     "entities": [
       {
         "value": "CUSTOM:BouncySteve"
+      },
+      {
+        "value": "CUSTOM:GiantBouncySteve"
       }
     ],
     "name": "we_are_steves",
