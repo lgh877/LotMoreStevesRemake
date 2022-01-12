@@ -4,9 +4,9 @@ package net.mcreator.lotmorestevesremake.itemgroup;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.block.Blocks;
 
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 
@@ -22,7 +22,7 @@ public class MeetTheStevesItemGroup extends LotmorestevesremakeModElements.ModEl
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public ItemStack createIcon() {
-				return new ItemStack(Items.ZOMBIE_HEAD);
+				return new ItemStack(Blocks.PLAYER_HEAD);
 			}
 
 			@OnlyIn(Dist.CLIENT)

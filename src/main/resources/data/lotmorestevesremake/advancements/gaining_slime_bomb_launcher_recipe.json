@@ -1,6 +1,5 @@
 {
   "display": {
-    "background": "minecraft:textures/block/stone.png",
     "icon": {
       "item": "lotmorestevesremake:slime_bomb"
     },
@@ -10,22 +9,29 @@
     "description": {
       "translate": "advancements.gaining_slime_bomb_launcher_recipe.descr"
     },
-    "frame": "task",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
     "gaining_slime_bomb_launcher_recipe": {
-      "trigger": "minecraft:consume_item",
+      "trigger": "minecraft:inventory_changed",
       "conditions": {
-        "item": {
-          "item": "lotmorestevesremake:slime_bomb"
-        }
+        "items": [
+          {
+            "item": "lotmorestevesremake:slime_bomb",
+            "count": {
+              "min": 1,
+              "max": 64
+            }
+          }
+        ]
       }
     }
   },
   "rewards": {
     "experience": 40
-  }
+  },
+  "parent": "lotmorestevesremake:meet_the_steves_advancement"
 }

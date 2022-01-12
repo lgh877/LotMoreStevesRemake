@@ -27,7 +27,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Hand;
 import net.minecraft.util.DamageSource;
-import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.datasync.DataSerializers;
@@ -53,23 +53,15 @@ import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 
+import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
 import net.mcreator.lotmorestevesremake.item.SlimeBombItem;
 import net.mcreator.lotmorestevesremake.entity.BouncySteveEntity;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class SlimySteveEntity extends MonsterEntity {
+public class SlimySteveEntity extends AggressiveSteveEntity {
 	private static final DataParameter<Integer> DEATH_TICKS = EntityDataManager.createKey(SlimySteveEntity.class, DataSerializers.VARINT);
 	public int deathTicks;
 	public boolean wasOnGround;
-
-	public boolean isOnSameTeam(Entity entityIn) {
-		if (super.isOnSameTeam(entityIn))
-			return true;
-		else if (EntityTypeTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:we_are_steves")).contains(entityIn.getType()))
-			return true;
-		else
-			return false;
-	}
 
 	@Override
 	protected void registerData() {
@@ -163,7 +155,7 @@ public class SlimySteveEntity extends MonsterEntity {
 		this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1));
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setCallsForHelp());
 		this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-		this.goalSelector.addGoal(5, new SwimGoal(this));
+		this.goalSelector.addGoal(0, new SwimGoal(this));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
 		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
@@ -192,8 +184,8 @@ public class SlimySteveEntity extends MonsterEntity {
 		}
 	}
 
-	public void tick() {
-		super.tick();
+	public void livingTick() {
+		super.livingTick();
 		if (!this.isPassenger() && this.isAlive()) {
 			if (rand.nextInt(100) == 0 && (this.onGround) || (rand.nextInt(20) == 0 && (this.isInLava() || this.isInWater()))) {
 				this.jump();
@@ -228,8 +220,6 @@ public class SlimySteveEntity extends MonsterEntity {
 	}
 
 	public boolean attackEntityFrom(DamageSource damagesource, float amount) {
-		if (damagesource.getTrueSource() instanceof LivingEntity && this.isOnSameTeam(damagesource.getTrueSource()))
-			return false;
 		return super.attackEntityFrom(damagesource, amount);
 	}
 
@@ -237,6 +227,7 @@ public class SlimySteveEntity extends MonsterEntity {
 		this.playSound(SoundEvents.ENTITY_SLIME_ATTACK, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 		for (LivingEntity livingentity : this.world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(1.5f, 0, 1.5f))) {
 			if (!this.isOnSameTeam(livingentity)) {
+				livingentity.addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0, (true), (false)));
 				livingentity.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackDamage() / 3);
 				this.applyEnchantments(this, livingentity);
 				livingentity.hurtResistantTime = 0;

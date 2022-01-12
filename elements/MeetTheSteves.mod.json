@@ -4,7 +4,7 @@
   "definition": {
     "name": "Meet The Steves!",
     "icon": {
-      "value": "Items.SKULL#3"
+      "value": "Blocks.SKULL#3"
     },
     "showSearch": false
   }

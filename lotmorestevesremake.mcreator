@@ -244,6 +244,158 @@
       "locked_code": false,
       "registry_name": "giant_bouncy_steve_loot_table",
       "path": "~/Overworld/Mobs/BouncySteve"
+    },
+    {
+      "name": "MeetTheStevesAdvancement",
+      "type": "achievement",
+      "sortid": 15,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "meet_the_steves_advancement"
+    },
+    {
+      "name": "Stevager",
+      "type": "livingentity",
+      "sortid": 16,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "stevager",
+      "path": "~/Overworld/Mobs/Stevillagers"
+    },
+    {
+      "name": "InfectionEvent",
+      "type": "procedure",
+      "sortid": 17,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "infection_event",
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          },
+          {
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "name": "y",
+            "type": "number"
+          },
+          {
+            "name": "z",
+            "type": "number"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/InfectionEvent"
+    },
+    {
+      "name": "StevillagersSpawnCondition",
+      "type": "procedure",
+      "sortid": 18,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "stevillagers_spawn_condition",
+      "metadata": {
+        "return_type": "logic",
+        "dependencies": [
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/Overworld/Mobs/Stevillagers"
+    },
+    {
+      "name": "Stevindicator",
+      "type": "livingentity",
+      "sortid": 18,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "stevindicator",
+      "path": "~/Overworld/Mobs/Stevillagers"
+    },
+    {
+      "name": "SteveFaceParticle",
+      "type": "particle",
+      "sortid": 19,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "steve_face_particle",
+      "path": "~/Particles"
+    },
+    {
+      "name": "CursedDiversionOnEffectActiveTick",
+      "type": "procedure",
+      "sortid": 20,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "cursed_diversion_on_effect_active_tick",
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          },
+          {
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "name": "y",
+            "type": "number"
+          },
+          {
+            "name": "z",
+            "type": "number"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/Effects"
+    },
+    {
+      "name": "CursedDiversion",
+      "type": "potioneffect",
+      "sortid": 20,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "cursed_diversion",
+      "path": "~/Effects"
+    },
+    {
+      "name": "AggressiveSteveEntity",
+      "type": "code",
+      "sortid": 21,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "aggressive_steve_entity"
+    },
+    {
+      "name": "Sdasaadsf",
+      "type": "procedure",
+      "sortid": 22,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "sdasaadsf",
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          }
+        ]
+      }
     }
   ],
   "variable_elements": [],
@@ -267,15 +419,22 @@
   ],
   "language_map": {
     "en_us": {
-      "advancements.gaining_slime_bomb_launcher_recipe.descr": "Kill the giant bouncy Steve",
       "subtitles.bouncy_steve_death": "",
-      "item.lotmorestevesremake.slime_bomb": "Slime Bomb Launcher",
+      "advancements.meet_the_steves_advancement.descr": "So, you\u0027ve meet them.",
       "item.lotmorestevesremake.bouncy_steve_spawn_egg": "Bouncy Steve Spawn Egg",
-      "subtitles.hostile_steve_hurt": "",
+      "entity.lotmorestevesremake.stevindicator": "Stevindicator",
       "entity.lotmorestevesremake.giant_bouncy_steve": "Giant Bouncy Steve",
-      "itemGroup.tabmeet_the_steves": "Meet The Steves!",
-      "advancements.gaining_slime_bomb_launcher_recipe.title": "I love jelly!",
+      "item.lotmorestevesremake.stevager_spawn_egg": "Stevager Spawn Egg",
       "item.lotmorestevesremake.giant_bouncy_steve_spawn_egg": "Giant Bouncy Steve Spawn Egg",
+      "advancements.gaining_slime_bomb_launcher_recipe.title": "I love jelly!",
+      "advancements.gaining_slime_bomb_launcher_recipe.descr": "Kill the giant bouncy Steve",
+      "entity.lotmorestevesremake.stevager": "Stevager",
+      "effect.cursed_diversion": "Cursed Diversion",
+      "item.lotmorestevesremake.slime_bomb": "Slime Bomb Launcher",
+      "subtitles.hostile_steve_hurt": "",
+      "advancements.meet_the_steves_advancement.title": "Meet The Steves!",
+      "item.lotmorestevesremake.stevindicator_spawn_egg": "Stevindicator Spawn Egg",
+      "itemGroup.tabmeet_the_steves": "Meet The Steves!",
       "itemGroup.tabweapons_of_steves": "Weapons Of Steves",
       "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve"
     }
@@ -305,10 +464,30 @@
               {
                 "name": "BouncySteve",
                 "children": []
+              },
+              {
+                "name": "Stevillagers",
+                "children": []
               }
             ]
+          },
+          {
+            "name": "Blocks",
+            "children": []
           }
         ]
+      },
+      {
+        "name": "InfectionEvent",
+        "children": []
+      },
+      {
+        "name": "Particles",
+        "children": []
+      },
+      {
+        "name": "Effects",
+        "children": []
       }
     ]
   },

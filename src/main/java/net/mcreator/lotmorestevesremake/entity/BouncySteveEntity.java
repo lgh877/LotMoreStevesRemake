@@ -10,6 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.Item;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -52,7 +53,14 @@ public class BouncySteveEntity extends LotmorestevesremakeModElements.ModElement
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 5, 1, 1));
+		boolean biomeCriteria = false;
+		if (new ResourceLocation("swamp").equals(event.getName()))
+			biomeCriteria = true;
+		if (new ResourceLocation("swamp_hills").equals(event.getName()))
+			biomeCriteria = true;
+		if (!biomeCriteria)
+			return;
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 10, 1, 4));
 	}
 
 	@Override
@@ -81,5 +89,4 @@ public class BouncySteveEntity extends LotmorestevesremakeModElements.ModElement
 			event.put(entity, ammma.create());
 		}
 	}
-
 }
