@@ -17,21 +17,17 @@ package net.mcreator.lotmorestevesremake;
 import net.minecraftforge.fml.common.Mod;
 
 import net.minecraft.world.World;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 
 import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
 import net.mcreator.lotmorestevesremake.entity.StevagerEntity;
-
-import java.util.EnumSet;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AggressiveSteveEntity extends MonsterEntity {
@@ -64,26 +60,7 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	}
 
 	public boolean attackEntityAsMob(Entity entityIn) {
-		((LivingEntity) entityIn).addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0, (true), (false)));
+		((LivingEntity) entityIn).addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
 		return super.attackEntityAsMob(entityIn);
-	}
-
-	public class LockAngle extends Goal {
-		float stopTime;
-
-		public LockAngle(float amount) {
-			this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-			float stopTime = MathHelper.clamp(amount, 0, 1);
-		}
-
-		public boolean shouldExecute() {
-			return AggressiveSteveEntity.this.isSwingInProgress;
-		}
-
-		public void tick() {
-			if (AggressiveSteveEntity.this.swingProgress < stopTime && AggressiveSteveEntity.this.getAttackTarget() != null) {
-				AggressiveSteveEntity.this.faceEntity(AggressiveSteveEntity.this.getAttackTarget(), 30F, 30F);
-			}
-		}
 	}
 }

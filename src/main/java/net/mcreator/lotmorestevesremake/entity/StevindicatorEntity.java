@@ -19,6 +19,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Hand;
+import net.minecraft.util.GroundPathHelper;
 import net.minecraft.util.DamageSource;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.network.IPacket;
@@ -30,6 +31,7 @@ import net.minecraft.item.Item;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
@@ -86,7 +88,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 10, 1, 4));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 5, 2, 4));
 	}
 
 	@Override
@@ -115,14 +117,13 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 	}
 
 	public static class CustomEntity extends AggressiveSteveEntity {
-		private boolean attack;
-		private boolean isBreakDoorsTaskSet = true;
+		public boolean attack;
 
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);
 		}
 
-		public CustomEntity(EntityType<CustomEntity> type, World world) {
+		public CustomEntity(EntityType<? extends MonsterEntity> type, World world) {
 			super(type, world);
 			experienceValue = 15;
 			stepHeight = 1.5f;
@@ -138,6 +139,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
+			this.goalSelector.addGoal(1, new SwimGoal(this));
 			this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setCallsForHelp());
 			this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
 			this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
@@ -157,7 +159,6 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 			});
 			this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1));
 			this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
-			this.goalSelector.addGoal(0, new SwimGoal(this));
 		}
 
 		protected double getAttackReach(LivingEntity attackTarget) {
@@ -165,27 +166,31 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 		}
 
 		public boolean attackEntityFrom(DamageSource source, float amount) {
-			double d0 = this.getDistanceSq(source.getTrueSource());
-			if (source.getTrueSource() instanceof LivingEntity)
-				if (!this.isSwingInProgress && this.getAttackReach((LivingEntity) source.getTrueSource()) > d0 * 0.3f) {
-					this.swingArm(Hand.MAIN_HAND);
-					this.attack = false;
-				}
+			if (!this.isSwingInProgress) {
+				this.swingArm(Hand.MAIN_HAND);
+				this.attack = false;
+			}
 			return super.attackEntityFrom(source, amount);
 		}
 
 		public void livingTick() {
 			super.livingTick();
-			((GroundPathNavigator) this.getNavigator()).setBreakDoors(true);
+			if (GroundPathHelper.isGroundNavigator(this))
+				((GroundPathNavigator) this.getNavigator()).setBreakDoors(true);
 			if (this.isAlive()) {
-				if (this.getAttackTarget() != null && this.isSwingInProgress) {
+				this.attackProcedure();
+			}
+		}
+
+		public void attackProcedure() {
+			if (this.isSwingInProgress && !this.attack && this.swingProgress > 0.3f) {
+				this.attack = true;
+				this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
+				if (this.getAttackTarget() != null) {
+					this.getAttackTarget().hurtResistantTime = 0;
 					double d0 = this.getDistanceSq(this.getAttackTarget());
-					if (!this.attack && this.swingProgress > 0.3f) {
-						this.getAttackTarget().hurtResistantTime = 0;
-						this.attack = true;
-						this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
-						if (d0 <= this.getAttackReach(this.getAttackTarget()))
-							this.attackEntityAsMob(this.getAttackTarget());
+					if (d0 <= this.getAttackReach(this.getAttackTarget())) {
+						this.attackEntityAsMob(this.getAttackTarget());
 					}
 				}
 			}
@@ -253,18 +258,18 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 				this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
 				this.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
 				this.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHP + 80);
-				this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
+				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHP * 4);
+				this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed * 0.75f);
 				this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
 				this.getAttribute(Attributes.ARMOR).setBaseValue(15);
 				this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(damage + 2);
-			} else if (rand.nextInt(70) == 0) {
+			} else if (rand.nextInt(50) == 0) {
 				this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
 				this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
 				this.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
 				this.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHP + 40);
-				this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed + 0.24);
+				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHP * 2.5f);
+				this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed * 1.5f);
 				this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(damage + 2);
 			}
 			this.setHealth(this.getMaxHealth());

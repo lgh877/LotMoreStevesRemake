@@ -93,8 +93,12 @@ public class SlimySteveEntity extends AggressiveSteveEntity {
 
 	protected void jump() {
 		Vector3d vector3d = this.getMotion();
-		this.setMotion(vector3d.x * 1.5f, (double) this.getJumpUpwardsMotion() * 2, vector3d.z * 1.5f);
+		this.setMotion(this.getLookVec().x * 0.5f * jumpStrength(), this.getJumpFactor(), this.getLookVec().z * 0.5f * jumpStrength());
 		this.isAirBorne = true;
+	}
+
+	protected float jumpStrength() {
+		return this.getAttackTarget() == null ? 1 : (float) Math.pow(this.getDistance(this.getAttackTarget()), 0.25);
 	}
 
 	public boolean onLivingFall(float distance, float damageMultiplier) {
@@ -139,6 +143,7 @@ public class SlimySteveEntity extends AggressiveSteveEntity {
 		super(type, world);
 		experienceValue = 5;
 		setNoAI(false);
+		jumpMovementFactor = 0.1f;
 		stepHeight = 1.5f;
 	}
 

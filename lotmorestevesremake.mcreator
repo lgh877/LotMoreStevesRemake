@@ -382,20 +382,66 @@
       "registry_name": "aggressive_steve_entity"
     },
     {
-      "name": "Sdasaadsf",
-      "type": "procedure",
+      "name": "StevindicatorBig",
+      "type": "livingentity",
       "sortid": 22,
       "compiles": true,
       "locked_code": true,
-      "registry_name": "sdasaadsf",
+      "registry_name": "stevindicator_big",
+      "path": "~/Overworld/Mobs/Stevillagers"
+    },
+    {
+      "name": "HouseRelatedBlocks",
+      "type": "tag",
+      "sortid": 23,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "house_related_blocks"
+    },
+    {
+      "name": "StevindicatorDetectBlockGoal",
+      "type": "code",
+      "sortid": 24,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "stevindicator_detect_block_goal",
+      "path": "~/Overworld/Mobs/Stevillagers"
+    },
+    {
+      "name": "StegolemSpawnCondition",
+      "type": "procedure",
+      "sortid": 25,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "stegolem_spawn_condition",
       "metadata": {
+        "return_type": "logic",
         "dependencies": [
           {
-            "name": "entity",
-            "type": "entity"
+            "name": "world",
+            "type": "world"
           }
         ]
-      }
+      },
+      "path": "~/Overworld/Mobs/Stegolem"
+    },
+    {
+      "name": "Stegolem",
+      "type": "livingentity",
+      "sortid": 25,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "stegolem",
+      "path": "~/Overworld/Mobs/Stegolem"
+    },
+    {
+      "name": "SpinningSteve",
+      "type": "livingentity",
+      "sortid": 26,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "spinning_steve",
+      "path": "~/Overworld/Mobs/SpinningSteve"
     }
   ],
   "variable_elements": [],
@@ -415,28 +461,43 @@
       ],
       "category": "hostile",
       "subtitle": ""
+    },
+    {
+      "name": "mechanical_steve_hurt",
+      "files": [
+        "mechanical_steve_hurt"
+      ],
+      "category": "hostile",
+      "subtitle": ""
     }
   ],
   "language_map": {
     "en_us": {
-      "subtitles.bouncy_steve_death": "",
       "advancements.meet_the_steves_advancement.descr": "So, you\u0027ve meet them.",
-      "item.lotmorestevesremake.bouncy_steve_spawn_egg": "Bouncy Steve Spawn Egg",
+      "entity.lotmorestevesremake.stegolem": "Stegolem",
       "entity.lotmorestevesremake.stevindicator": "Stevindicator",
       "entity.lotmorestevesremake.giant_bouncy_steve": "Giant Bouncy Steve",
+      "subtitles.mechanical_steve_hurt": "",
+      "entity.lotmorestevesremake.stevager": "Stevager",
+      "item.lotmorestevesremake.stegolem_spawn_egg": "Stegolem Spawn Egg",
+      "entity.lotmorestevesremake.spinning_steve": "Spinning Steve",
+      "subtitles.hostile_steve_hurt": "",
+      "entity.lotmorestevesremake.stevindicator_big": "Stevindicator Big",
+      "itemGroup.tabmeet_the_steves": "Meet The Steves!",
+      "itemGroup.tabweapons_of_steves": "Weapons Of Steves",
+      "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve",
+      "subtitles.bouncy_steve_death": "",
+      "item.lotmorestevesremake.bouncy_steve_spawn_egg": "Bouncy Steve Spawn Egg",
+      "item.lotmorestevesremake.spinning_steve_spawn_egg": "Spinning Steve Spawn Egg",
       "item.lotmorestevesremake.stevager_spawn_egg": "Stevager Spawn Egg",
       "item.lotmorestevesremake.giant_bouncy_steve_spawn_egg": "Giant Bouncy Steve Spawn Egg",
       "advancements.gaining_slime_bomb_launcher_recipe.title": "I love jelly!",
       "advancements.gaining_slime_bomb_launcher_recipe.descr": "Kill the giant bouncy Steve",
-      "entity.lotmorestevesremake.stevager": "Stevager",
       "effect.cursed_diversion": "Cursed Diversion",
       "item.lotmorestevesremake.slime_bomb": "Slime Bomb Launcher",
-      "subtitles.hostile_steve_hurt": "",
+      "item.lotmorestevesremake.stevindicator_big_spawn_egg": "Stevindicator Big Spawn Egg",
       "advancements.meet_the_steves_advancement.title": "Meet The Steves!",
-      "item.lotmorestevesremake.stevindicator_spawn_egg": "Stevindicator Spawn Egg",
-      "itemGroup.tabmeet_the_steves": "Meet The Steves!",
-      "itemGroup.tabweapons_of_steves": "Weapons Of Steves",
-      "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve"
+      "item.lotmorestevesremake.stevindicator_spawn_egg": "Stevindicator Spawn Egg"
     }
   },
   "foldersRoot": {
@@ -467,6 +528,14 @@
               },
               {
                 "name": "Stevillagers",
+                "children": []
+              },
+              {
+                "name": "Stegolem",
+                "children": []
+              },
+              {
+                "name": "SpinningSteve",
                 "children": []
               }
             ]

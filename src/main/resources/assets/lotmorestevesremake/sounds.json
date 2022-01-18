@@ -16,5 +16,14 @@
         "stream": false
       }
     ]
+  },
+  "mechanical_steve_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:mechanical_steve_hurt",
+        "stream": false
+      }
+    ]
   }
 }

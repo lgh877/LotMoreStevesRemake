@@ -1,9 +1,12 @@
 {
   "replace": false,
   "values": [
+    "lotmorestevesremake:spinning_steve",
+    "lotmorestevesremake:stegolem",
     "lotmorestevesremake:giant_bouncy_steve",
     "lotmorestevesremake:bouncy_steve",
     "lotmorestevesremake:stevager",
-    "lotmorestevesremake:stevindicator"
+    "lotmorestevesremake:stevindicator",
+    "lotmorestevesremake:stevindicator_big"
   ]
 }

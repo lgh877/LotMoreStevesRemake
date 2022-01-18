@@ -30,7 +30,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.CreatureAttribute;
 
 import net.mcreator.lotmorestevesremake.procedures.SpawnInOverworldOnlyProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
@@ -112,6 +111,7 @@ public class GiantBouncySteveEntity extends LotmorestevesremakeModElements.ModEl
 			super(type, world);
 			experienceValue = 15;
 			setNoAI(false);
+			jumpMovementFactor = 0.2f;
 			enablePersistence();
 		}
 
@@ -123,11 +123,6 @@ public class GiantBouncySteveEntity extends LotmorestevesremakeModElements.ModEl
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
-		}
-
-		@Override
-		public CreatureAttribute getCreatureAttribute() {
-			return CreatureAttribute.UNDEFINED;
 		}
 
 		@Override
@@ -190,7 +185,7 @@ public class GiantBouncySteveEntity extends LotmorestevesremakeModElements.ModEl
 				}
 			}
 			Vector3d vector3d = this.getMotion();
-			this.setMotion(vector3d.x * 7, (double) this.getJumpUpwardsMotion() * 3.5f, vector3d.z * 7);
+			this.setMotion(this.getLookVec().x * 2 * jumpStrength(), this.getJumpFactor() * 1.8f, this.getLookVec().z * 2 * jumpStrength());
 			this.isAirBorne = true;
 		}
 

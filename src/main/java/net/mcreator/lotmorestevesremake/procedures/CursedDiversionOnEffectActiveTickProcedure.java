@@ -46,15 +46,15 @@ public class CursedDiversionOnEffectActiveTickProcedure {
 		double z = dependencies.get("z") instanceof Integer ? (int) dependencies.get("z") : (double) dependencies.get("z");
 		Entity entity = (Entity) dependencies.get("entity");
 		if (world instanceof ServerWorld) {
-			((ServerWorld) world).spawnParticle(SteveFaceParticleParticle.particle, x, y, z,
-					(int) (5 * Math.pow(entity.getWidth(), 2) * entity.getHeight()), Math.pow(entity.getWidth(), 0.5), (entity.getHeight() * 0.66),
-					Math.pow(entity.getWidth(), 0.5), 0);
+			((ServerWorld) world).spawnParticle(SteveFaceParticleParticle.particle, x, y, z, (int) (2 * entity.getWidth() * entity.getHeight()),
+					Math.pow(entity.getWidth(), 0.5), Math.pow(entity.getHeight(), 0.66), Math.pow(entity.getWidth(), 0.5), 0);
 		}
-		if (!entity.isAlive()) {
+		if (!entity.getPersistentData().getBoolean("hasInfected") && !entity.isAlive()) {
 			InfectionEventProcedure.executeProcedure(Stream
 					.of(new AbstractMap.SimpleEntry<>("world", world), new AbstractMap.SimpleEntry<>("entity", entity),
 							new AbstractMap.SimpleEntry<>("x", x), new AbstractMap.SimpleEntry<>("y", y), new AbstractMap.SimpleEntry<>("z", z))
 					.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
+			entity.getPersistentData().putBoolean("hasInfected", (true));
 		}
 	}
 }
