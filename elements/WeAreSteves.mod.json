@@ -27,6 +27,18 @@
       },
       {
         "value": "CUSTOM:SpinningSteve"
+      },
+      {
+        "value": "CUSTOM:MicroSteve"
+      },
+      {
+        "value": "CUSTOM:Zteve"
+      },
+      {
+        "value": "CUSTOM:Stecube"
+      },
+      {
+        "value": "CUSTOM:MiniZteve"
       }
     ],
     "name": "we_are_steves",

@@ -51,7 +51,7 @@ import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class StevagerEntity extends LotmorestevesremakeModElements.ModElement {
-	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.CREATURE)
+	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.MONSTER)
 			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(CustomEntity::new)
 			.size(1.95f, 2.2f)).build("stevager").setRegistryName("stevager");
 
@@ -155,7 +155,7 @@ public class StevagerEntity extends LotmorestevesremakeModElements.ModElement {
 		public void livingTick() {
 			super.livingTick();
 			if (this.isAlive()) {
-				if (this.isBeingRidden()) {
+				/*if (this.isBeingRidden()) {
 					if ((this.getControllingPassenger() instanceof MobEntity)
 							&& ((MobEntity) this.getControllingPassenger()).getAttackTarget() != null)
 						this.setAttackTarget(((MobEntity) this.getControllingPassenger()).getAttackTarget());
@@ -168,6 +168,7 @@ public class StevagerEntity extends LotmorestevesremakeModElements.ModElement {
 						}
 					}
 				}
+				*/
 			}
 		}
 

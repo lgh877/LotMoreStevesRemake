@@ -108,9 +108,9 @@ public class StevindicatorDetectBlockGoal extends MoveToBlockGoal {
 		if (this.getIsAboveDestination() && blockpos1 != null) {
 			if (!this.entity.isSwingInProgress) {
 				this.entity.swingArm(Hand.MAIN_HAND);
-				if (this.entity.swingProgress > 0.4f)
-					world.destroyBlock(blockpos, true, this.entity);
 			}
+			if (this.entity.swingProgress > 0.4f && !this.entity.world.isRemote() && random.nextInt(10) == 0)
+				world.destroyBlock(blockpos1, true, this.entity);
 		}
 	}
 

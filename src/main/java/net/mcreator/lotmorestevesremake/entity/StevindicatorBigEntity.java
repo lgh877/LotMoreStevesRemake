@@ -71,7 +71,7 @@ public class StevindicatorBigEntity extends LotmorestevesremakeModElements.ModEl
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 1, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 5, 1, 1));
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class StevindicatorBigEntity extends LotmorestevesremakeModElements.ModEl
 					int y = pos.getY();
 					int z = pos.getZ();
 					return StevillagersSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll)) && Math.random() < 0.3;
+							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 				});
 	}
 
@@ -131,7 +131,14 @@ public class StevindicatorBigEntity extends LotmorestevesremakeModElements.ModEl
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
+			this.applyEntityAI();
+		}
+
+		protected void applyEntityAI() {
 			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.CRAFTING_TABLE, this, 1, (int) 6));
+			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.FURNACE, this, 1, (int) 6));
+			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.BLAST_FURNACE, this, 1, (int) 6));
+			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.BOOKSHELF, this, 1, (int) 6));
 		}
 
 		@Override

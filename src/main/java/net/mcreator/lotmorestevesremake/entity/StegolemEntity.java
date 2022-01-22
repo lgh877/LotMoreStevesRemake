@@ -26,14 +26,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.IPacket;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.Item;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -115,7 +110,8 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 
 	public static class CustomEntity extends AggressiveSteveEntity {
 		private static final DataParameter<Integer> ATTACK_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
-		public boolean isAttackSucceed;
+		public boolean isAttackSucceed = true;
+		public boolean isLanded;
 
 		protected void registerData() {
 			super.registerData();
@@ -169,6 +165,7 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 		}
 
 		public boolean onLivingFall(float a, float b) {
+			this.isLanded = true;
 			return false;
 		}
 
@@ -200,38 +197,37 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 		protected void registerGoals() {
 			super.registerGoals();
 			this.goalSelector.addGoal(1, new CustomEntity.LockAngle());
-			this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
-			this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
-			this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.CRAFTING_TABLE, this, 1, (int) 6));
 			this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					double d0 = this.getAttackReachSqr(enemy);
-					if (!this.attacker.isSwingInProgress && distToEnemySqr * 0.1f <= d0 * 2) {
+					if (!this.attacker.isSwingInProgress && distToEnemySqr * 0.1f <= d0 * 2 && CustomEntity.this.isAttackSucceed) {
 						CustomEntity.this.swingArm(Hand.MAIN_HAND);
+						CustomEntity.this.isAttackSucceed = false;
 					}
 				}
 			});
 			this.goalSelector.addGoal(6, new RandomWalkingGoal(this, 1));
-			this.targetSelector.addGoal(7, new HurtByTargetGoal(this).setCallsForHelp(this.getClass()));
 			this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
-			this.goalSelector.addGoal(0, new SwimGoal(this));
+			this.applyEntityAI();
 		}
 
-		public void swingArm(Hand hand) {
-			super.swingArm(hand);
-			this.isAttackSucceed = false;
+		protected void applyEntityAI() {
+			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.CRAFTING_TABLE, this, 1, (int) 6));
+			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.FURNACE, this, 1, (int) 6));
+			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.BLAST_FURNACE, this, 1, (int) 6));
+			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.BOOKSHELF, this, 1, (int) 6));
 		}
 
 		public void livingTick() {
 			super.livingTick();
 			if (this.isAlive()) {
 				if ((this.collidedHorizontally && this.onGround || this.getNavigator().getPath() != null && rand.nextInt(80) == 0)
-						&& !this.isSwingInProgress) {
+						&& !this.isSwingInProgress && this.isAttackSucceed) {
 					this.swingArm(Hand.MAIN_HAND);
+					this.isAttackSucceed = false;
 				}
-				if (!this.onGround && this.getMotion().y < -0.2) {
-					if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) && rand.nextInt(3) == 0) {
+				if (!this.onGround && !this.isLanded) {
+					if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) && rand.nextInt(5) == 0) {
 						boolean flag = false;
 						AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(1, 1, 1);
 						for (BlockPos blockpos : BlockPos.getAllInBoxMutable(MathHelper.floor(axisalignedbb.minX),
@@ -250,9 +246,9 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 					}
 				}
 				if (this.swingProgress > 0.8f && !this.isAttackSucceed) {
-					this.isAttackSucceed = true;
 					if (this.onGround)
 						this.jump();
+					this.isAttackSucceed = true;
 				}
 			}
 		}
@@ -282,7 +278,10 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 		}
 
 		protected void jump() {
-			this.setMotion(this.getLookVec().x, this.getJumpFactor() * (rand.nextFloat() + 1), this.getLookVec().z);
+			if (this.swingProgress > 0.8f && !this.isAttackSucceed) {
+				this.isLanded = false;
+				this.setMotion(this.getLookVec().x, this.getJumpFactor() * (rand.nextFloat() + 1), this.getLookVec().z);
+			}
 		}
 
 		@Override

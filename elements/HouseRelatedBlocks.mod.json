@@ -52,11 +52,77 @@
       },
       {
         "value": "Blocks.BLACK_BED"
+      },
+      {
+        "value": "Blocks.BELL"
+      },
+      {
+        "value": "Blocks.LOOM"
+      },
+      {
+        "value": "Blocks.BARREL"
+      },
+      {
+        "value": "Blocks.SMOKER"
+      },
+      {
+        "value": "Blocks.BLAST_FURNACE"
+      },
+      {
+        "value": "Blocks.CARTOGRAPHY_TABLE"
+      },
+      {
+        "value": "Blocks.FLETCHING_TABLE"
+      },
+      {
+        "value": "Blocks.GRINDSTONE"
+      },
+      {
+        "value": "Blocks.LECTERN"
+      },
+      {
+        "value": "Blocks.SMITHING_TABLE"
+      },
+      {
+        "value": "Blocks.STONECUTTER"
+      },
+      {
+        "value": "Blocks.COMPOSTER"
+      },
+      {
+        "value": "Blocks.BEEHIVE"
+      },
+      {
+        "value": "Blocks.BOOKSHELF"
+      },
+      {
+        "value": "Blocks.TORCH"
+      },
+      {
+        "value": "Blocks.WALL_TORCH"
+      },
+      {
+        "value": "Blocks.SOUL_TORCH"
+      },
+      {
+        "value": "Blocks.SOUL_WALL_TORCH"
+      },
+      {
+        "value": "Blocks.CAMPFIRE"
+      },
+      {
+        "value": "Blocks.SOUL_CAMPFIRE"
+      },
+      {
+        "value": "Blocks.CRAFTING_TABLE"
+      },
+      {
+        "value": "Blocks.FURNACE"
       }
     ],
     "functions": [],
     "entities": [],
     "name": "house_related_blocks",
-    "namespace": "forge"
+    "namespace": "mod"
   }
 }

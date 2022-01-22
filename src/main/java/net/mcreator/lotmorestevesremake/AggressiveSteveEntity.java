@@ -21,7 +21,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
@@ -44,6 +51,43 @@ public class AggressiveSteveEntity extends MonsterEntity {
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(8, new SwimGoal(this) {
+			public void tick() {
+				if (AggressiveSteveEntity.this.getAttackTarget() != null) {
+					float speed = (float) AggressiveSteveEntity.this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+					if (AggressiveSteveEntity.this.getAttackTarget().getPosY() < AggressiveSteveEntity.this.getPosY()) {
+						AggressiveSteveEntity.this.setMotion(AggressiveSteveEntity.this.getMotion().add(0, -speed * 0.1f, 0));
+						AggressiveSteveEntity.this.applyKnockback(speed * 0.2f,
+								-AggressiveSteveEntity.this.getAttackTarget().getPosX() + AggressiveSteveEntity.this.getPosX(),
+								-AggressiveSteveEntity.this.getAttackTarget().getPosZ() + AggressiveSteveEntity.this.getPosZ());
+						AggressiveSteveEntity.this.faceEntity(AggressiveSteveEntity.this.getAttackTarget(), 40, 40);
+					} else {
+						AggressiveSteveEntity.this.applyKnockback(speed * 0.2f,
+								-AggressiveSteveEntity.this.getAttackTarget().getPosX() + AggressiveSteveEntity.this.getPosX(),
+								-AggressiveSteveEntity.this.getAttackTarget().getPosZ() + AggressiveSteveEntity.this.getPosZ());
+						AggressiveSteveEntity.this.faceEntity(AggressiveSteveEntity.this.getAttackTarget(), 40, 40);
+						super.tick();
+					}
+				} else
+					super.tick();
+			}
+		});
+		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(AggressiveSteveEntity.class));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
+	}
+
+	protected void collideWithEntity(Entity entityIn) {
+		if (entityIn instanceof MobEntity && !this.isOnSameTeam(entityIn) && this.getRNG().nextInt(5) == 0) {
+			this.setAttackTarget((LivingEntity) entityIn);
+		}
+		super.collideWithEntity(entityIn);
 	}
 
 	@Override

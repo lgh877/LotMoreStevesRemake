@@ -22,14 +22,10 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.network.IPacket;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.Item;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.Pose;
@@ -41,6 +37,8 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.AreaEffectCloudEntity;
 
 import net.mcreator.lotmorestevesremake.procedures.SpawnInOverworldOnlyProcedure;
+import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
+import net.mcreator.lotmorestevesremake.particle.SteveFaceParticleParticle;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.SpinningSteveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
@@ -74,7 +72,7 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 20, 4, 4));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 5, 1, 4));
 	}
 
 	@Override
@@ -124,12 +122,8 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
-			this.targetSelector.addGoal(1, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
-			this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
-			this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
 			this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2, false));
 			this.goalSelector.addGoal(5, new RandomWalkingGoal(this, 1));
-			this.targetSelector.addGoal(6, new HurtByTargetGoal(this));
 			this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
 			this.goalSelector.addGoal(8, new SwimGoal(this));
 		}
@@ -141,9 +135,9 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 			else
 				this.setPose(Pose.STANDING);
 			if (this.onGround && rand.nextInt(25) == 0)
-				this.setMotion(this.getMotion().add(this.getLookVec().x * 2, 1.5, this.getLookVec().z * 2));
+				this.setMotion(this.getMotion().add(this.getLookVec().x, 1.5, this.getLookVec().z));
 			else if ((!this.onGround && rand.nextInt(60) == 0 && this.getMotion().y > 0) || this.isInWater() || this.isInLava())
-				this.setMotion(this.getMotion().add(0, 1, 0));
+				this.setMotion(this.getMotion().add(this.getLookVec().x * 0.5f, 1, this.getLookVec().y * 0.5f));
 		}
 
 		public boolean isOnGround() {
@@ -161,8 +155,7 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 							? Explosion.Mode.DESTROY
 							: Explosion.Mode.NONE;
 					this.dead = true;
-					this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float) Math.pow(distance, 0.5) * 2,
-							explosion$mode);
+					this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float) Math.pow(distance, 0.5), explosion$mode);
 					this.remove();
 					this.spawnLingeringCloud();
 				}
@@ -171,12 +164,14 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 		}
 
 		private void spawnLingeringCloud() {
+			this.addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
 			Collection<EffectInstance> collection = this.getActivePotionEffects();
 			if (!collection.isEmpty()) {
 				AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ());
-				areaeffectcloudentity.setRadius(2.5F);
+				areaeffectcloudentity.setRadius(4F);
 				areaeffectcloudentity.setRadiusOnUse(-0.5F);
 				areaeffectcloudentity.setWaitTime(10);
+				areaeffectcloudentity.setParticleData(SteveFaceParticleParticle.particle);
 				areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
 				areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float) areaeffectcloudentity.getDuration());
 				for (EffectInstance effectinstance : collection) {

@@ -135,11 +135,11 @@ public class StegolemRenderer {
 			upperBody.rotateAngleX = MathHelper.cos(f2 / 17) * (1 - f1) / 7 + bodyMove * f1;
 			this.lowerBody.rotateAngleX = MathHelper.cos(f2 / 11) * (1 - f1) / 7 + bodyMove * f1;
 			this.lowerBody.rotateAngleZ = MathHelper.cos(f2 / 13) / 7;
-			this.rightThigh.rotateAngleX = MathHelper.cos(f * 0.5F) * f1;
+			this.rightThigh.rotateAngleX = MathHelper.cos(f * 0.5F + (float) Math.PI * 0.2f) * f1;
 			this.rightShank.rotateAngleX = (MathHelper.cos(f * 0.5F) + 1) * f1 * 0.8f;
 			this.rightShoulder.rotateAngleX = MathHelper.cos(f2 / 5) * (1 - f1) / 5 + (MathHelper.cos(f * 0.6f) / 4 - (float) Math.PI / 2) * f1;
 			this.rightWrist.rotateAngleX = MathHelper.cos(f2 / 7) * (1 - f1) / 5 + (MathHelper.cos(f * 0.6f) / 4 + (float) Math.PI / 5) * f1;
-			this.leftThigh.rotateAngleX = MathHelper.cos(f * 0.5F) * -1.0F * f1;
+			this.leftThigh.rotateAngleX = MathHelper.cos(f * 0.5F + (float) Math.PI * 0.2f) * -1.0F * f1;
 			this.leftShank.rotateAngleX = (MathHelper.cos(f * 0.5f + (float) Math.PI) + 1) * f1 * 0.8f;
 			this.leftShoulder.rotateAngleX = MathHelper.cos(f2 / 6) * (1 - f1) / 5
 					+ (MathHelper.cos(f * 0.6f + (float) Math.PI / 2) / 4 - (float) Math.PI / 2) * f1;

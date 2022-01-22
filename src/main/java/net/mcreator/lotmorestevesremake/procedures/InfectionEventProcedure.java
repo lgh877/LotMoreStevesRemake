@@ -8,6 +8,7 @@ import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.monster.VindicatorEntity;
 import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -20,11 +21,14 @@ import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.Entity;
 
 import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
+import net.mcreator.lotmorestevesremake.entity.ZteveEntity;
 import net.mcreator.lotmorestevesremake.entity.StevindicatorEntity;
 import net.mcreator.lotmorestevesremake.entity.StevindicatorBigEntity;
 import net.mcreator.lotmorestevesremake.entity.StevagerEntity;
 import net.mcreator.lotmorestevesremake.entity.StegolemEntity;
+import net.mcreator.lotmorestevesremake.entity.StecubeEntity;
 import net.mcreator.lotmorestevesremake.entity.SpinningSteveEntity;
+import net.mcreator.lotmorestevesremake.entity.MicroSteveEntity;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeMod;
 
 import java.util.Map;
@@ -103,6 +107,32 @@ public class InfectionEventProcedure {
 									(CompoundNBT) null);
 						world.addEntity(entityToSpawn);
 					}
+				} else if (entity instanceof ZombieEntity) {
+					if (!entity.world.isRemote())
+						entity.remove();
+					if (world instanceof ServerWorld) {
+						Entity entityToSpawn = new ZteveEntity.CustomEntity(ZteveEntity.entity, (World) world);
+						entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+						if (entityToSpawn instanceof MobEntity)
+							((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world,
+									world.getDifficultyForLocation(entityToSpawn.getPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null,
+									(CompoundNBT) null);
+						world.addEntity(entityToSpawn);
+					}
+				} else if (entity.getWidth() + entity.getHeight() <= 1.4) {
+					if (!entity.world.isRemote())
+						entity.remove();
+					if (world instanceof ServerWorld) {
+						Entity entityToSpawn = new MicroSteveEntity.CustomEntity(MicroSteveEntity.entity, (World) world);
+						if (Math.random() <= 0.2)
+							entityToSpawn = new StecubeEntity.CustomEntity(StecubeEntity.entity, (World) world);
+						entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+						if (entityToSpawn instanceof MobEntity)
+							((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world,
+									world.getDifficultyForLocation(entityToSpawn.getPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null,
+									(CompoundNBT) null);
+						world.addEntity(entityToSpawn);
+					}
 				}
 			} else if (entity instanceof VillagerEntity) {
 				if (!entity.world.isRemote())
@@ -133,6 +163,19 @@ public class InfectionEventProcedure {
 					entity.remove();
 				if (world instanceof ServerWorld) {
 					Entity entityToSpawn = new StegolemEntity.CustomEntity(StegolemEntity.entity, (World) world);
+					entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+					if (entityToSpawn instanceof MobEntity)
+						((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(entityToSpawn.getPosition()),
+								SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+					world.addEntity(entityToSpawn);
+				}
+			} else if (entity.getWidth() + entity.getHeight() <= 1.4) {
+				if (!entity.world.isRemote())
+					entity.remove();
+				if (world instanceof ServerWorld) {
+					Entity entityToSpawn = new MicroSteveEntity.CustomEntity(MicroSteveEntity.entity, (World) world);
+					if (Math.random() <= 0.2)
+						entityToSpawn = new StecubeEntity.CustomEntity(StecubeEntity.entity, (World) world);
 					entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
 					if (entityToSpawn instanceof MobEntity)
 						((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(entityToSpawn.getPosition()),

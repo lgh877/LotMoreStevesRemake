@@ -25,5 +25,31 @@
         "stream": false
       }
     ]
+  },
+  "zteve_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:zteve_hurt",
+        "stream": false
+      }
+    ]
+  },
+  "strange_steve_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:strange_steve_hurt1",
+        "stream": false
+      },
+      {
+        "name": "lotmorestevesremake:strange_steve_hurt2",
+        "stream": false
+      },
+      {
+        "name": "lotmorestevesremake:strange_steve_hurt3",
+        "stream": false
+      }
+    ]
   }
 }

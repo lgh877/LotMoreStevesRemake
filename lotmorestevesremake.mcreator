@@ -391,14 +391,6 @@
       "path": "~/Overworld/Mobs/Stevillagers"
     },
     {
-      "name": "HouseRelatedBlocks",
-      "type": "tag",
-      "sortid": 23,
-      "compiles": true,
-      "locked_code": false,
-      "registry_name": "house_related_blocks"
-    },
-    {
       "name": "StevindicatorDetectBlockGoal",
       "type": "code",
       "sortid": 24,
@@ -442,6 +434,126 @@
       "locked_code": true,
       "registry_name": "spinning_steve",
       "path": "~/Overworld/Mobs/SpinningSteve"
+    },
+    {
+      "name": "MicroSteve",
+      "type": "livingentity",
+      "sortid": 27,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "micro_steve",
+      "path": "~/Overworld/Mobs/MicroSteve"
+    },
+    {
+      "name": "StevesAmbushEvent",
+      "type": "procedure",
+      "sortid": 28,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "steves_ambush_event",
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "name": "y",
+            "type": "number"
+          },
+          {
+            "name": "z",
+            "type": "number"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/Events"
+    },
+    {
+      "name": "Zteve",
+      "type": "livingentity",
+      "sortid": 29,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "zteve",
+      "path": "~/Overworld/Mobs/Zteve"
+    },
+    {
+      "name": "Stecube",
+      "type": "livingentity",
+      "sortid": 30,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "stecube",
+      "path": "~/Overworld/Mobs/Stecuve"
+    },
+    {
+      "name": "SeeThroughWallsTargetGoal",
+      "type": "code",
+      "sortid": 31,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "see_through_walls_target_goal"
+    },
+    {
+      "name": "ZteveSpawnCondition",
+      "type": "procedure",
+      "sortid": 32,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "zteve_spawn_condition",
+      "metadata": {
+        "return_type": "logic",
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "name": "y",
+            "type": "number"
+          },
+          {
+            "name": "z",
+            "type": "number"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/Overworld/Mobs/Zteve"
+    },
+    {
+      "name": "MiniZteve",
+      "type": "livingentity",
+      "sortid": 33,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "mini_zteve",
+      "path": "~/Overworld/Mobs/Zteve"
+    },
+    {
+      "name": "HouseRelatedBlocks",
+      "type": "tag",
+      "sortid": 34,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "house_related_blocks"
+    },
+    {
+      "name": "Smasteve",
+      "type": "livingentity",
+      "sortid": 36,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "smasteve",
+      "path": "~/Overworld/Mobs/Smasteve"
     }
   ],
   "variable_elements": [],
@@ -469,25 +581,53 @@
       ],
       "category": "hostile",
       "subtitle": ""
+    },
+    {
+      "name": "zteve_hurt",
+      "files": [
+        "zteve_hurt"
+      ],
+      "category": "hostile",
+      "subtitle": ""
+    },
+    {
+      "name": "strange_steve_hurt",
+      "files": [
+        "strange_steve_hurt1",
+        "strange_steve_hurt2",
+        "strange_steve_hurt3"
+      ],
+      "category": "hostile",
+      "subtitle": ""
     }
   ],
   "language_map": {
     "en_us": {
       "advancements.meet_the_steves_advancement.descr": "So, you\u0027ve meet them.",
       "entity.lotmorestevesremake.stegolem": "Stegolem",
+      "item.lotmorestevesremake.micro_steve_spawn_egg": "Micro Steve Spawn Egg",
+      "item.lotmorestevesremake.mini_zteve_spawn_egg": "Mini Zteve Spawn Egg",
+      "entity.lotmorestevesremake.micro_steve": "Micro Steve",
       "entity.lotmorestevesremake.stevindicator": "Stevindicator",
       "entity.lotmorestevesremake.giant_bouncy_steve": "Giant Bouncy Steve",
       "subtitles.mechanical_steve_hurt": "",
+      "entity.lotmorestevesremake.stecube": "Stecube",
+      "subtitles.zteve_hurt": "",
       "entity.lotmorestevesremake.stevager": "Stevager",
+      "item.lotmorestevesremake.smasteve_spawn_egg": "Smasteve Spawn Egg",
       "item.lotmorestevesremake.stegolem_spawn_egg": "Stegolem Spawn Egg",
       "entity.lotmorestevesremake.spinning_steve": "Spinning Steve",
       "subtitles.hostile_steve_hurt": "",
       "entity.lotmorestevesremake.stevindicator_big": "Stevindicator Big",
+      "subtitles.strange_steve_hurt": "",
+      "entity.lotmorestevesremake.zteve": "Zteve",
+      "entity.lotmorestevesremake.smasteve": "Smasteve",
       "itemGroup.tabmeet_the_steves": "Meet The Steves!",
       "itemGroup.tabweapons_of_steves": "Weapons Of Steves",
       "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve",
       "subtitles.bouncy_steve_death": "",
       "item.lotmorestevesremake.bouncy_steve_spawn_egg": "Bouncy Steve Spawn Egg",
+      "item.lotmorestevesremake.zteve_spawn_egg": "Zteve Spawn Egg",
       "item.lotmorestevesremake.spinning_steve_spawn_egg": "Spinning Steve Spawn Egg",
       "item.lotmorestevesremake.stevager_spawn_egg": "Stevager Spawn Egg",
       "item.lotmorestevesremake.giant_bouncy_steve_spawn_egg": "Giant Bouncy Steve Spawn Egg",
@@ -496,8 +636,10 @@
       "effect.cursed_diversion": "Cursed Diversion",
       "item.lotmorestevesremake.slime_bomb": "Slime Bomb Launcher",
       "item.lotmorestevesremake.stevindicator_big_spawn_egg": "Stevindicator Big Spawn Egg",
+      "entity.lotmorestevesremake.mini_zteve": "Mini Zteve",
       "advancements.meet_the_steves_advancement.title": "Meet The Steves!",
-      "item.lotmorestevesremake.stevindicator_spawn_egg": "Stevindicator Spawn Egg"
+      "item.lotmorestevesremake.stevindicator_spawn_egg": "Stevindicator Spawn Egg",
+      "item.lotmorestevesremake.stecube_spawn_egg": "Stecube Spawn Egg"
     }
   },
   "foldersRoot": {
@@ -537,6 +679,22 @@
               {
                 "name": "SpinningSteve",
                 "children": []
+              },
+              {
+                "name": "MicroSteve",
+                "children": []
+              },
+              {
+                "name": "Zteve",
+                "children": []
+              },
+              {
+                "name": "Stecuve",
+                "children": []
+              },
+              {
+                "name": "Smasteve",
+                "children": []
               }
             ]
           },
@@ -557,13 +715,17 @@
       {
         "name": "Effects",
         "children": []
+      },
+      {
+        "name": "Events",
+        "children": []
       }
     ]
   },
   "workspaceSettings": {
     "modid": "lotmorestevesremake",
     "modName": "LotMoreStevesRemake",
-    "version": "1.0.0",
+    "version": "0.3.0",
     "author": "±ÔÇõ, MCreator",
     "websiteURL": "https://mcreator.net",
     "license": "Academic Free License v3.0",
