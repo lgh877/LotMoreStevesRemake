@@ -39,6 +39,6 @@ public class GhosteveSpawningConditionProcedure {
 		return world.func_241828_r().getRegistry(Registry.BIOME_KEY).getKey(world.getBiome(new BlockPos((int) x, (int) y, (int) z))) != null
 				&& world.func_241828_r().getRegistry(Registry.BIOME_KEY).getKey(world.getBiome(new BlockPos((int) x, (int) y, (int) z)))
 						.equals(new ResourceLocation("soul_sand_valley"))
-				|| Math.random() < 0.05;
+				|| Math.random() < 0.1;
 	}
 }
