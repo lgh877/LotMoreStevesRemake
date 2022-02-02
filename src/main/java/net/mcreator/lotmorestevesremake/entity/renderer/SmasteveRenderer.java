@@ -9,6 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
@@ -26,10 +27,14 @@ public class SmasteveRenderer {
 		@OnlyIn(Dist.CLIENT)
 		public void registerModels(ModelRegistryEvent event) {
 			RenderingRegistry.registerEntityRenderingHandler(SmasteveEntity.entity, renderManager -> {
-				return new MobRenderer(renderManager, new ModelSmasteve(), 1f) {
+				return new MobRenderer(renderManager, new ModelSmasteve(), 1.5f) {
 					@Override
 					public ResourceLocation getEntityTexture(Entity entity) {
 						return new ResourceLocation("lotmorestevesremake:textures/smasteve.png");
+					}
+
+					protected void preRenderCallback(LivingEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
+						matrixStackIn.scale(1.5f, 1.5f, 1.7f);
 					}
 				};
 			});
@@ -67,7 +72,7 @@ public class SmasteveRenderer {
 			whole = new ModelRenderer(this);
 			whole.setRotationPoint(0.0F, 24.0F, 0.0F);
 			lowerBody = new ModelRenderer(this);
-			lowerBody.setRotationPoint(2.0F, -14.0F, 0.0F);
+			lowerBody.setRotationPoint(6.0F, -14.0F, 0.0F);
 			whole.addChild(lowerBody);
 			cube_r1 = new ModelRenderer(this);
 			cube_r1.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -115,7 +120,7 @@ public class SmasteveRenderer {
 			leftShoulder.addChild(leftWrist);
 			leftWrist.setTextureOffset(92, 24).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, -1.0F, false);
 			rightRearThigh = new ModelRenderer(this);
-			rightRearThigh.setRotationPoint(-4.0F, -13.0F, 3.0F);
+			rightRearThigh.setRotationPoint(0.0F, -13.0F, 3.0F);
 			whole.addChild(rightRearThigh);
 			setRotationAngle(rightRearThigh, 0.0F, 0.5236F, 0.0F);
 			cube_r2 = new ModelRenderer(this);
@@ -128,7 +133,7 @@ public class SmasteveRenderer {
 			rightRearThigh.addChild(rightRearShank);
 			rightRearShank.setTextureOffset(37, 42).addBox(-7.0F, -2.0F, -5.0F, 11.0F, 13.0F, 11.0F, -2.0F, false);
 			rightFrontThigh = new ModelRenderer(this);
-			rightFrontThigh.setRotationPoint(-4.0F, -14.0F, -4.0F);
+			rightFrontThigh.setRotationPoint(0.0F, -14.0F, -4.0F);
 			whole.addChild(rightFrontThigh);
 			rightFrontThigh.setTextureOffset(60, 86).addBox(-3.0F, -1.5F, -3.0F, 6.0F, 9.0F, 6.0F, -1.5F, false);
 			rightFrontShank = new ModelRenderer(this);
@@ -136,7 +141,7 @@ public class SmasteveRenderer {
 			rightFrontThigh.addChild(rightFrontShank);
 			rightFrontShank.setTextureOffset(72, 66).addBox(-4.0F, -2.0F, -4.0F, 8.0F, 12.0F, 8.0F, -2.0F, false);
 			leftThigh = new ModelRenderer(this);
-			leftThigh.setRotationPoint(9.0F, -21.0F, 0.0F);
+			leftThigh.setRotationPoint(13.0F, -21.0F, 0.0F);
 			whole.addChild(leftThigh);
 			cube_r3 = new ModelRenderer(this);
 			cube_r3.setRotationPoint(0.0F, 9.0F, 0.0F);
@@ -192,8 +197,8 @@ public class SmasteveRenderer {
 				rightRearThigh.rotationPointY = -13;
 				leftThigh.rotationPointY = -21;
 			}
-			eye.rotationPointX += MathHelper.clamp(-yawhead * 2 + (float) (Math.random() - 0.5) * 0.4f, -1, 1);
-			eye.rotationPointY += MathHelper.clamp(pitch * 1.4f + (float) (Math.random() - 0.5) * 0.4f, -1, 1);
+			eye.rotationPointX += MathHelper.clamp(-yawhead + (float) (Math.random() - 0.5) * 0.4f, -1, 1);
+			eye.rotationPointY += MathHelper.clamp(pitch + (float) (Math.random() - 0.5) * 0.4f, -1, 1);
 			this.leftShoulder.rotateAngleX = (MathHelper.cos(f * 0.3662F) + 2) * f1 * 0.3f;
 			this.leftWrist.rotateAngleX = (MathHelper.cos(f * 0.3662F) + 2) * f1 * 0.3f;
 			this.rightRearThigh.rotateAngleY = MathHelper.cos(f * 0.4F * speed) * 0.5f * f1 * speed + pi / 6;
@@ -211,7 +216,7 @@ public class SmasteveRenderer {
 						float a = this.swingProgress * 1.25f;
 						a = (float) Math.pow((double) a, 18);
 						lowerBody.rotateAngleX -= MathHelper.sin(a * pi * 1.5f) * pi * 0.1f;
-						lowerBody.rotateAngleY -= MathHelper.sin(a * pi * 1.5f) * pi * 0.2f;
+						lowerBody.rotateAngleY -= MathHelper.sin(a * pi) * pi * 0.2f;
 						upperBody.rotateAngleX -= MathHelper.sin(a * pi * 1.5f) * pi * 0.1f;
 						upperBody.rotateAngleY -= MathHelper.sin(a * pi * 1.5f) * pi * 0.2f;
 						this.rightShoulder.rotateAngleX *= (1 - MathHelper.sin(a * pi / 2));
@@ -224,7 +229,7 @@ public class SmasteveRenderer {
 						float a = (1f - this.swingProgress) * 5f;
 						a = (float) Math.pow((double) a, 3);
 						lowerBody.rotateAngleX += MathHelper.sin(a * pi / 2) * pi * 0.1f;
-						lowerBody.rotateAngleY += MathHelper.sin(a * pi / 2) * pi * 0.2f;
+						//lowerBody.rotateAngleY += MathHelper.sin(a * pi / 2) * pi * 0.2f;
 						upperBody.rotateAngleX += MathHelper.sin(a * pi / 2) * pi * 0.1f;
 						upperBody.rotateAngleY += MathHelper.sin(a * pi / 2) * pi * 0.2f;
 						this.rightShoulder.rotateAngleX *= (1 - MathHelper.sin(a * pi / 2));

@@ -34,7 +34,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.IPacket;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
@@ -133,7 +132,7 @@ public class SlimySteveEntity extends AggressiveSteveEntity {
 		this(BouncySteveEntity.entity, world);
 	}
 
-	public SlimySteveEntity(EntityType<? extends MonsterEntity> type, World world) {
+	public SlimySteveEntity(EntityType<? extends AggressiveSteveEntity> type, World world) {
 		super(type, world);
 		experienceValue = 5;
 		setNoAI(false);

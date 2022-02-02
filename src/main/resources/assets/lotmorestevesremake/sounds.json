@@ -51,5 +51,44 @@
         "stream": false
       }
     ]
+  },
+  "nameless_steve_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:hit1",
+        "stream": false
+      },
+      {
+        "name": "lotmorestevesremake:hit2",
+        "stream": false
+      },
+      {
+        "name": "lotmorestevesremake:hit3",
+        "stream": false
+      }
+    ]
+  },
+  "nameless_steve_death": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:death1",
+        "stream": false
+      },
+      {
+        "name": "lotmorestevesremake:death2",
+        "stream": false
+      }
+    ]
+  },
+  "ghosteve_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:ghosteve_hurt",
+        "stream": false
+      }
+    ]
   }
 }

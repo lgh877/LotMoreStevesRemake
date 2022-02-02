@@ -127,8 +127,6 @@ public class StegolemRenderer {
 		public void setRotationAngles(Entity e, float f, float f1, float f2, float f3, float f4) {
 			StegolemEntity.CustomEntity entityA = (StegolemEntity.CustomEntity) e;
 			float bodyMove = (MathHelper.cos(f * 1.2f) / 10 + 0.2f) * f1;
-			float a = this.swingProgress;
-			a = (float) Math.pow(a, 4);
 			this.Whole.rotateAngleX = bodyMove * 0.3f;
 			this.head.rotateAngleY = f3 / (180F / (float) Math.PI);
 			this.head.rotateAngleX = f4 / (180F / (float) Math.PI) - bodyMove * 1.3f;
@@ -146,13 +144,26 @@ public class StegolemRenderer {
 			this.leftWrist.rotateAngleX = MathHelper.cos(f2 / 4.5f) * (1 - f1) / 5
 					+ (MathHelper.cos(f * 0.6f + (float) Math.PI / 2) / 4 + (float) Math.PI / 5) * f1;
 			if (entityA.isSwingInProgress) {
-				head.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI * 0.4f;
-				lowerBody.rotateAngleX += MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 5f;
-				upperBody.rotateAngleX += MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 6;
-				rightShoulder.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
-				rightWrist.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
-				leftShoulder.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
-				leftWrist.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
+				if (entityA.getAttackState() == 1) {
+					float a = this.swingProgress;
+					a = (float) Math.pow(a, 4);
+					head.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI * 0.4f;
+					lowerBody.rotateAngleX += MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 5f;
+					upperBody.rotateAngleX += MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 6;
+					rightShoulder.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
+					rightWrist.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
+					leftShoulder.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
+					leftWrist.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
+				} else if (entityA.getAttackState() == 2) {
+					float a = 1 - this.swingProgress;
+					a = (float) Math.pow(a, 4);
+					lowerBody.rotateAngleX -= MathHelper.sin(a * (float) Math.PI);
+					upperBody.rotateAngleX -= MathHelper.sin(a * (float) Math.PI);
+					rightShoulder.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI * 0.8f;
+					rightWrist.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
+					leftShoulder.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI * 0.8f;
+					leftWrist.rotateAngleX -= MathHelper.sin(a * (float) Math.PI) * (float) Math.PI / 3;
+				}
 			}
 		}
 	}

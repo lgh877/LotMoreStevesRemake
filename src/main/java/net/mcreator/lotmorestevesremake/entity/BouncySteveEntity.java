@@ -33,7 +33,7 @@ import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class BouncySteveEntity extends LotmorestevesremakeModElements.ModElement {
-	public static EntityType entity = (EntityType.Builder.<SlimySteveEntity>create(SlimySteveEntity::new, EntityClassification.MONSTER)
+	public static EntityType entity = (EntityType.Builder.<SlimySteveEntity>create(SlimySteveEntity::new, EntityClassification.CREATURE)
 			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(SlimySteveEntity::new)
 			.size(0.6f, 1.8f)).build("bouncy_steve").setRegistryName("bouncy_steve");
 
@@ -60,7 +60,7 @@ public class BouncySteveEntity extends LotmorestevesremakeModElements.ModElement
 			biomeCriteria = true;
 		if (!biomeCriteria)
 			return;
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 10, 1, 4));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 30, 1, 4));
 	}
 
 	@Override

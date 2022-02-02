@@ -31,11 +31,11 @@ import net.minecraft.item.Item;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.BreakDoorGoal;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -60,6 +60,7 @@ import javax.annotation.Nullable;
 import java.util.stream.Stream;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.EnumSet;
 import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
@@ -119,7 +120,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 			this(entity, world);
 		}
 
-		public CustomEntity(EntityType<? extends MonsterEntity> type, World world) {
+		public CustomEntity(EntityType<? extends AggressiveSteveEntity> type, World world) {
 			super(type, world);
 			experienceValue = 15;
 			stepHeight = 1.5f;
@@ -136,16 +137,20 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 		protected void registerGoals() {
 			super.registerGoals();
 			this.goalSelector.addGoal(1, new BreakDoorGoal(this, e -> true));
+			this.goalSelector.addGoal(1, new CustomEntity.LockAngle());
 			this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, (float) 6));
 			this.goalSelector.addGoal(4, new LookAtGoal(this, ServerPlayerEntity.class, (float) 6));
 			this.goalSelector.addGoal(4, new LookAtGoal(this, MobEntity.class, (float) 6));
 			this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					double d0 = this.getAttackReachSqr(enemy);
-					if (distToEnemySqr <= d0 * 4 && !this.attacker.isSwingInProgress) {
+					if (distToEnemySqr * 0.1 <= d0 && !this.attacker.isSwingInProgress) {
+						float multiplier = 1;
+						if (attacker.getHealth() / attacker.getMaxHealth() < 0.5)
+							multiplier = 1.8f;
 						this.attacker.swingArm(Hand.MAIN_HAND);
-						this.attacker.applyKnockback((float) distToEnemySqr * 0.1f, -enemy.getPosX() + this.attacker.getPosX(),
-								-enemy.getPosZ() + this.attacker.getPosZ());
+						this.attacker.applyKnockback((float) Math.pow(distToEnemySqr, 0.5) * 0.17f * multiplier,
+								-enemy.getPosX() + this.attacker.getPosX(), -enemy.getPosZ() + this.attacker.getPosZ());
 						CustomEntity.this.attack = false;
 					}
 				}
@@ -271,6 +276,20 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 			this.setHealth(this.getMaxHealth());
 			this.setEnchantmentBasedOnDifficulty(difficulty);
 			return retval;
+		}
+
+		public class LockAngle extends Goal {
+			public LockAngle() {
+				this.setMutexFlags(EnumSet.of(Goal.Flag.LOOK));
+			}
+
+			public boolean shouldExecute() {
+				return CustomEntity.this.isSwingInProgress && CustomEntity.this.getAttackTarget() != null;
+			}
+
+			public void tick() {
+				CustomEntity.this.getNavigator().tryMoveToEntityLiving(CustomEntity.this.getAttackTarget(), 1.5);
+			}
 		}
 
 		@Override

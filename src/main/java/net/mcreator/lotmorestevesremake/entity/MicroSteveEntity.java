@@ -32,13 +32,9 @@ import net.minecraft.item.Item;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.FollowMobGoal;
 import net.minecraft.entity.ai.goal.BreakDoorGoal;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -56,7 +52,6 @@ import net.minecraft.entity.CreatureAttribute;
 import net.mcreator.lotmorestevesremake.procedures.SpawnInOverworldOnlyProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.MicroSteveRenderer;
-import net.mcreator.lotmorestevesremake.SeeThroughWallsTargetGoal;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
@@ -140,13 +135,9 @@ public class MicroSteveEntity extends LotmorestevesremakeModElements.ModElement 
 
 		@Override
 		protected void registerGoals() {
-			//super.registerGoals();
+			super.registerGoals();
 			this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1));
 			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-			this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(AggressiveSteveEntity.class));
-			this.targetSelector.addGoal(6, new SeeThroughWallsTargetGoal(this, PlayerEntity.class, false, false));
-			this.targetSelector.addGoal(6, new SeeThroughWallsTargetGoal(this, ServerPlayerEntity.class, false, false));
-			this.targetSelector.addGoal(6, new SeeThroughWallsTargetGoal(this, MobEntity.class, false, false));
 			this.goalSelector.addGoal(6, new BreakDoorGoal(this, e -> true));
 			this.goalSelector.addGoal(3, new FollowMobGoal(this, (float) 1, 10, 5));
 			this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false) {
@@ -157,27 +148,6 @@ public class MicroSteveEntity extends LotmorestevesremakeModElements.ModElement 
 						this.attacker.swingArm(Hand.MAIN_HAND);
 						this.attacker.attackEntityAsMob(enemy);
 					}
-				}
-			});
-			this.goalSelector.addGoal(8, new SwimGoal(this) {
-				public void tick() {
-					if (CustomEntity.this.getAttackTarget() != null) {
-						float speed = (float) CustomEntity.this.getAttributeValue(Attributes.MOVEMENT_SPEED);
-						if (CustomEntity.this.getAttackTarget().getPosY() < CustomEntity.this.getPosY()) {
-							CustomEntity.this.setMotion(CustomEntity.this.getMotion().add(0, -speed * 0.1f, 0));
-							CustomEntity.this.applyKnockback(speed * 0.2f,
-									-CustomEntity.this.getAttackTarget().getPosX() + CustomEntity.this.getPosX(),
-									-CustomEntity.this.getAttackTarget().getPosZ() + CustomEntity.this.getPosZ());
-							CustomEntity.this.faceEntity(CustomEntity.this.getAttackTarget(), 40, 40);
-						} else {
-							CustomEntity.this.applyKnockback(speed * 0.2f,
-									-CustomEntity.this.getAttackTarget().getPosX() + CustomEntity.this.getPosX(),
-									-CustomEntity.this.getAttackTarget().getPosZ() + CustomEntity.this.getPosZ());
-							CustomEntity.this.faceEntity(CustomEntity.this.getAttackTarget(), 40, 40);
-							super.tick();
-						}
-					} else
-						super.tick();
 				}
 			});
 		}

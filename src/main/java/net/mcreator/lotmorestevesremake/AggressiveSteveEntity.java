@@ -38,6 +38,8 @@ import net.mcreator.lotmorestevesremake.entity.StevagerEntity;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AggressiveSteveEntity extends MonsterEntity {
+	public float swimmingSpeed = 1;
+
 	public AggressiveSteveEntity(EntityType<? extends MonsterEntity> type, World world) {
 		super(type, world);
 		setNoAI(false);
@@ -62,12 +64,12 @@ public class AggressiveSteveEntity extends MonsterEntity {
 					float speed = (float) AggressiveSteveEntity.this.getAttributeValue(Attributes.MOVEMENT_SPEED);
 					if (AggressiveSteveEntity.this.getAttackTarget().getPosY() < AggressiveSteveEntity.this.getPosY()) {
 						AggressiveSteveEntity.this.setMotion(AggressiveSteveEntity.this.getMotion().add(0, -speed * 0.1f, 0));
-						AggressiveSteveEntity.this.applyKnockback(speed * 0.2f,
+						AggressiveSteveEntity.this.applyKnockback(speed * 0.2f * AggressiveSteveEntity.this.swimmingSpeed,
 								-AggressiveSteveEntity.this.getAttackTarget().getPosX() + AggressiveSteveEntity.this.getPosX(),
 								-AggressiveSteveEntity.this.getAttackTarget().getPosZ() + AggressiveSteveEntity.this.getPosZ());
 						AggressiveSteveEntity.this.faceEntity(AggressiveSteveEntity.this.getAttackTarget(), 40, 40);
 					} else {
-						AggressiveSteveEntity.this.applyKnockback(speed * 0.2f,
+						AggressiveSteveEntity.this.applyKnockback(speed * 0.2f * AggressiveSteveEntity.this.swimmingSpeed,
 								-AggressiveSteveEntity.this.getAttackTarget().getPosX() + AggressiveSteveEntity.this.getPosX(),
 								-AggressiveSteveEntity.this.getAttackTarget().getPosZ() + AggressiveSteveEntity.this.getPosZ());
 						AggressiveSteveEntity.this.faceEntity(AggressiveSteveEntity.this.getAttackTarget(), 40, 40);
@@ -94,6 +96,8 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	public boolean attackEntityFrom(DamageSource damagesource, float amount) {
 		if (damagesource.getTrueSource() instanceof LivingEntity && this.isOnSameTeam(damagesource.getTrueSource()))
 			return false;
+		else if (damagesource == DamageSource.DROWN)
+			this.setAir(60);
 		if (this.getRidingEntity() != null) {
 			if (this.getRidingEntity() instanceof StevagerEntity.CustomEntity) {
 				this.getRidingEntity().attackEntityFrom(damagesource, amount);

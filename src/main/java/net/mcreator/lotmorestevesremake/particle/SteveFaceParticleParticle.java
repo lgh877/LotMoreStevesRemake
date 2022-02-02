@@ -20,7 +20,7 @@ import net.minecraft.client.Minecraft;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SteveFaceParticleParticle {
-	public static final BasicParticleType particle = new BasicParticleType(true);
+	public static final BasicParticleType particle = new BasicParticleType(false);
 
 	@SubscribeEvent
 	public static void registerParticleType(RegistryEvent.Register<ParticleType<?>> event) {
@@ -46,7 +46,7 @@ public class SteveFaceParticleParticle {
 			this.setSize((float) 0.1, (float) 0.1);
 			this.particleScale *= (float) 1;
 			this.maxAge = 10;
-			this.particleGravity = (float) 0;
+			this.particleGravity = (float) -0.1;
 			this.canCollide = false;
 			this.motionX = vx * 1;
 			this.motionY = vy * 1;

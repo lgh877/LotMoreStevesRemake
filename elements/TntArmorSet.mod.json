@@ -1,0 +1,68 @@
+{
+  "_fv": 24,
+  "_type": "armor",
+  "definition": {
+    "enableHelmet": false,
+    "textureHelmet": "",
+    "enableBody": true,
+    "textureBody": "tnt_vest",
+    "enableLeggings": false,
+    "textureLeggings": "",
+    "enableBoots": true,
+    "textureBoots": "tnt_boots",
+    "onBodyTick": {
+      "name": "TntArmorSetBodyTickEvent"
+    },
+    "onBootsTick": {
+      "name": "TntArmorSetBodyTickEvent"
+    },
+    "creativeTab": {
+      "value": "CUSTOM:ArmorsOfSteves"
+    },
+    "armorTextureFile": "stnteve_",
+    "helmetName": "Tnt Armor Set Helmet",
+    "bodyName": "Tnt Vest",
+    "leggingsName": "Tnt Armor Set Leggings",
+    "bootsName": "Tnt Boots",
+    "helmetSpecialInfo": [],
+    "bodySpecialInfo": [
+      "I'll never wear it. ¡×4Never."
+    ],
+    "leggingsSpecialInfo": [],
+    "bootsSpecialInfo": [
+      "¡×4Safety First!"
+    ],
+    "helmetModelName": "Default",
+    "helmetModelPart": "Helmet",
+    "helmetModelTexture": "From armor",
+    "bodyModelName": "Default",
+    "bodyModelPart": "Body",
+    "armsModelPartL": "Arms L",
+    "armsModelPartR": "Arms R",
+    "bodyModelTexture": "From armor",
+    "leggingsModelName": "Default",
+    "leggingsModelPartL": "Leggings L",
+    "leggingsModelPartR": "Leggings R",
+    "leggingsModelTexture": "From armor",
+    "bootsModelName": "Default",
+    "bootsModelPartL": "Boots L",
+    "bootsModelPartR": "Boots R",
+    "bootsModelTexture": "From armor",
+    "helmetImmuneToFire": false,
+    "bodyImmuneToFire": false,
+    "leggingsImmuneToFire": false,
+    "bootsImmuneToFire": false,
+    "maxDamage": 25,
+    "damageValueHelmet": 2,
+    "damageValueBody": 10,
+    "damageValueLeggings": 5,
+    "damageValueBoots": 10,
+    "enchantability": 9,
+    "toughness": 8.0,
+    "knockbackResistance": 0.0,
+    "equipSound": {
+      "value": "entity.villager.no"
+    },
+    "repairItems": []
+  }
+}

@@ -45,7 +45,7 @@ import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class GiantBouncySteveEntity extends LotmorestevesremakeModElements.ModElement {
-	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.MONSTER)
+	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.CREATURE)
 			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(CustomEntity::new).size(1.2f, 4f))
 					.build("giant_bouncy_steve").setRegistryName("giant_bouncy_steve");
 
@@ -111,7 +111,7 @@ public class GiantBouncySteveEntity extends LotmorestevesremakeModElements.ModEl
 			super(type, world);
 			experienceValue = 15;
 			setNoAI(false);
-			jumpMovementFactor = 0.2f;
+			jumpMovementFactor = 0.1f;
 			enablePersistence();
 		}
 
@@ -185,7 +185,7 @@ public class GiantBouncySteveEntity extends LotmorestevesremakeModElements.ModEl
 				}
 			}
 			Vector3d vector3d = this.getMotion();
-			this.setMotion(this.getLookVec().x * 2 * jumpStrength(), this.getJumpFactor() * 1.8f, this.getLookVec().z * 2 * jumpStrength());
+			this.setMotion(this.getLookVec().x * jumpStrength(), this.getJumpFactor() * 1.8f, this.getLookVec().z * jumpStrength());
 			this.isAirBorne = true;
 		}
 

@@ -168,7 +168,7 @@ public class StevindicatorBigEntity extends LotmorestevesremakeModElements.ModEl
 
 		public void livingTick() {
 			super.livingTick();
-			if (this.collidedHorizontally && !this.isSwingInProgress) {
+			if ((this.collidedHorizontally || this.isMovementBlocked()) && !this.isSwingInProgress) {
 				this.swingArm(Hand.MAIN_HAND);
 				this.attack = false;
 			}
@@ -187,7 +187,7 @@ public class StevindicatorBigEntity extends LotmorestevesremakeModElements.ModEl
 							MathHelper.floor(axisalignedbb.maxZ))) {
 						BlockState blockstate = this.world.getBlockState(blockpos);
 						Block block = blockstate.getBlock();
-						if (rand.nextInt(3) == 0 && block.getExplosionResistance() < 1200 && !world.isRemote()) {
+						if (rand.nextInt(3) == 0 && block.getExplosionResistance() < 100 && !world.isRemote()) {
 							flag = this.world.destroyBlock(blockpos, true, this) || flag;
 						}
 					}

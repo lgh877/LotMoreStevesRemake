@@ -26,13 +26,14 @@ import net.mcreator.lotmorestevesremake.entity.StevindicatorEntity;
 import net.mcreator.lotmorestevesremake.entity.StevindicatorBigEntity;
 import net.mcreator.lotmorestevesremake.entity.StevagerEntity;
 import net.mcreator.lotmorestevesremake.entity.StegolemEntity;
-import net.mcreator.lotmorestevesremake.entity.StecubeEntity;
 import net.mcreator.lotmorestevesremake.entity.SpinningSteveEntity;
-import net.mcreator.lotmorestevesremake.entity.MicroSteveEntity;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeMod;
 
+import java.util.stream.Stream;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Collection;
+import java.util.AbstractMap;
 
 public class InfectionEventProcedure {
 
@@ -119,20 +120,12 @@ public class InfectionEventProcedure {
 									(CompoundNBT) null);
 						world.addEntity(entityToSpawn);
 					}
-				} else if (entity.getWidth() + entity.getHeight() <= 1.4) {
-					if (!entity.world.isRemote())
-						entity.remove();
-					if (world instanceof ServerWorld) {
-						Entity entityToSpawn = new MicroSteveEntity.CustomEntity(MicroSteveEntity.entity, (World) world);
-						if (Math.random() <= 0.2)
-							entityToSpawn = new StecubeEntity.CustomEntity(StecubeEntity.entity, (World) world);
-						entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
-						if (entityToSpawn instanceof MobEntity)
-							((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world,
-									world.getDifficultyForLocation(entityToSpawn.getPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null,
-									(CompoundNBT) null);
-						world.addEntity(entityToSpawn);
-					}
+				} else {
+					SizeTypeStatsBasedInfectionProcedure.executeProcedure(Stream
+							.of(new AbstractMap.SimpleEntry<>("world", world), new AbstractMap.SimpleEntry<>("entity", entity),
+									new AbstractMap.SimpleEntry<>("x", x), new AbstractMap.SimpleEntry<>("y", y),
+									new AbstractMap.SimpleEntry<>("z", z))
+							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 				}
 			} else if (entity instanceof VillagerEntity) {
 				if (!entity.world.isRemote())
@@ -169,19 +162,11 @@ public class InfectionEventProcedure {
 								SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
 					world.addEntity(entityToSpawn);
 				}
-			} else if (entity.getWidth() + entity.getHeight() <= 1.4) {
-				if (!entity.world.isRemote())
-					entity.remove();
-				if (world instanceof ServerWorld) {
-					Entity entityToSpawn = new MicroSteveEntity.CustomEntity(MicroSteveEntity.entity, (World) world);
-					if (Math.random() <= 0.2)
-						entityToSpawn = new StecubeEntity.CustomEntity(StecubeEntity.entity, (World) world);
-					entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
-					if (entityToSpawn instanceof MobEntity)
-						((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(entityToSpawn.getPosition()),
-								SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-					world.addEntity(entityToSpawn);
-				}
+			} else {
+				SizeTypeStatsBasedInfectionProcedure.executeProcedure(Stream
+						.of(new AbstractMap.SimpleEntry<>("world", world), new AbstractMap.SimpleEntry<>("entity", entity),
+								new AbstractMap.SimpleEntry<>("x", x), new AbstractMap.SimpleEntry<>("y", y), new AbstractMap.SimpleEntry<>("z", z))
+						.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 			}
 		}
 	}

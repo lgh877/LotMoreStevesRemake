@@ -51,6 +51,7 @@ import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 import java.util.stream.Stream;
+import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumSet;
@@ -97,7 +98,7 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 		@SubscribeEvent
 		public void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
 			AttributeModifierMap.MutableAttribute ammma = MobEntity.func_233666_p_();
-			ammma = ammma.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2);
+			ammma = ammma.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3);
 			ammma = ammma.createMutableAttribute(Attributes.MAX_HEALTH, 150);
 			ammma = ammma.createMutableAttribute(Attributes.FOLLOW_RANGE, 64);
 			ammma = ammma.createMutableAttribute(Attributes.ARMOR, 0);
@@ -134,30 +135,13 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 			super(type, world);
 			experienceValue = 25;
 			setNoAI(false);
+			this.stepHeight = 1.5f;
+			this.isLanded = true;
 		}
 
 		@Override
 		public IPacket<?> createSpawnPacket() {
 			return NetworkHooks.getEntitySpawningPacket(this);
-		}
-
-		public boolean isEntityInBox(LivingEntity entityIn, double sizeup) {
-			for (LivingEntity entity : this.world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(sizeup))) {
-				if (entity == entityIn) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public AxisAlignedBB makeHorizontalAttackRange(LivingEntity entityIn, double height, double distTo, double sizeX, double sizeY,
-				double sizeZ) {
-			double x = entityIn.getPosX() - Math.sin((Math.toRadians((entityIn.getYaw(1))))) * distTo;
-			double y = entityIn.getPosY() + height;
-			double z = entityIn.getPosZ() + Math.cos((Math.toRadians((entityIn.getYaw(1))))) * distTo;
-			AxisAlignedBB attackRange = new AxisAlignedBB(x - (sizeX / 2d), y - (sizeY / 2), z - (sizeZ / 2d), x + (sizeX / 2d), y + (sizeY / 2),
-					z + (sizeZ / 2d));
-			return attackRange;
 		}
 
 		public float getAttackDamage() {
@@ -177,6 +161,7 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 				if (this.swingProgressInt >= i) {
 					this.swingProgressInt = 0;
 					this.isSwingInProgress = false;
+					this.setAttackState(0);
 				}
 			} else {
 				this.swingProgressInt = 0;
@@ -200,9 +185,18 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 			this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					double d0 = this.getAttackReachSqr(enemy);
-					if (!this.attacker.isSwingInProgress && distToEnemySqr * 0.1f <= d0 * 2 && CustomEntity.this.isAttackSucceed) {
+					Random random = new Random();
+					if (!(attacker.isInWater() || attacker.isInLava()) && random.nextInt(15) == 0) {
+						if (!this.attacker.isSwingInProgress && distToEnemySqr * 0.03f <= d0 * 2 && CustomEntity.this.isAttackSucceed) {
+							CustomEntity.this.swingArm(Hand.MAIN_HAND);
+							CustomEntity.this.isAttackSucceed = false;
+							CustomEntity.this.setAttackState(1);
+						}
+					} else if (!this.attacker.isSwingInProgress && distToEnemySqr <= d0) {
 						CustomEntity.this.swingArm(Hand.MAIN_HAND);
-						CustomEntity.this.isAttackSucceed = false;
+						CustomEntity.this.attackEntityAsMob(enemy);
+						CustomEntity.this.setAttackState(2);
+						CustomEntity.this.isAttackSucceed = true;
 					}
 				}
 			});
@@ -221,13 +215,8 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 		public void livingTick() {
 			super.livingTick();
 			if (this.isAlive()) {
-				if ((this.collidedHorizontally && this.onGround || this.getNavigator().getPath() != null && rand.nextInt(80) == 0)
-						&& !this.isSwingInProgress && this.isAttackSucceed) {
-					this.swingArm(Hand.MAIN_HAND);
-					this.isAttackSucceed = false;
-				}
 				if (!this.onGround && !this.isLanded) {
-					if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) && rand.nextInt(5) == 0) {
+					if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
 						boolean flag = false;
 						AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(1, 1, 1);
 						for (BlockPos blockpos : BlockPos.getAllInBoxMutable(MathHelper.floor(axisalignedbb.minX),
@@ -235,7 +224,7 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 								MathHelper.floor(axisalignedbb.maxY), MathHelper.floor(axisalignedbb.maxZ))) {
 							BlockState blockstate = this.world.getBlockState(blockpos);
 							Block block = blockstate.getBlock();
-							if (rand.nextInt(3) == 0 && block.getExplosionResistance() < 1200 && !world.isRemote()) {
+							if (rand.nextInt(9) == 0 && block.getExplosionResistance() < 100 && !world.isRemote()) {
 								flag = this.world.destroyBlock(blockpos, true, this) || flag;
 							}
 						}
@@ -245,7 +234,15 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 							this.attackEntityAsMob(livingentity);
 					}
 				}
-				if (this.swingProgress > 0.8f && !this.isAttackSucceed) {
+				if (this.isInWater() || this.isInLava() || this.onGround)
+					this.isLanded = true;
+				else if (((!this.getNavigator().noPath() && rand.nextInt(80) == 0) || this.collidedHorizontally && this.onGround)
+						&& !this.isSwingInProgress && this.isAttackSucceed) {
+					this.swingArm(Hand.MAIN_HAND);
+					this.setAttackState(1);
+					this.isAttackSucceed = false;
+				}
+				if (this.getAttackState() == 1 && this.swingProgress > 0.8f && !this.isAttackSucceed) {
 					if (this.onGround)
 						this.jump();
 					this.isAttackSucceed = true;
@@ -267,7 +264,7 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 			}
 
 			public boolean shouldExecute() {
-				return CustomEntity.this.isSwingInProgress && CustomEntity.this.getAttackTarget() != null;
+				return CustomEntity.this.isSwingInProgress && CustomEntity.this.getAttackTarget() != null && CustomEntity.this.getAttackState() == 1;
 			}
 
 			public void tick() {
@@ -278,9 +275,13 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 		}
 
 		protected void jump() {
-			if (this.swingProgress > 0.8f && !this.isAttackSucceed) {
+			if (this.swingProgress > 0.8f && !this.isAttackSucceed && this.getAttackState() == 1) {
+				float multiplier = 1;
+				if (this.getAttackTarget() != null) {
+					multiplier = (float) Math.pow(this.getDistance(this.getAttackTarget()), 0.5f) * 0.5f;
+				}
 				this.isLanded = false;
-				this.setMotion(this.getLookVec().x, this.getJumpFactor() * (rand.nextFloat() + 1), this.getLookVec().z);
+				this.setMotion(this.getLookVec().x * multiplier, this.getJumpFactor() * (rand.nextFloat() + 1), this.getLookVec().z * multiplier);
 			}
 		}
 
