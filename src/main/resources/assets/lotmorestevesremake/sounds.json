@@ -90,5 +90,14 @@
         "stream": false
       }
     ]
+  },
+  "great_boy_steve_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:steve_hurt2",
+        "stream": false
+      }
+    ]
   }
 }

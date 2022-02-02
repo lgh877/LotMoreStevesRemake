@@ -18,6 +18,7 @@ import net.mcreator.lotmorestevesremake.entity.StecubeEntity;
 import net.mcreator.lotmorestevesremake.entity.SmasteveEntity;
 import net.mcreator.lotmorestevesremake.entity.MiniZteveEntity;
 import net.mcreator.lotmorestevesremake.entity.MicroSteveEntity;
+import net.mcreator.lotmorestevesremake.entity.GhosteveEntity;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeMod;
 
 import java.util.Map;
@@ -55,7 +56,9 @@ public class SizeTypeStatsBasedInfectionProcedure {
 		double y = dependencies.get("y") instanceof Integer ? (int) dependencies.get("y") : (double) dependencies.get("y");
 		double z = dependencies.get("z") instanceof Integer ? (int) dependencies.get("z") : (double) dependencies.get("z");
 		Entity entity = (Entity) dependencies.get("entity");
-		if (entity.getWidth() + entity.getHeight() <= 1.4) {
+		double random = 0;
+		random = Math.random();
+		if (entity.getHeight() * Math.pow(entity.getWidth(), 2) <= 0.5) {
 			if (!entity.world.isRemote())
 				entity.remove();
 			if (entity instanceof LivingEntity ? (((LivingEntity) entity).getCreatureAttribute() == CreatureAttribute.UNDEAD) : false) {
@@ -79,7 +82,7 @@ public class SizeTypeStatsBasedInfectionProcedure {
 					world.addEntity(entityToSpawn);
 				}
 			}
-		} else if (entity.getWidth() + entity.getHeight() <= 5) {
+		} else if (entity.getHeight() * Math.pow(entity.getWidth(), 2) <= 3) {
 			if (!entity.world.isRemote())
 				entity.remove();
 			if (entity instanceof LivingEntity ? (((LivingEntity) entity).getCreatureAttribute() == CreatureAttribute.UNDEAD) : false) {
@@ -92,19 +95,32 @@ public class SizeTypeStatsBasedInfectionProcedure {
 					world.addEntity(entityToSpawn);
 				}
 			} else {
-				if (world instanceof ServerWorld) {
-					Entity entityToSpawn = new StevindicatorEntity.CustomEntity(StevindicatorEntity.entity, (World) world);
-					entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
-					if (entityToSpawn instanceof MobEntity)
-						((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(entityToSpawn.getPosition()),
-								SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-					world.addEntity(entityToSpawn);
+				if (random < 0.7) {
+					if (world instanceof ServerWorld) {
+						Entity entityToSpawn = new StevindicatorEntity.CustomEntity(StevindicatorEntity.entity, (World) world);
+						entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+						if (entityToSpawn instanceof MobEntity)
+							((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world,
+									world.getDifficultyForLocation(entityToSpawn.getPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null,
+									(CompoundNBT) null);
+						world.addEntity(entityToSpawn);
+					}
+				} else if (random < 1) {
+					if (world instanceof ServerWorld) {
+						Entity entityToSpawn = new GhosteveEntity.CustomEntity(GhosteveEntity.entity, (World) world);
+						entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+						if (entityToSpawn instanceof MobEntity)
+							((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world,
+									world.getDifficultyForLocation(entityToSpawn.getPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null,
+									(CompoundNBT) null);
+						world.addEntity(entityToSpawn);
+					}
 				}
 			}
-		} else if (entity.getWidth() + entity.getHeight() <= 9) {
+		} else if (entity.getHeight() * Math.pow(entity.getWidth(), 2) <= 6) {
 			if (!entity.world.isRemote())
 				entity.remove();
-			if (Math.random() <= 0.3) {
+			if (random < 0.2) {
 				if (world instanceof ServerWorld) {
 					Entity entityToSpawn = new SmasteveEntity.CustomEntity(SmasteveEntity.entity, (World) world);
 					entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
@@ -113,7 +129,7 @@ public class SizeTypeStatsBasedInfectionProcedure {
 								SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
 					world.addEntity(entityToSpawn);
 				}
-			} else {
+			} else if (random < 1) {
 				if (world instanceof ServerWorld) {
 					Entity entityToSpawn = new StevindicatorBigEntity.CustomEntity(StevindicatorBigEntity.entity, (World) world);
 					entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);

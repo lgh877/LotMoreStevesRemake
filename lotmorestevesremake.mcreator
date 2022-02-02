@@ -729,6 +729,15 @@
         ]
       },
       "path": "~/EveryDimension/Mobs/Ghosteve"
+    },
+    {
+      "name": "GreatBoySteve",
+      "type": "livingentity",
+      "sortid": 47,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "great_boy_steve",
+      "path": "~/Overworld/Mobs/GreatBoySteve"
     }
   ],
   "variable_elements": [],
@@ -801,6 +810,14 @@
       ],
       "category": "hostile",
       "subtitle": ""
+    },
+    {
+      "name": "great_boy_steve_hurt",
+      "files": [
+        "steve_hurt2"
+      ],
+      "category": "hostile",
+      "subtitle": ""
     }
   ],
   "language_map": {
@@ -819,13 +836,16 @@
       "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve",
       "item.lotmorestevesremake.bouncy_steve_spawn_egg": "Bouncy Steve Spawn Egg",
       "item.lotmorestevesremake.stevager_spawn_egg": "Stevager Spawn Egg",
+      "subtitles.great_boy_steve_hurt": "",
       "advancements.gaining_slime_bomb_launcher_recipe.title": "I love jelly!",
       "item.lotmorestevesremake.nameless_steve_spawn_egg": "」0」o」m」n」lNameless Steve Spawn Egg",
       "effect.cursed_diversion": "Cursed Diversion",
+      "item.lotmorestevesremake.great_boy_steve_spawn_egg": "Great Boy Steve Spawn Egg",
       "item.lotmorestevesremake.stevindicator_big_spawn_egg": "Stevindicator Big Spawn Egg",
       "entity.lotmorestevesremake.mini_zteve": "Mini Zteve",
       "advancements.meet_the_steves_advancement.title": "Meet The Steves!",
       "item.lotmorestevesremake.tnt_armor_set_chestplate": "Tnt Vest",
+      "entity.lotmorestevesremake.great_boy_steve": "Great Boy Steve",
       "advancements.meet_the_steves_advancement.descr": "So, you\u0027ve meet them.",
       "item.lotmorestevesremake.tnt_armor_set_helmet": "Tnt Armor Set Helmet",
       "entity.lotmorestevesremake.nameless_steve": "」0」o」m」n」lNameless Steve",
@@ -916,6 +936,10 @@
               },
               {
                 "name": "NamelessSteve",
+                "children": []
+              },
+              {
+                "name": "GreatBoySteve",
                 "children": []
               }
             ]
