@@ -20,7 +20,6 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.util.ITooltipFlag;
 
@@ -126,27 +125,6 @@ public class TntArmorSetItem extends LotmorestevesremakeModElements.ModElement {
 			}
 
 			@Override
-			public void inventoryTick(ItemStack itemstack, World world, Entity entity, int slot, boolean selected) {
-				super.inventoryTick(itemstack, world, entity, slot, selected);
-				double x = entity.getPosX();
-				double y = entity.getPosY();
-				double z = entity.getPosZ();
-				if (itemstack.getItem() == ((entity instanceof LivingEntity)
-						? ((LivingEntity) entity).getItemStackFromSlot(EquipmentSlotType.CHEST)
-						: ItemStack.EMPTY).getItem()) {
-					if (entity.world instanceof World && !((World) entity.world).isRemote) {
-						((World) entity.world).createExplosion(null, (int) x, (int) y, (int) z, (float) 4, Explosion.Mode.BREAK);
-					}
-				}
-				/*FdssfaItemInInventoryTickProcedure.executeProcedure(Stream
-						.of(new AbstractMap.SimpleEntry<>("world", world), new AbstractMap.SimpleEntry<>("x", x),
-								new AbstractMap.SimpleEntry<>("y", y), new AbstractMap.SimpleEntry<>("z", z),
-								new AbstractMap.SimpleEntry<>("entity", entity), new AbstractMap.SimpleEntry<>("itemstack", itemstack))
-						.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
-				*/
-			}
-
-			@Override
 			public void onArmorTick(ItemStack itemstack, World world, PlayerEntity entity) {
 				double x = entity.getPosX();
 				double y = entity.getPosY();
@@ -165,14 +143,27 @@ public class TntArmorSetItem extends LotmorestevesremakeModElements.ModElement {
 				list.add(new StringTextComponent("¡×4Safety First!"));
 			}
 
-			/*@Override
-			public boolean onEntityItemUpdate(ItemEntity entityItem) {
-				return super.onEntityItemUpdate(this);
-			}
-			*/
 			@Override
 			public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
 				return "lotmorestevesremake:textures/models/armor/stnteve__layer_" + (slot == EquipmentSlotType.LEGS ? "2" : "1") + ".png";
+			}
+
+			public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+				double x = entity.getPosX();
+				double y = entity.getPosY();
+				double z = entity.getPosZ();
+				World world = entity.world;
+				Random random = new Random();
+				if (random.nextInt(100) == 0) {
+					if (world instanceof World && !((World) world).isRemote) {
+						((World) world).createExplosion(entity, x, y, z, (float) 4, Explosion.Mode.BREAK);
+						entity.remove();
+					}
+				} else if (random.nextInt(20) == 0)
+					if (world instanceof ServerWorld) {
+						((ServerWorld) world).spawnParticle(ParticleTypes.LAVA, x, y, z, (int) 1, 0, 0, 0, 1);
+					}
+				return false;
 			}
 
 			@Override

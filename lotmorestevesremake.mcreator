@@ -699,6 +699,36 @@
       "locked_code": true,
       "registry_name": "ghosteve",
       "path": "~/EveryDimension/Mobs/Ghosteve"
+    },
+    {
+      "name": "GhosteveSpawningCondition",
+      "type": "procedure",
+      "sortid": 46,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "ghosteve_spawning_condition",
+      "metadata": {
+        "return_type": "logic",
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "name": "y",
+            "type": "number"
+          },
+          {
+            "name": "z",
+            "type": "number"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/EveryDimension/Mobs/Ghosteve"
     }
   ],
   "variable_elements": [],

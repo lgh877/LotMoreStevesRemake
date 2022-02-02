@@ -37,8 +37,8 @@ import net.minecraft.item.Item;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
@@ -60,18 +60,24 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.block.BlockState;
 
+import net.mcreator.lotmorestevesremake.procedures.GhosteveSpawningConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.GhosteveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
+import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 import javax.annotation.Nullable;
 
+import java.util.stream.Stream;
 import java.util.Random;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.EnumSet;
+import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
-	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.MONSTER)
+	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.MONSTER).immuneToFire()
 			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(CustomEntity::new)
 			.size(0.6f, 1.8f)).build("ghosteve").setRegistryName("ghosteve");
 
@@ -91,13 +97,19 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 10, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 100, 1, 1));
 	}
 
 	@Override
 	public void init(FMLCommonSetupEvent event) {
-		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				MonsterEntity::canMonsterSpawn);
+		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS,
+				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+					int x = pos.getX();
+					int y = pos.getY();
+					int z = pos.getZ();
+					return GhosteveSpawningConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
+							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
+				});
 	}
 
 	private static class EntityAttributesRegisterHandler {
@@ -108,13 +120,13 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 			ammma = ammma.createMutableAttribute(Attributes.MAX_HEALTH, 20);
 			ammma = ammma.createMutableAttribute(Attributes.FOLLOW_RANGE, 64);
 			ammma = ammma.createMutableAttribute(Attributes.ARMOR, 0);
-			ammma = ammma.createMutableAttribute(Attributes.ATTACK_DAMAGE, 1);
+			ammma = ammma.createMutableAttribute(Attributes.ATTACK_DAMAGE, 2);
 			ammma = ammma.createMutableAttribute(Attributes.FLYING_SPEED, 0.3);
 			event.put(entity, ammma.create());
 		}
 	}
 
-	public static class CustomEntity extends MonsterEntity {
+	public static class CustomEntity extends AggressiveSteveEntity {
 		private static final DataParameter<Integer> AVOID = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 
 		protected void registerData() {
@@ -151,7 +163,6 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 		@Override
 		protected void registerGoals() {
-			super.registerGoals();
 			this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 0.8, 20) {
 				@Override
 				protected Vector3d getPosition() {
@@ -249,10 +260,12 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 					}
 				}
 			});
-			this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, LivingEntity.class, false, false));
+
 			this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-			this.goalSelector.addGoal(5, new SwimGoal(this));
+			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
+			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
+			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
 		}
 
 		public boolean attackEntityFrom(DamageSource source, float amount) {
