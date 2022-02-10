@@ -16,6 +16,9 @@ import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.IPacket;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.Item;
@@ -67,7 +70,7 @@ public class GreatBoySteveEntity extends LotmorestevesremakeModElements.ModEleme
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 8, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 3, 1, 1));
 	}
 
 	@Override
@@ -96,6 +99,22 @@ public class GreatBoySteveEntity extends LotmorestevesremakeModElements.ModEleme
 	}
 
 	public static class CustomEntity extends MonsterEntity {
+		private static final DataParameter<Integer> ATTACK_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
+		private int attackProgress;
+
+		protected void registerData() {
+			super.registerData();
+			this.dataManager.register(ATTACK_STATE, 0);
+		}
+
+		public void setAttackState(int value) {
+			this.dataManager.set(ATTACK_STATE, value);
+		}
+
+		public int getAttackState() {
+			return this.dataManager.get(ATTACK_STATE);
+		}
+
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);
 		}
@@ -120,6 +139,22 @@ public class GreatBoySteveEntity extends LotmorestevesremakeModElements.ModEleme
 			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
 			this.goalSelector.addGoal(5, new SwimGoal(this));
 			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, LivingEntity.class, false, false));
+		}
+
+		@Override
+		protected void updateArmSwingProgress() {
+			int i = 8;
+			if (this.isSwingInProgress) {
+				++this.swingProgressInt;
+				if (this.swingProgressInt >= i) {
+					this.swingProgressInt = 0;
+					this.isSwingInProgress = false;
+					this.setAttackState(0);
+				}
+			} else {
+				this.swingProgressInt = 0;
+			}
+			this.swingProgress = (float) this.swingProgressInt / (float) i;
 		}
 
 		protected float getSoundPitch() {

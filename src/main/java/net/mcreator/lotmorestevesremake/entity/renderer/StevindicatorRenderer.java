@@ -13,11 +13,11 @@ import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.model.ModelHelper;
 import net.minecraft.client.renderer.entity.model.IHasHead;
 import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.entity.model.EntityModel;
@@ -44,18 +44,19 @@ public class StevindicatorRenderer {
 				return new MobRenderer(renderManager, new Modelstev_illager(), 0.5f) {
 					{
 						this.addLayer(new GlowingLayer<>(this));
-						this.addLayer(new HeldItemLayer<LivingEntity, Modelstev_illager<LivingEntity>>(this) {
+						this.addLayer(new HeldItemLayer<StevindicatorEntity.CustomEntity, Modelstev_illager<StevindicatorEntity.CustomEntity>>(this) {
 							public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn,
-									LivingEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-									float netHeadYaw, float headPitch) {
+									StevindicatorEntity.CustomEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+									float ageInTicks, float netHeadYaw, float headPitch) {
+								//StevindicatorEntity.CustomEntity entityS = (StevindicatorEntity.CustomEntity) entitylivingbaseIn;
 								if ((entitylivingbaseIn.isSwingInProgress || entitylivingbaseIn.limbSwingAmount > 0.13f)
-										&& entitylivingbaseIn.isAlive()) {
+										&& entitylivingbaseIn.isAlive() || entitylivingbaseIn.getDancingTick() > 0) {
 									super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
 											ageInTicks, netHeadYaw, headPitch);
 								}
 							}
 						});
-						this.addLayer(new HeadLayer<LivingEntity, Modelstev_illager<LivingEntity>>(this));
+						this.addLayer(new HeadLayer<StevindicatorEntity.CustomEntity, Modelstev_illager<StevindicatorEntity.CustomEntity>>(this));
 					}
 
 					@Override
@@ -94,7 +95,7 @@ public class StevindicatorRenderer {
 	// Made with Blockbench 4.1.1
 	// Exported for Minecraft version 1.15 - 1.16 with MCP mappings
 	// Paste this class into your mod and generate all required imports
-	public static class Modelstev_illager<T extends LivingEntity> extends EntityModel<T> implements IHasArm, IHasHead {
+	public static class Modelstev_illager<T extends StevindicatorEntity.CustomEntity> extends EntityModel<T> implements IHasArm, IHasHead {
 		private final ModelRenderer head;
 		private final ModelRenderer body;
 		private final ModelRenderer arms;
@@ -159,11 +160,20 @@ public class StevindicatorRenderer {
 			modelRenderer.rotateAngleZ = z;
 		}
 
-		public void setRotationAngles(T e, float f, float f1, float f2, float f3, float f4) {
-			MobEntity entityM = (MobEntity) e;
+		public void setRotationAngles(T entityM, float f, float f1, float f2, float f3, float f4) {
+			// entityM = (StevindicatorEntity.CustomEntity) e;
 			float armSwing = MathHelper.cos(f * 0.6662F) * f1;
 			boolean flag = entityM.getPrimaryHand() == HandSide.RIGHT;
-			if ((f1 > 0.13f || entityM.isSwingInProgress || entityM.isPassenger()) && entityM.isAlive()) {
+			this.head.rotateAngleY = f3 / (180F / (float) Math.PI);
+			this.head.rotateAngleX = f4 / (180F / (float) Math.PI) + entityM.getDancingTick();
+			this.head.rotationPointX = 0;
+			this.head.rotationPointY = 0;
+			this.right_arm.rotateAngleZ = 0;
+			this.left_arm.rotateAngleZ = 0;
+			this.right_arm.rotationPointY = 2;
+			this.left_arm.rotationPointY = 2;
+			this.body.rotationPointY = 0;
+			if ((f1 > 0.13f || entityM.isSwingInProgress || entityM.isPassenger()) && entityM.isAlive() || entityM.getDancingTick() > 0) {
 				this.arms.showModel = false;
 				this.right_arm.showModel = true;
 				this.left_arm.showModel = true;
@@ -210,8 +220,16 @@ public class StevindicatorRenderer {
 					this.left_arm.rotateAngleX += (-(float) Math.PI / 5F);
 				}
 			}
-			this.head.rotateAngleY = f3 / (180F / (float) Math.PI);
-			this.head.rotateAngleX = f4 / (180F / (float) Math.PI);
+			if (entityM.getDancingTick() > 0) {
+				float d3 = f2 / 20.0F;
+				this.head.rotationPointX += MathHelper.sin(d3 * 10.0F);
+				this.head.rotationPointY += MathHelper.sin(d3 * 40.0F) + 0.4F;
+				this.right_arm.rotateAngleZ += ((float) Math.PI / 180F) * (70.0F + MathHelper.cos(d3 * 40.0F) * 10.0F);
+				this.left_arm.rotateAngleZ += this.right_arm.rotateAngleZ * -1.0F;
+				this.right_arm.rotationPointY += MathHelper.sin(d3 * 40.0F) * 0.5F + 1.5F;
+				this.left_arm.rotationPointY += MathHelper.sin(d3 * 40.0F) * 0.5F + 1.5F;
+				this.body.rotationPointY += MathHelper.sin(d3 * 40.0F) * 0.35F;
+			}
 			if (this.isSitting) {
 				this.right_leg.rotateAngleX = -1.4137167F;
 				this.right_leg.rotateAngleY = ((float) Math.PI / 10F);
@@ -228,6 +246,7 @@ public class StevindicatorRenderer {
 				right_leg.rotateAngleZ = 0;
 			}
 			this.arms.rotateAngleX = 0;
+			ModelHelper.func_239101_a_(this.right_arm, this.left_arm, f2);
 		}
 
 		public ModelRenderer getModelHead() {

@@ -8,6 +8,7 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
@@ -164,22 +165,32 @@ public class GreatBoySteveRenderer {
 		}
 
 		public void setRotationAngles(Entity e, float f, float f1, float f2, float f3, float f4) {
+			MobEntity entityM = (MobEntity) e;
 			float pi = (float) Math.PI;
 			float pitch = f4 / (180F / pi);
 			float headYaw = f3 / (180F / pi);
 			this.Whole.rotateAngleX = f1 * pi * (1 + MathHelper.cos(f * 0.8F)) / 12;
+			this.Whole.rotationPointY = 24;
 			this.Whole.rotationPointZ = 0;
 			this.Head.rotateAngleY = headYaw;
 			this.Head.rotateAngleX = pitch * 0.25f;
-			this.Jaw.rotateAngleX = (MathHelper.cos(f * 0.5F) + 1) * f1 / 3f;
+			//this.Jaw.rotateAngleX = (MathHelper.cos(f * 0.5F) + 1) * f1 / 3f;
 			this.Neck.rotateAngleX = pitch * 0.25f - pi / 12 + (1 - f1) * MathHelper.cos(f2 / 6) / 12;
 			this.UpperTorso.rotateAngleX = pitch * 0.25f + pi / 12 + (1 - f1) * MathHelper.cos(f2 / 5) / 12;
+			this.UpperTorso.rotateAngleY = 0;
 			this.LowerTorso.rotateAngleX = pitch * 0.25f + pi / 12 + (1 - f1) * MathHelper.cos(f2 / 7) / 12
 					- f1 * pi * (1 + MathHelper.cos(f * 0.8F)) / 18;
-			this.LeftShoulder.rotateAngleX = MathHelper.cos(f * 0.6F) * f1 / 3 + (1 - f1) * MathHelper.sin(f2 / 4) / 12;
-			this.LeftWrist.rotateAngleX = MathHelper.cos(f * 0.6F) * f1 / 3;
-			this.RightShoulder.rotateAngleX = MathHelper.cos(f * 0.6F + pi) * f1 / 3 + (1 - f1) * MathHelper.cos(f2 / 4) / 12;
-			this.RightWrist.rotateAngleX = MathHelper.cos(f * 0.4F + pi) * f1 / 2;
+			this.LowerTorso.rotateAngleY = 0;
+			{//arms
+				this.LeftShoulder.rotateAngleX = MathHelper.cos(f * 0.6F) * f1 / 3 + (1 - f1) * MathHelper.cos(f2 / 4) / 12 + 0.4f;
+				this.LeftShoulder.rotateAngleZ = 0;
+				this.LeftWrist.rotateAngleX = MathHelper.cos(f * 0.6F) * f1 / 3;
+				this.LeftWrist.rotateAngleY = 0;
+				this.RightShoulder.rotateAngleX = MathHelper.cos(f * 0.6F + pi) * f1 / 3 + (1 - f1) * MathHelper.cos(f2 / 4) / 12 + 0.4f;
+				this.RightShoulder.rotateAngleZ = 0;
+				this.RightWrist.rotateAngleX = MathHelper.cos(f * 0.4F + pi) * f1 / 3;
+				this.RightWrist.rotateAngleY = 0;
+			}
 			this.LeftThigh.rotateAngleX = MathHelper.cos(f * 0.4F) * -1.0F * f1 / 3;
 			this.LeftShank.rotateAngleX = MathHelper.cos(f * 0.4F - pi * 0.4f) * -1.0F * f1 / 3;
 			this.RightThigh.rotateAngleX = MathHelper.cos(f * 0.4F) * 1.0F * f1 / 2;

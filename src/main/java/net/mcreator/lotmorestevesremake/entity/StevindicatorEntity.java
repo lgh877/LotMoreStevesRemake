@@ -10,6 +10,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
@@ -46,6 +48,7 @@ import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.block.Blocks;
 
@@ -115,9 +118,25 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 
 	public static class CustomEntity extends AggressiveSteveEntity {
 		public boolean attack;
+		public int DancingTick;
+
+		public void readAdditional(CompoundNBT compound) {
+			super.readAdditional(compound);
+			this.DancingTick = compound.getInt("DancingTick");
+		}
+
+		public void writeAdditional(CompoundNBT compound) {
+			super.writeAdditional(compound);
+			compound.putInt("DancingTick", this.DancingTick);
+		}
 
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);
+		}
+
+		public void awardKillScore(Entity killed, int scoreValue, DamageSource damageSource) {
+			super.awardKillScore(killed, scoreValue, damageSource);
+			this.DancingTick = 30;
 		}
 
 		public CustomEntity(EntityType<? extends AggressiveSteveEntity> type, World world) {
@@ -177,10 +196,18 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 
 		public void livingTick() {
 			super.livingTick();
+			if (rand.nextInt(80) == 0)
+				this.DancingTick = 40;
+			if (this.DancingTick > 0)
+				this.DancingTick--;
 			if (GroundPathHelper.isGroundNavigator(this))
 				((GroundPathNavigator) this.getNavigator()).setBreakDoors(true);
 			if (this.isAlive()) {
 				this.attackProcedure();
+				if (this.DancingTick > 0 && this.getNavigator().hasPath())
+					this.setSprinting(true);
+				else
+					this.setSprinting(false);
 			}
 		}
 
@@ -284,6 +311,9 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 			}
 
 			public boolean shouldExecute() {
+				LivingEntity livingentity = CustomEntity.this.getAttackTarget();
+				if (livingentity instanceof PlayerEntity && ((PlayerEntity) livingentity).abilities.disableDamage)
+					return false;
 				return CustomEntity.this.isSwingInProgress && CustomEntity.this.getAttackTarget() != null;
 			}
 
@@ -301,6 +331,11 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 		public net.minecraft.util.SoundEvent getHurtSound(DamageSource ds) {
 			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS
 					.getValue(new ResourceLocation("lotmorestevesremake:hostile_steve_hurt"));
+		}
+
+		@OnlyIn(Dist.CLIENT)
+		public int getDancingTick() {
+			return this.DancingTick;
 		}
 
 		@Override

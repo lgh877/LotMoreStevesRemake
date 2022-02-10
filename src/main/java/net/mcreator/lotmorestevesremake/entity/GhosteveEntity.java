@@ -168,7 +168,7 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 				protected Vector3d getPosition() {
 					Random random = CustomEntity.this.getRNG();
 					double dir_x = CustomEntity.this.getPosX() + ((random.nextFloat() * 2 - 1) * 32);
-					double dir_y = CustomEntity.this.getPosY() + ((random.nextFloat() * 2 - 1) * 16);
+					double dir_y = CustomEntity.this.getPosY() + ((random.nextFloat() * 2 - 1) * 8);
 					double dir_z = CustomEntity.this.getPosZ() + ((random.nextFloat() * 2 - 1) * 32);
 					return new Vector3d(dir_x, dir_y, dir_z);
 				}
@@ -260,7 +260,6 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 					}
 				}
 			});
-
 			this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
 			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
@@ -322,6 +321,7 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 			ILivingEntityData retval = super.onInitialSpawn(world, difficulty, reason, livingdata, tag);
 			this.setEquipmentBasedOnDifficulty(difficulty);
 			this.setEnchantmentBasedOnDifficulty(difficulty);
+			this.getNavigator().tryMoveToXYZ(this.getPosX(), this.getPosY() + 3, this.getPosZ(), 1);
 			return retval;
 		}
 

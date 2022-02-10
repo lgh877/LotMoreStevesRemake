@@ -18,7 +18,7 @@ public class StegolemSpawnConditionProcedure {
 			return false;
 		}
 		IWorld world = (IWorld) dependencies.get("world");
-		return 12000 < world.getWorldInfo().getDayTime()
+		return 120000 < world.getWorldInfo().getDayTime()
 				&& SpawnInOverworldOnlyProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world)).collect(HashMap::new,
 						(_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 	}

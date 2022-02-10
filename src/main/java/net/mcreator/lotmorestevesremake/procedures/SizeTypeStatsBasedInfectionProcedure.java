@@ -57,8 +57,10 @@ public class SizeTypeStatsBasedInfectionProcedure {
 		double z = dependencies.get("z") instanceof Integer ? (int) dependencies.get("z") : (double) dependencies.get("z");
 		Entity entity = (Entity) dependencies.get("entity");
 		double random = 0;
+		double size = 0;
 		random = Math.random();
-		if (entity.getHeight() * Math.pow(entity.getWidth(), 2) <= 0.5) {
+		size = (entity.getHeight() * Math.pow(entity.getWidth(), 2));
+		if (size <= 0.6) {
 			if (!entity.world.isRemote())
 				entity.remove();
 			if (entity instanceof LivingEntity ? (((LivingEntity) entity).getCreatureAttribute() == CreatureAttribute.UNDEAD) : false) {
@@ -82,7 +84,7 @@ public class SizeTypeStatsBasedInfectionProcedure {
 					world.addEntity(entityToSpawn);
 				}
 			}
-		} else if (entity.getHeight() * Math.pow(entity.getWidth(), 2) <= 3) {
+		} else if (size <= 5) {
 			if (!entity.world.isRemote())
 				entity.remove();
 			if (entity instanceof LivingEntity ? (((LivingEntity) entity).getCreatureAttribute() == CreatureAttribute.UNDEAD) : false) {
@@ -117,27 +119,27 @@ public class SizeTypeStatsBasedInfectionProcedure {
 					}
 				}
 			}
-		} else if (entity.getHeight() * Math.pow(entity.getWidth(), 2) <= 6) {
+		} else if (size <= 30) {
 			if (!entity.world.isRemote())
 				entity.remove();
-			if (random < 0.2) {
-				if (world instanceof ServerWorld) {
-					Entity entityToSpawn = new SmasteveEntity.CustomEntity(SmasteveEntity.entity, (World) world);
-					entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
-					if (entityToSpawn instanceof MobEntity)
-						((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(entityToSpawn.getPosition()),
-								SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-					world.addEntity(entityToSpawn);
-				}
-			} else if (random < 1) {
-				if (world instanceof ServerWorld) {
-					Entity entityToSpawn = new StevindicatorBigEntity.CustomEntity(StevindicatorBigEntity.entity, (World) world);
-					entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
-					if (entityToSpawn instanceof MobEntity)
-						((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(entityToSpawn.getPosition()),
-								SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-					world.addEntity(entityToSpawn);
-				}
+			if (world instanceof ServerWorld) {
+				Entity entityToSpawn = new StevindicatorBigEntity.CustomEntity(StevindicatorBigEntity.entity, (World) world);
+				entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+				if (entityToSpawn instanceof MobEntity)
+					((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(entityToSpawn.getPosition()),
+							SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+				world.addEntity(entityToSpawn);
+			}
+		} else {
+			if (!entity.world.isRemote())
+				entity.remove();
+			if (world instanceof ServerWorld) {
+				Entity entityToSpawn = new SmasteveEntity.CustomEntity(SmasteveEntity.entity, (World) world);
+				entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+				if (entityToSpawn instanceof MobEntity)
+					((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(entityToSpawn.getPosition()),
+							SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+				world.addEntity(entityToSpawn);
 			}
 		}
 	}

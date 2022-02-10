@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 
+import net.mcreator.lotmorestevesremake.entity.StevindicatorEntity;
 import net.mcreator.lotmorestevesremake.entity.StevindicatorBigEntity;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -39,18 +40,22 @@ public class StevindicatorBigRenderer {
 				return new MobRenderer(renderManager, new StevindicatorRenderer.Modelstev_illager(), 1f) {
 					{
 						this.addLayer(new GlowingLayer<>(this));
-						this.addLayer(new HeldItemLayer<LivingEntity, StevindicatorRenderer.Modelstev_illager<LivingEntity>>(this) {
-							public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn,
-									LivingEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-									float netHeadYaw, float headPitch) {
-								if ((entitylivingbaseIn.isSwingInProgress || entitylivingbaseIn.limbSwingAmount > 0.13f)
-										&& entitylivingbaseIn.isAlive()) {
-									super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
-											ageInTicks, netHeadYaw, headPitch);
-								}
-							}
-						});
-						this.addLayer(new HeadLayer<LivingEntity, StevindicatorRenderer.Modelstev_illager<LivingEntity>>(this));
+						this.addLayer(
+								new HeldItemLayer<StevindicatorEntity.CustomEntity, StevindicatorRenderer.Modelstev_illager<StevindicatorEntity.CustomEntity>>(
+										this) {
+									public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn,
+											StevindicatorEntity.CustomEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount,
+											float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+										if ((entitylivingbaseIn.isSwingInProgress || entitylivingbaseIn.limbSwingAmount > 0.13f)
+												&& entitylivingbaseIn.isAlive() || entitylivingbaseIn.getDancingTick() > 0) {
+											super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount,
+													partialTicks, ageInTicks, netHeadYaw, headPitch);
+										}
+									}
+								});
+						this.addLayer(
+								new HeadLayer<StevindicatorEntity.CustomEntity, StevindicatorRenderer.Modelstev_illager<StevindicatorEntity.CustomEntity>>(
+										this));
 					}
 
 					@Override

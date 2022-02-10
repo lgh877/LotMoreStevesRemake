@@ -738,6 +738,14 @@
       "locked_code": true,
       "registry_name": "great_boy_steve",
       "path": "~/Overworld/Mobs/GreatBoySteve"
+    },
+    {
+      "name": "Fasfdsdf",
+      "type": "code",
+      "sortid": 48,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "fasfdsdf"
     }
   ],
   "variable_elements": [],
@@ -997,7 +1005,7 @@
   "workspaceSettings": {
     "modid": "lotmorestevesremake",
     "modName": "LotMoreStevesRemake",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "author": "±ÔÇõ, MCreator",
     "websiteURL": "https://mcreator.net",
     "license": "Academic Free License v3.0",
