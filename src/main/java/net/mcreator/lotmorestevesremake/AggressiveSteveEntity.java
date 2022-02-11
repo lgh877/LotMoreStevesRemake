@@ -33,6 +33,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 
+import net.mcreator.lotmorestevesremake.world.CanCauseInfectionGameRule;
 import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
 import net.mcreator.lotmorestevesremake.entity.StevagerEntity;
 
@@ -79,7 +80,7 @@ public class AggressiveSteveEntity extends MonsterEntity {
 					super.tick();
 			}
 		});
-		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(AggressiveSteveEntity.class));
+		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AggressiveSteveEntity.class)).setCallsForHelp());
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
@@ -108,7 +109,8 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	}
 
 	public boolean attackEntityAsMob(Entity entityIn) {
-		((LivingEntity) entityIn).addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
+		if (this.rand.nextInt(5) == 0 && world.getWorldInfo().getGameRulesInstance().getBoolean(CanCauseInfectionGameRule.gamerule))
+			((LivingEntity) entityIn).addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
 		return super.attackEntityAsMob(entityIn);
 	}
 }

@@ -111,7 +111,6 @@ public class GiantBouncySteveEntity extends LotmorestevesremakeModElements.ModEl
 			super(type, world);
 			experienceValue = 15;
 			setNoAI(false);
-			jumpMovementFactor = 0.1f;
 			enablePersistence();
 		}
 

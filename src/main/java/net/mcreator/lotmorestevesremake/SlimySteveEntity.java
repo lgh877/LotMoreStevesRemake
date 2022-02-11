@@ -136,7 +136,6 @@ public class SlimySteveEntity extends AggressiveSteveEntity {
 		super(type, world);
 		experienceValue = 5;
 		setNoAI(false);
-		jumpMovementFactor = 0.1f;
 		stepHeight = 1.5f;
 	}
 

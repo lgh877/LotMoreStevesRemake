@@ -746,6 +746,56 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "fasfdsdf"
+    },
+    {
+      "name": "CanCauseInfection",
+      "type": "gamerule",
+      "sortid": 49,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "canCauseInfection",
+      "metadata": {
+        "type": "logic"
+      },
+      "path": "~/Effects"
+    },
+    {
+      "name": "CursedDiversionEffectExpires",
+      "type": "procedure",
+      "sortid": 50,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "cursed_diversion_effect_expires",
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          }
+        ]
+      },
+      "path": "~/Effects"
+    },
+    {
+      "name": "CursedDiversionEffectStartedapplied",
+      "type": "procedure",
+      "sortid": 51,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "cursed_diversion_effect_startedapplied",
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/Effects"
     }
   ],
   "variable_elements": [],
@@ -837,12 +887,13 @@
       "item.lotmorestevesremake.tnt_armor_set_boots": "Tnt Boots",
       "item.lotmorestevesremake.smasteve_spawn_egg": "Smasteve Spawn Egg",
       "item.lotmorestevesremake.stegolem_spawn_egg": "Stegolem Spawn Egg",
-      "subtitles.strange_steve_hurt": "",
       "entity.lotmorestevesremake.stevindicator_big": "Stevindicator Big",
+      "subtitles.strange_steve_hurt": "",
       "entity.lotmorestevesremake.zteve": "Zteve",
-      "item.lotmorestevesremake.ghosteve_spawn_egg": "Ghosteve Spawn Egg",
       "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve",
+      "item.lotmorestevesremake.ghosteve_spawn_egg": "Ghosteve Spawn Egg",
       "item.lotmorestevesremake.bouncy_steve_spawn_egg": "Bouncy Steve Spawn Egg",
+      "gamerule.canCauseInfection": "canCauseInfection",
       "item.lotmorestevesremake.stevager_spawn_egg": "Stevager Spawn Egg",
       "subtitles.great_boy_steve_hurt": "",
       "advancements.gaining_slime_bomb_launcher_recipe.title": "I love jelly!",
@@ -879,6 +930,7 @@
       "item.lotmorestevesremake.tnt_armor_set_leggings": "Tnt Armor Set Leggings",
       "item.lotmorestevesremake.stevindicator_spawn_egg": "Stevindicator Spawn Egg",
       "subtitles.ghosteve_hurt": "",
+      "gamerule.canCauseInfection.description": "Determines if CursedDiversionEffect cause infection.",
       "itemGroup.tabarmors_of_steves": "Armors Of Steves",
       "subtitles.nameless_steve_hurt": "",
       "item.lotmorestevesremake.stecube_spawn_egg": "Stecube Spawn Egg"

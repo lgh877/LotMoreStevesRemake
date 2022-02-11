@@ -13,8 +13,14 @@
     "isBenefitical": false,
     "renderStatusInInventory": true,
     "renderStatusInHUD": true,
+    "onStarted": {
+      "name": "CursedDiversionEffectStartedapplied"
+    },
     "onActiveTick": {
       "name": "CursedDiversionOnEffectActiveTick"
+    },
+    "onExpired": {
+      "name": "CursedDiversionEffectExpires"
     }
   }
 }
