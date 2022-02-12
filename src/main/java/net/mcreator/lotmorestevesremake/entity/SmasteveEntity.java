@@ -104,10 +104,10 @@ public class SmasteveEntity extends LotmorestevesremakeModElements.ModElement {
 		public void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
 			AttributeModifierMap.MutableAttribute ammma = MobEntity.func_233666_p_();
 			ammma = ammma.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25);
-			ammma = ammma.createMutableAttribute(Attributes.MAX_HEALTH, 160);
+			ammma = ammma.createMutableAttribute(Attributes.MAX_HEALTH, 384);
 			ammma = ammma.createMutableAttribute(Attributes.FOLLOW_RANGE, 64);
 			ammma = ammma.createMutableAttribute(Attributes.ARMOR, 0);
-			ammma = ammma.createMutableAttribute(Attributes.ATTACK_DAMAGE, 16);
+			ammma = ammma.createMutableAttribute(Attributes.ATTACK_DAMAGE, 25);
 			ammma = ammma.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.8);
 			ammma = ammma.createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 3);
 			event.put(entity, ammma.create());
@@ -224,7 +224,8 @@ public class SmasteveEntity extends LotmorestevesremakeModElements.ModElement {
 							if (!this.isOnSameTeam(livingentity)) {
 								livingentity.hurtResistantTime = 0;
 								livingentity.addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
-								if (livingentity.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackDamage() * 0.6f)) {
+								if (livingentity.attackEntityFrom(DamageSource.causeMobDamage(this),
+										(this.getAttackDamage() / MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5)) * 0.6f)) {
 									this.applyEnchantments(this, livingentity);
 									livingentity.setMotion(livingentity.getMotion().add(0, -1, 0));
 								}
@@ -287,10 +288,12 @@ public class SmasteveEntity extends LotmorestevesremakeModElements.ModElement {
 							if (!this.isOnSameTeam(livingentity) && this.getDistance(livingentity) < this.getWidth() * 4f) {
 								livingentity.hurtResistantTime = 0;
 								livingentity.addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
-								if (livingentity.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackDamage())) {
+								if (livingentity.attackEntityFrom(DamageSource.causeMobDamage(this),
+										this.getAttackDamage() / MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5))) {
 									this.applyEnchantments(this, livingentity);
-									livingentity.applyKnockback(this.getKnockBackPower(), -livingentity.getPosX() + this.getPosX(),
-											-livingentity.getPosZ() + this.getPosZ());
+									livingentity.applyKnockback(
+											this.getKnockBackPower() / MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5),
+											-livingentity.getPosX() + this.getPosX(), -livingentity.getPosZ() + this.getPosZ());
 								}
 							}
 						}
