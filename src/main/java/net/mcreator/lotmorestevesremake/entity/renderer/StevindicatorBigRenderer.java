@@ -7,27 +7,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.item.Items;
-import net.minecraft.item.Item;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.client.renderer.entity.layers.HeadLayer;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 
 import net.mcreator.lotmorestevesremake.entity.StevindicatorEntity;
 import net.mcreator.lotmorestevesremake.entity.StevindicatorBigEntity;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 @OnlyIn(Dist.CLIENT)
@@ -39,7 +28,7 @@ public class StevindicatorBigRenderer {
 			RenderingRegistry.registerEntityRenderingHandler(StevindicatorBigEntity.entity, renderManager -> {
 				return new MobRenderer(renderManager, new StevindicatorRenderer.Modelstev_illager(), 1f) {
 					{
-						this.addLayer(new GlowingLayer<>(this));
+						this.addLayer(new StevindicatorRenderer.GlowingLayer<>(this));
 						this.addLayer(
 								new HeldItemLayer<StevindicatorEntity.CustomEntity, StevindicatorRenderer.Modelstev_illager<StevindicatorEntity.CustomEntity>>(
 										this) {
@@ -70,13 +59,11 @@ public class StevindicatorBigRenderer {
 			});
 		}
 	}
-
-	@OnlyIn(Dist.CLIENT)
+	/*@OnlyIn(Dist.CLIENT)
 	private static class GlowingLayer<T extends Entity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
 		public GlowingLayer(IEntityRenderer<T, M> er) {
 			super(er);
 		}
-
 		public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing,
 				float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 			ResourceLocation Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_cloth1.png");
@@ -94,6 +81,7 @@ public class StevindicatorBigRenderer {
 			this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
 		}
 	}
+	*/
 	// Made with Blockbench 4.1.1
 	// Exported for Minecraft version 1.15 - 1.16 with MCP mappings
 	// Paste this class into your mod and generate all required imports

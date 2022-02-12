@@ -225,7 +225,8 @@ public class SmasteveEntity extends LotmorestevesremakeModElements.ModElement {
 								livingentity.hurtResistantTime = 0;
 								livingentity.addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
 								if (livingentity.attackEntityFrom(DamageSource.causeMobDamage(this),
-										(this.getAttackDamage() / MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5)) * 0.6f)) {
+										(float) (this.getAttackDamage() / MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5))
+												* 0.6f)) {
 									this.applyEnchantments(this, livingentity);
 									livingentity.setMotion(livingentity.getMotion().add(0, -1, 0));
 								}
@@ -289,10 +290,11 @@ public class SmasteveEntity extends LotmorestevesremakeModElements.ModElement {
 								livingentity.hurtResistantTime = 0;
 								livingentity.addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
 								if (livingentity.attackEntityFrom(DamageSource.causeMobDamage(this),
-										this.getAttackDamage() / MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5))) {
+										this.getAttackDamage() / (float) MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5))) {
 									this.applyEnchantments(this, livingentity);
 									livingentity.applyKnockback(
-											this.getKnockBackPower() / MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5),
+											this.getKnockBackPower()
+													/ (float) MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5),
 											-livingentity.getPosX() + this.getPosX(), -livingentity.getPosZ() + this.getPosZ());
 								}
 							}

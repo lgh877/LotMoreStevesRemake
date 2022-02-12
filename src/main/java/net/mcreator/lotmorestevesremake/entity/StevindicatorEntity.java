@@ -24,6 +24,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.GroundPathHelper;
 import net.minecraft.util.DamageSource;
 import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.IPacket;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.item.SpawnEggItem;
@@ -117,17 +120,45 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 	}
 
 	public static class CustomEntity extends AggressiveSteveEntity {
+		private static final DataParameter<Integer> RED = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
+		private static final DataParameter<Integer> GREEN = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
+		private static final DataParameter<Integer> BLUE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 		public boolean attack;
 		public int DancingTick;
+
+		/*public int red;
+		public int green;
+		public int blue;
+		*/
+		protected void registerData() {
+			super.registerData();
+			this.dataManager.register(RED, 0);
+			this.dataManager.register(GREEN, 0);
+			this.dataManager.register(BLUE, 0);
+		}
 
 		public void readAdditional(CompoundNBT compound) {
 			super.readAdditional(compound);
 			this.DancingTick = compound.getInt("DancingTick");
+			this.dataManager.set(RED, compound.getInt("red"));
+			this.dataManager.set(GREEN, compound.getInt("green"));
+			this.dataManager.set(BLUE, compound.getInt("blue"));
+			/*this.red = compound.getInt("red");
+			this.green = compound.getInt("green");
+			this.blue = compound.getInt("blue");
+			*/
 		}
 
 		public void writeAdditional(CompoundNBT compound) {
 			super.writeAdditional(compound);
 			compound.putInt("DancingTick", this.DancingTick);
+			compound.putInt("red", (int) this.getRed());
+			compound.putInt("green", (int) this.getGreen());
+			compound.putInt("blue", (int) this.getBlue());
+			/*compound.putInt("red", this.red);
+			compound.putInt("green", this.green);
+			compound.putInt("blue", this.blue);
+			*/
 		}
 
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
@@ -196,7 +227,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 
 		public void livingTick() {
 			super.livingTick();
-			if (rand.nextInt(80) == 0)
+			if (rand.nextInt(240) == 0)
 				this.DancingTick = 40;
 			if (this.DancingTick > 0)
 				this.DancingTick--;
@@ -251,27 +282,34 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 			float maxHP = (float) this.getAttributeValue(Attributes.MAX_HEALTH);
 			float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
 			float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-			if (rand.nextInt(10) == 0) {
+			this.setRed(rand.nextInt(11));
+			this.setGreen(rand.nextInt(11));
+			this.setBlue(rand.nextInt(11));
+			/*this.red = rand.nextInt(11);
+			this.green = rand.nextInt(11);
+			this.blue = rand.nextInt(11);
+			*/
+			if (rand.nextInt(20) == 0) {
 				this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.LEATHER_HELMET));
 				this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
 				this.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
 				this.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-			} else if (rand.nextInt(10) == 0) {
+			} else if (rand.nextInt(20) == 0) {
 				this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
 				this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
 				this.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
 				this.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-			} else if (rand.nextInt(10) == 0) {
+			} else if (rand.nextInt(20) == 0) {
 				this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 				this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
 				this.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
 				this.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-			} else if (rand.nextInt(10) == 0) {
+			} else if (rand.nextInt(20) == 0) {
 				this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.NETHERITE_HELMET));
 				this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.NETHERITE_CHESTPLATE));
 				this.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.NETHERITE_LEGGINGS));
 				this.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.NETHERITE_BOOTS));
-			} else if (rand.nextInt(10) == 0) {
+			} else if (rand.nextInt(20) == 0) {
 				ItemStack _setstack = new ItemStack(Items.TOTEM_OF_UNDYING);
 				_setstack.setCount(rand.nextInt(10));
 				this.setHeldItem(Hand.OFF_HAND, _setstack);
@@ -305,6 +343,43 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 			return retval;
 		}
 
+		public void setRed(int value) {
+			this.dataManager.set(RED, value);
+		}
+
+		public void setGreen(int value) {
+			this.dataManager.set(GREEN, value);
+		}
+
+		public void setBlue(int value) {
+			this.dataManager.set(BLUE, value);
+		}
+
+		public float getRed() {
+			return this.dataManager.get(RED);
+		}
+
+		public float getGreen() {
+			return this.dataManager.get(GREEN);
+		}
+
+		public float getBlue() {
+			return this.dataManager.get(BLUE);
+		}
+
+		/*@OnlyIn(Dist.CLIENT)
+		public float getRed() {
+			return (float) this.red;
+		}
+		@OnlyIn(Dist.CLIENT)
+		public float getGreen() {
+			return (float) this.green;
+		}
+		@OnlyIn(Dist.CLIENT)
+		public float getBlue() {
+			return (float) this.blue;
+		}
+		*/
 		public class LockAngle extends Goal {
 			public LockAngle() {
 				this.setMutexFlags(EnumSet.of(Goal.Flag.LOOK));

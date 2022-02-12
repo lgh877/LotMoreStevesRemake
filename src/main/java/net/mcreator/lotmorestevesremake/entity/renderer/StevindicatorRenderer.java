@@ -12,7 +12,6 @@ import net.minecraft.util.HandSide;
 import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -69,7 +68,7 @@ public class StevindicatorRenderer {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private static class GlowingLayer<T extends Entity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
+	public static class GlowingLayer<T extends Entity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
 		public GlowingLayer(IEntityRenderer<T, M> er) {
 			super(er);
 		}
@@ -77,8 +76,9 @@ public class StevindicatorRenderer {
 		public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing,
 				float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 			ResourceLocation Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_cloth1.png");
-			MobEntity entityM = (MobEntity) entitylivingbaseIn;
+			StevindicatorEntity.CustomEntity entityM = (StevindicatorEntity.CustomEntity) entitylivingbaseIn;
 			Item getArmor = entityM.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem();
+			float color[] = {1, 1, 1};
 			if (getArmor == Items.NETHERITE_CHESTPLATE)
 				Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_netherite.png");
 			else if (getArmor == Items.DIAMOND_CHESTPLATE)
@@ -87,8 +87,13 @@ public class StevindicatorRenderer {
 				Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_iron.png");
 			else if (getArmor == Items.LEATHER_CHESTPLATE)
 				Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_leather.png");
+			else {
+				color[0] = entityM.getRed() * 0.1f;
+				color[1] = entityM.getGreen() * 0.1f;
+				color[2] = entityM.getBlue() * 0.1f;
+			}
 			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(Texture));
-			this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+			this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color[0], color[1], color[2], 1);
 		}
 	}
 
@@ -145,13 +150,13 @@ public class StevindicatorRenderer {
 		@Override
 		public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue,
 				float alpha) {
-			head.render(matrixStack, buffer, packedLight, packedOverlay);
-			body.render(matrixStack, buffer, packedLight, packedOverlay);
-			arms.render(matrixStack, buffer, packedLight, packedOverlay);
-			left_arm.render(matrixStack, buffer, packedLight, packedOverlay);
-			right_arm.render(matrixStack, buffer, packedLight, packedOverlay);
-			left_leg.render(matrixStack, buffer, packedLight, packedOverlay);
-			right_leg.render(matrixStack, buffer, packedLight, packedOverlay);
+			head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			body.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			arms.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			left_arm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			right_arm.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			left_leg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			right_leg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
 		}
 
 		public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
@@ -165,7 +170,7 @@ public class StevindicatorRenderer {
 			float armSwing = MathHelper.cos(f * 0.6662F) * f1;
 			boolean flag = entityM.getPrimaryHand() == HandSide.RIGHT;
 			this.head.rotateAngleY = f3 / (180F / (float) Math.PI);
-			this.head.rotateAngleX = f4 / (180F / (float) Math.PI) + entityM.getDancingTick();
+			this.head.rotateAngleX = f4 / (180F / (float) Math.PI);
 			this.head.rotationPointX = 0;
 			this.head.rotationPointY = 0;
 			this.right_arm.rotateAngleZ = 0;

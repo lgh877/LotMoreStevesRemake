@@ -18,7 +18,7 @@ public class StevillagersSpawnConditionProcedure {
 			return false;
 		}
 		IWorld world = (IWorld) dependencies.get("world");
-		return world.getWorldInfo().getDayTime() > 240000
+		return world.getWorldInfo().getDayTime() > 96000
 				&& SpawnInOverworldOnlyProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world)).collect(HashMap::new,
 						(_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 	}
