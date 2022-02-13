@@ -129,6 +129,8 @@ public class MonstrosteveRenderer {
 				this.rightLeg.rotationPointY = -24;
 				this.rightLeg.rotationPointZ = 0;
 				this.body.rotateAngleX = 0;
+				this.body.rotationPointY = -32;
+				this.head.rotationPointY = -35;
 			}
 			this.whole.rotateAngleZ = MathHelper.sin(f * 0.5f) * f1 * 0.1f;
 			this.head.rotateAngleY = headYaw;
@@ -160,6 +162,11 @@ public class MonstrosteveRenderer {
 						this.leftShoulder.rotateAngleX += -MathHelper.sin(a * pi / 2) * pi * 0.6667f;
 						this.rightShoulder.rotateAngleX += this.leftShoulder.rotateAngleX;
 					}
+				} else if (entityM.getAttackState() == 2) {
+					float a = (1 - this.swingProgress);
+					a = (float) Math.pow((double) a, 3);
+					this.body.rotationPointY += MathHelper.sin(a * pi) * 5;
+					this.head.rotationPointY += MathHelper.sin(a * pi) * 5;
 				}
 			}
 		}

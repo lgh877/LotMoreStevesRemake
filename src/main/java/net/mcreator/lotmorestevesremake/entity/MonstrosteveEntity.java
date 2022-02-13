@@ -11,11 +11,13 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.common.MinecraftForge;
 
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
 import net.minecraft.world.BossInfo;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
@@ -30,20 +32,20 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.IPacket;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.Item;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
@@ -107,7 +109,7 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 			AttributeModifierMap.MutableAttribute ammma = MobEntity.func_233666_p_();
 			ammma = ammma.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3);
 			ammma = ammma.createMutableAttribute(Attributes.MAX_HEALTH, 500);
-			ammma = ammma.createMutableAttribute(Attributes.FOLLOW_RANGE, 96);
+			ammma = ammma.createMutableAttribute(Attributes.FOLLOW_RANGE, 64);
 			ammma = ammma.createMutableAttribute(Attributes.ARMOR, 15);
 			ammma = ammma.createMutableAttribute(Attributes.ARMOR_TOUGHNESS, 15);
 			ammma = ammma.createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 5);
@@ -157,31 +159,58 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 			super.registerGoals();
 			this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-					if (CustomMathHelper.isEntityInBox(this.attacker.getAttackTarget(), this.attacker, 3) && !this.attacker.isSwingInProgress
-							&& CustomEntity.this.getAttackState() == 0) {
+					if (CustomMathHelper.isEntityInBox(this.attacker.getAttackTarget(), this.attacker, 4) && !this.attacker.isSwingInProgress
+							&& CustomEntity.this.getAttackState() == 0 && CustomEntity.this.rand.nextInt(10) == 0) {
 						this.attacker.swingArm(Hand.MAIN_HAND);
 						CustomEntity.this.setAttackState(1);
 						CustomEntity.this.attackProgress = 0;
+					} else if (!this.attacker.isSwingInProgress && CustomEntity.this.getAttackState() == 0
+							&& CustomEntity.this.rand.nextInt(60) == 0) {
+						this.attacker.swingArm(Hand.MAIN_HAND);
+						CustomEntity.this.setAttackState(2);
+						CustomEntity.this.attackProgress = 0;
+						if (world instanceof ServerWorld) {
+							float f = (this.attacker.renderYawOffset + (float) (180 * (CustomEntity.this.rand.nextInt(3) - 1)))
+									* ((float) Math.PI / 180F);
+							float f1 = MathHelper.cos(f);
+							float f2 = MathHelper.sin(f);
+							double x = this.attacker.getPosX() + f1 * 1.3;
+							double y = this.attacker.getPosY() + 4;
+							double z = this.attacker.getPosZ() + f2 * 1.3;
+							Vector3d posVector = new Vector3d(Math.pow(enemy.getPosX() - this.attacker.getPosX(), 0.5),
+									Math.pow(enemy.getPosY() - this.attacker.getPosY() - 5, 0.2) + 0.6,
+									Math.pow(enemy.getPosZ() - this.attacker.getPosZ(), 0.5));
+							SpinningSteveEntity.CustomEntity entityToSpawn = new SpinningSteveEntity.CustomEntity(SpinningSteveEntity.entity,
+									(World) world);
+							entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+							entityToSpawn.mustExplode = true;
+							entityToSpawn.setMotion(entityToSpawn.getMotion().add(posVector.x, posVector.y, posVector.z));
+							if (entityToSpawn instanceof MobEntity)
+								((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world,
+										world.getDifficultyForLocation(entityToSpawn.getPosition()), SpawnReason.MOB_SUMMONED,
+										(ILivingEntityData) null, (CompoundNBT) null);
+							world.addEntity(entityToSpawn);
+						}
 					}
 				}
 			});
 			this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1));
-			this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
 			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-			this.goalSelector.addGoal(5, new SwimGoal(this));
-			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
-			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
-			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
+			this.goalSelector.addGoal(7, new LookAtGoal(this, LivingEntity.class, 8.0F));
 		}
 
 		public void livingTick() {
 			super.livingTick();
-			this.attackProcedure();
+			if (this.isAlive()) {
+				this.attackProcedure();
+			}
 		}
 
 		@Override
 		protected void updateArmSwingProgress() {
-			int i = 45;
+			int i = 60;
+			if (this.getAttackState() == 2)
+				i = 10;
 			if (this.isSwingInProgress) {
 				++this.swingProgressInt;
 				if (this.swingProgressInt >= i) {
@@ -190,10 +219,14 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 				}
 			} else {
 				this.swingProgressInt = 0;
-				if (!(this.getAttackState() == 2 && this.bullet == 0))
-					this.setAttackState(0);
+				//if (!(this.getAttackState() == 3 && this.bullet == 0))
+				this.setAttackState(0);
 			}
 			this.swingProgress = (float) this.swingProgressInt / (float) i;
+		}
+
+		public int getHorizontalFaceSpeed() {
+			return 20;
 		}
 
 		public void attackProcedure() {

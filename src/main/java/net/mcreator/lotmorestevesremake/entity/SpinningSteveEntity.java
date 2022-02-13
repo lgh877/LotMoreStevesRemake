@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.network.IPacket;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.Item;
 import net.minecraft.entity.ai.goal.SwimGoal;
@@ -102,6 +103,18 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 	}
 
 	public static class CustomEntity extends AggressiveSteveEntity {
+		public boolean mustExplode;
+
+		public void readAdditional(CompoundNBT compound) {
+			super.readAdditional(compound);
+			this.mustExplode = compound.getBoolean("mustExplode");
+		}
+
+		public void writeAdditional(CompoundNBT compound) {
+			super.writeAdditional(compound);
+			compound.putBoolean("mustExplode", this.mustExplode);
+		}
+
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);
 		}
@@ -136,8 +149,20 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 				this.setPose(Pose.STANDING);
 			if (this.onGround && rand.nextInt(25) == 0)
 				this.setMotion(this.getMotion().add(this.getLookVec().x, 1.5, this.getLookVec().z));
-			else if ((!this.onGround && rand.nextInt(60) == 0 && this.getMotion().y > 0) || this.isInWater() || this.isInLava())
+			else if ((!this.onGround && rand.nextInt(60) == 0 && this.getMotion().y > 0) || this.isInWater() || this.isInLava()) {
 				this.setMotion(this.getMotion().add(this.getLookVec().x * 0.5f, 1, this.getLookVec().y * 0.5f));
+				if (this.rand.nextInt(6) == 0) {
+					if (!this.world.isRemote) {
+						Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)
+								? Explosion.Mode.DESTROY
+								: Explosion.Mode.NONE;
+						this.dead = true;
+						this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), 4, explosion$mode);
+						this.remove();
+						this.spawnLingeringCloud();
+					}
+				}
+			}
 		}
 
 		public boolean isOnGround() {
@@ -149,7 +174,7 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 		}
 
 		public boolean onLivingFall(float distance, float damageMultiplier) {
-			if (rand.nextInt(6) == 0 && distance > 3) {
+			if (rand.nextInt(6) == 0 && distance > 3 || this.mustExplode) {
 				if (!this.world.isRemote) {
 					Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)
 							? Explosion.Mode.DESTROY
