@@ -760,23 +760,6 @@
       "path": "~/Effects"
     },
     {
-      "name": "CursedDiversionEffectExpires",
-      "type": "procedure",
-      "sortid": 50,
-      "compiles": true,
-      "locked_code": false,
-      "registry_name": "cursed_diversion_effect_expires",
-      "metadata": {
-        "dependencies": [
-          {
-            "name": "entity",
-            "type": "entity"
-          }
-        ]
-      },
-      "path": "~/Effects"
-    },
-    {
       "name": "CursedDiversionEffectStartedapplied",
       "type": "procedure",
       "sortid": 51,
