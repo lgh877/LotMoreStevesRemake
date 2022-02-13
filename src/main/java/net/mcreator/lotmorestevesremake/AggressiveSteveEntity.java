@@ -87,7 +87,7 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	}
 
 	protected void collideWithEntity(Entity entityIn) {
-		if (entityIn instanceof MobEntity && !this.isOnSameTeam(entityIn) && this.getRNG().nextInt(3) == 0) {
+		if (entityIn instanceof MobEntity && !this.isOnSameTeam(entityIn) && this.getRNG().nextInt(5) == 0) {
 			this.setAttackTarget((LivingEntity) entityIn);
 		}
 		super.collideWithEntity(entityIn);
@@ -109,7 +109,7 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	}
 
 	public boolean attackEntityAsMob(Entity entityIn) {
-		if (this.rand.nextInt(5) == 0 && world.getWorldInfo().getGameRulesInstance().getBoolean(CanCauseInfectionGameRule.gamerule))
+		if (world.getWorldInfo().getGameRulesInstance().getBoolean(CanCauseInfectionGameRule.gamerule))
 			((LivingEntity) entityIn).addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
 		return super.attackEntityAsMob(entityIn);
 	}

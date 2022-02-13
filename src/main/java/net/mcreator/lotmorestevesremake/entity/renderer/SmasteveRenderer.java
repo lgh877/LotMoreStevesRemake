@@ -34,7 +34,7 @@ public class SmasteveRenderer {
 					}
 
 					protected void preRenderCallback(LivingEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
-						matrixStackIn.scale(1.5f, 1.5f, 1.7f);
+						matrixStackIn.scale(1.5f, 1.5f, 1.5f);
 					}
 				};
 			});

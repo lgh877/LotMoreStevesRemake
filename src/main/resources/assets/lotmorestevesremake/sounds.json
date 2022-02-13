@@ -99,5 +99,14 @@
         "stream": false
       }
     ]
+  },
+  "heavy_mechanical_steve": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:heavy_mechanical_steve_hurt",
+        "stream": false
+      }
+    ]
   }
 }

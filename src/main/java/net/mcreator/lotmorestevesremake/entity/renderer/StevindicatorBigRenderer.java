@@ -59,29 +59,6 @@ public class StevindicatorBigRenderer {
 			});
 		}
 	}
-	/*@OnlyIn(Dist.CLIENT)
-	private static class GlowingLayer<T extends Entity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
-		public GlowingLayer(IEntityRenderer<T, M> er) {
-			super(er);
-		}
-		public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing,
-				float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-			ResourceLocation Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_cloth1.png");
-			MobEntity entityM = (MobEntity) entitylivingbaseIn;
-			Item getArmor = entityM.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem();
-			if (getArmor == Items.NETHERITE_CHESTPLATE)
-				Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_netherite.png");
-			else if (getArmor == Items.DIAMOND_CHESTPLATE)
-				Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_diamond.png");
-			else if (getArmor == Items.IRON_CHESTPLATE)
-				Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_iron.png");
-			else if (getArmor == Items.LEATHER_CHESTPLATE)
-				Texture = new ResourceLocation("lotmorestevesremake:textures/stev_illager_leather.png");
-			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(Texture));
-			this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
-		}
-	}
-	*/
 	// Made with Blockbench 4.1.1
 	// Exported for Minecraft version 1.15 - 1.16 with MCP mappings
 	// Paste this class into your mod and generate all required imports

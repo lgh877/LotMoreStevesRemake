@@ -18,9 +18,6 @@
     },
     "onActiveTick": {
       "name": "CursedDiversionOnEffectActiveTick"
-    },
-    "onExpired": {
-      "name": "CursedDiversionEffectExpires"
     }
   }
 }

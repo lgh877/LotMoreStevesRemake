@@ -25,7 +25,7 @@ public class CursedDiversionEffectStartedappliedProcedure {
 		}
 		IWorld world = (IWorld) dependencies.get("world");
 		Entity entity = (Entity) dependencies.get("entity");
-		if (!world.getWorldInfo().getGameRulesInstance().getBoolean(CanCauseInfectionGameRule.gamerule)) {
+		if (!world.getWorldInfo().getGameRulesInstance().getBoolean(CanCauseInfectionGameRule.gamerule) && !world.isRemote()) {
 			if (entity instanceof LivingEntity) {
 				((LivingEntity) entity).removePotionEffect(CursedDiversionPotionEffect.potion);
 			}

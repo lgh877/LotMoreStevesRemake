@@ -59,6 +59,7 @@ import net.mcreator.lotmorestevesremake.procedures.StevillagersSpawnConditionPro
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.StevindicatorRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
+import net.mcreator.lotmorestevesremake.CustomMathHelper;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 import javax.annotation.Nullable;
@@ -248,8 +249,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 				this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
 				if (this.getAttackTarget() != null) {
 					this.getAttackTarget().hurtResistantTime = 0;
-					double d0 = this.getDistanceSq(this.getAttackTarget());
-					if (d0 <= this.getAttackReach(this.getAttackTarget())) {
+					if (CustomMathHelper.isEntityInBox(this.getAttackTarget(), this, 1.5)) {
 						this.attackEntityAsMob(this.getAttackTarget());
 					}
 				}

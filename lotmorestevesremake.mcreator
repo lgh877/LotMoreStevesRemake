@@ -293,7 +293,7 @@
           }
         ]
       },
-      "path": "~/InfectionEvent"
+      "path": "~/Effects/InfectionEvent"
     },
     {
       "name": "StevillagersSpawnCondition",
@@ -594,7 +594,7 @@
           }
         ]
       },
-      "path": "~/InfectionEvent"
+      "path": "~/Effects/InfectionEvent"
     },
     {
       "name": "ArmorsOfSteves",
@@ -796,6 +796,33 @@
         ]
       },
       "path": "~/Effects"
+    },
+    {
+      "name": "Monstrosteve",
+      "type": "livingentity",
+      "sortid": 52,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "monstrosteve",
+      "path": "~/Overworld/Mobs/Monstrosteve"
+    },
+    {
+      "name": "MonstrosteveSpawnCondition",
+      "type": "procedure",
+      "sortid": 53,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "monstrosteve_spawn_condition",
+      "metadata": {
+        "return_type": "logic",
+        "dependencies": [
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/Overworld/Mobs/Monstrosteve"
     }
   ],
   "variable_elements": [],
@@ -876,22 +903,31 @@
       ],
       "category": "hostile",
       "subtitle": ""
+    },
+    {
+      "name": "heavy_mechanical_steve",
+      "files": [
+        "heavy_mechanical_steve_hurt"
+      ],
+      "category": "hostile",
+      "subtitle": ""
     }
   ],
   "language_map": {
     "en_us": {
       "entity.lotmorestevesremake.stegolem": "Stegolem",
-      "item.lotmorestevesremake.mini_zteve_spawn_egg": "Mini Zteve Spawn Egg",
       "item.lotmorestevesremake.micro_steve_spawn_egg": "Micro Steve Spawn Egg",
+      "item.lotmorestevesremake.mini_zteve_spawn_egg": "Mini Zteve Spawn Egg",
       "entity.lotmorestevesremake.ghosteve": "Ghosteve",
+      "subtitles.heavy_mechanical_steve": "",
       "item.lotmorestevesremake.tnt_armor_set_boots": "Tnt Boots",
       "item.lotmorestevesremake.smasteve_spawn_egg": "Smasteve Spawn Egg",
       "item.lotmorestevesremake.stegolem_spawn_egg": "Stegolem Spawn Egg",
-      "subtitles.strange_steve_hurt": "",
       "entity.lotmorestevesremake.stevindicator_big": "Stevindicator Big",
+      "subtitles.strange_steve_hurt": "",
       "entity.lotmorestevesremake.zteve": "Zteve",
-      "item.lotmorestevesremake.ghosteve_spawn_egg": "Ghosteve Spawn Egg",
       "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve",
+      "item.lotmorestevesremake.ghosteve_spawn_egg": "Ghosteve Spawn Egg",
       "item.lotmorestevesremake.bouncy_steve_spawn_egg": "Bouncy Steve Spawn Egg",
       "gamerule.canCauseInfection": "canCauseInfection",
       "item.lotmorestevesremake.stevager_spawn_egg": "Stevager Spawn Egg",
@@ -925,6 +961,8 @@
       "item.lotmorestevesremake.spinning_steve_spawn_egg": "Spinning Steve Spawn Egg",
       "item.lotmorestevesremake.giant_bouncy_steve_spawn_egg": "Giant Bouncy Steve Spawn Egg",
       "advancements.gaining_slime_bomb_launcher_recipe.descr": "Kill the giant bouncy Steve",
+      "entity.lotmorestevesremake.monstrosteve": "Monstrosteve",
+      "item.lotmorestevesremake.monstrosteve_spawn_egg": "Monstrosteve Spawn Egg",
       "item.lotmorestevesremake.slime_bomb": "Slime Bomb Launcher",
       "subtitles.nameless_steve_death": "",
       "item.lotmorestevesremake.tnt_armor_set_leggings": "Tnt Armor Set Leggings",
@@ -1001,6 +1039,10 @@
               {
                 "name": "GreatBoySteve",
                 "children": []
+              },
+              {
+                "name": "Monstrosteve",
+                "children": []
               }
             ]
           },
@@ -1011,16 +1053,17 @@
         ]
       },
       {
-        "name": "InfectionEvent",
-        "children": []
-      },
-      {
         "name": "Particles",
         "children": []
       },
       {
         "name": "Effects",
-        "children": []
+        "children": [
+          {
+            "name": "InfectionEvent",
+            "children": []
+          }
+        ]
       },
       {
         "name": "Events",
