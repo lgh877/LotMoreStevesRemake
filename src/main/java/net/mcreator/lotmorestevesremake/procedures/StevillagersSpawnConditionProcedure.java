@@ -2,19 +2,14 @@ package net.mcreator.lotmorestevesremake.procedures;
 
 import net.minecraft.world.IWorld;
 
-import net.mcreator.lotmorestevesremake.LotmorestevesremakeMod;
-
 import java.util.stream.Stream;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.AbstractMap;
 
 public class StevillagersSpawnConditionProcedure {
-
 	public static boolean executeProcedure(Map<String, Object> dependencies) {
 		if (dependencies.get("world") == null) {
-			if (!dependencies.containsKey("world"))
-				LotmorestevesremakeMod.LOGGER.warn("Failed to load dependency world for procedure StevillagersSpawnCondition!");
 			return false;
 		}
 		IWorld world = (IWorld) dependencies.get("world");

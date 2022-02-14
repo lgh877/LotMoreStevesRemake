@@ -87,7 +87,7 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	}
 
 	protected void collideWithEntity(Entity entityIn) {
-		if (entityIn instanceof MobEntity && !this.isOnSameTeam(entityIn) && this.getRNG().nextInt(5) == 0) {
+		if (entityIn instanceof MobEntity && !this.isOnSameTeam(entityIn) && this.getRNG().nextInt(5) == 0 && !entityIn.isInvulnerable()) {
 			this.setAttackTarget((LivingEntity) entityIn);
 		}
 		super.collideWithEntity(entityIn);

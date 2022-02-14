@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.Explosion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.network.IPacket;
 import net.minecraft.nbt.CompoundNBT;
@@ -31,9 +32,11 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.AreaEffectCloudEntity;
 
@@ -73,7 +76,7 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 5, 1, 4));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 2, 1, 1));
 	}
 
 	@Override
@@ -141,6 +144,26 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 			this.goalSelector.addGoal(8, new SwimGoal(this));
 		}
 
+		private void defaultExplode() {
+			if (!this.world.isRemote) {
+				Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)
+						? Explosion.Mode.DESTROY
+						: Explosion.Mode.NONE;
+				this.dead = true;
+				this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), 4, explosion$mode);
+				this.remove();
+				this.spawnLingeringCloud(4);
+			}
+		}
+
+		protected void collideWithEntity(Entity entityIn) {
+			super.collideWithEntity(entityIn);
+			if (this.mustExplode && !EntityTypeTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:we_are_steves"))
+					.contains(entityIn.getType()) && entityIn instanceof LivingEntity) {
+				this.defaultExplode();
+			}
+		}
+
 		public void livingTick() {
 			super.livingTick();
 			if (!this.onGround)
@@ -151,16 +174,8 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 				this.setMotion(this.getMotion().add(this.getLookVec().x, 1.5, this.getLookVec().z));
 			else if ((!this.onGround && rand.nextInt(60) == 0 && this.getMotion().y > 0) || this.isInWater() || this.isInLava()) {
 				this.setMotion(this.getMotion().add(this.getLookVec().x * 0.5f, 1, this.getLookVec().y * 0.5f));
-				if (this.rand.nextInt(6) == 0) {
-					if (!this.world.isRemote) {
-						Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)
-								? Explosion.Mode.DESTROY
-								: Explosion.Mode.NONE;
-						this.dead = true;
-						this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), 4, explosion$mode);
-						this.remove();
-						this.spawnLingeringCloud();
-					}
+				if ((this.isInWater() || this.isInLava()) && this.rand.nextInt(6) == 0) {
+					this.defaultExplode();
 				}
 			}
 		}
@@ -182,18 +197,18 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 					this.dead = true;
 					this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float) Math.pow(distance, 0.5), explosion$mode);
 					this.remove();
-					this.spawnLingeringCloud();
+					this.spawnLingeringCloud((float) Math.pow(distance, 0.5));
 				}
 			}
 			return false;
 		}
 
-		private void spawnLingeringCloud() {
+		private void spawnLingeringCloud(float radius) {
 			this.addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
 			Collection<EffectInstance> collection = this.getActivePotionEffects();
 			if (!collection.isEmpty()) {
 				AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ());
-				areaeffectcloudentity.setRadius(4F);
+				areaeffectcloudentity.setRadius(radius);
 				areaeffectcloudentity.setRadiusOnUse(-0.5F);
 				areaeffectcloudentity.setWaitTime(10);
 				areaeffectcloudentity.setParticleData(SteveFaceParticleParticle.particle);

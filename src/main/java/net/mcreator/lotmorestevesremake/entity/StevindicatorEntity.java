@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -105,6 +106,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 					return StevillagersSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
 							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 				});
+		DungeonHooks.addDungeonMob(entity, 180);
 	}
 
 	private static class EntityAttributesRegisterHandler {

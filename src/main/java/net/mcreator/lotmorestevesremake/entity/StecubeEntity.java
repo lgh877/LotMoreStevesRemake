@@ -79,7 +79,7 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.AMBIENT).add(new MobSpawnInfo.Spawners(entity, 1, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.AMBIENT).add(new MobSpawnInfo.Spawners(entity, 1, 1, 3));
 	}
 
 	@Override

@@ -121,6 +121,8 @@ public class MonstrosteveRenderer {
 			float pi = (float) Math.PI;
 			float headYaw = f3 / (180F / (float) Math.PI);
 			float pitch = f4 / (180F / (float) Math.PI);
+			float a1 = f2 - (float) entityM.ticksExisted;
+			float a2 = entityM.getAnimationScale(a1);
 			{//basic settings
 				this.leftLeg.rotationPointX = 16;
 				this.leftLeg.rotationPointY = -24;
@@ -132,11 +134,14 @@ public class MonstrosteveRenderer {
 				this.body.rotationPointY = -32;
 				this.head.rotationPointY = -35;
 			}
+			this.jaw.rotationPointY = a2;
 			this.whole.rotateAngleZ = MathHelper.sin(f * 0.5f) * f1 * 0.1f;
 			this.head.rotateAngleY = headYaw;
 			this.head.rotateAngleX = pitch;
 			this.leftShoulder.rotateAngleX = (MathHelper.cos(f * 0.2f) - 2) * f1 * 0.2f;
+			this.leftShoulder.rotateAngleZ = 0;
 			this.rightShoulder.rotateAngleX = (MathHelper.cos(f * 0.2f + pi) - 2) * f1 * 0.2f;
+			this.rightShoulder.rotateAngleZ = 0;
 			this.leftLeg.rotateAngleX = MathHelper.cos(f * 0.5f + pi * 1.4f) * f1 * 0.4f;
 			this.leftLeg.rotationPointY += MathHelper.clamp(MathHelper.sin(f * 0.5f) * f1 * 5, -Float.POSITIVE_INFINITY, 0);
 			this.leftLeg.rotationPointZ += MathHelper.cos(f * 0.5f + pi) * f1 * 5;
@@ -147,7 +152,7 @@ public class MonstrosteveRenderer {
 				if (entityM.getAttackState() == 1) {
 					if (this.swingProgress < 0.8f) {
 						float a = this.swingProgress * 1.25f;
-						a = (float) Math.pow((double) a, 12);
+						a = (float) Math.pow((double) a, 8);
 						this.body.rotateAngleX += -MathHelper.sin(a * pi) * pi / 6 + MathHelper.sin(a * pi / 2) * pi / 2.4f;
 						this.leftShoulder.rotateAngleX *= MathHelper.clamp((1 - MathHelper.sin(a * pi / 2) * 2), 0, 1);
 						this.rightShoulder.rotateAngleX *= MathHelper.clamp((1 - MathHelper.sin(a * pi / 2) * 2), 0, 1);
@@ -164,9 +169,13 @@ public class MonstrosteveRenderer {
 					}
 				} else if (entityM.getAttackState() == 2) {
 					float a = (1 - this.swingProgress);
-					a = (float) Math.pow((double) a, 3);
-					this.body.rotationPointY += MathHelper.sin(a * pi) * 5;
+					a = (float) Math.pow((double) a, 2);
+					this.body.rotationPointY += MathHelper.sin(a * pi) * 8;
 					this.head.rotationPointY += MathHelper.sin(a * pi) * 5;
+					this.leftShoulder.rotateAngleX += -MathHelper.sin(a * pi);
+					this.leftShoulder.rotateAngleZ += -MathHelper.sin(a * pi);
+					this.rightShoulder.rotateAngleX += -MathHelper.sin(a * pi);
+					this.rightShoulder.rotateAngleZ += MathHelper.sin(a * pi);
 				}
 			}
 		}

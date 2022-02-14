@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.DungeonHooks;
 
 import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.gen.Heightmap;
@@ -79,6 +80,7 @@ public class NamelessSteveEntity extends LotmorestevesremakeModElements.ModEleme
 					return NamelessSteveSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
 							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll)) && Math.random() < 0.1;
 				});
+		DungeonHooks.addDungeonMob(entity, 180);
 	}
 
 	private static class EntityAttributesRegisterHandler {
