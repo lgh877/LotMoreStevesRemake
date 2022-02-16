@@ -197,7 +197,7 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 							CustomEntity.this.setAttackState(1);
 							CustomEntity.this.attackProgress = 0;
 						} else if (!this.attacker.isSwingInProgress && CustomEntity.this.getAttackState() == 0
-								&& CustomEntity.this.rand.nextInt(70) == 0) {
+								&& CustomEntity.this.rand.nextInt(55) == 0) {
 							this.attacker.swingArm(Hand.MAIN_HAND);
 							CustomEntity.this.setAttackState(2);
 							CustomEntity.this.attackProgress = 0;
@@ -470,7 +470,7 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 								((SpinningSteveEntity.CustomEntity) entityToSpawn).mustExplode = true;
 								this.shoot(this.getAttackTarget().getPosX() - this.getPosX(), this.getAttackTarget().getPosY() - this.getPosY(),
 										this.getAttackTarget().getPosZ() - this.getPosZ(),
-										(float) Math.pow(this.getDistance(this.getAttackTarget()) - 2, 0.5) * 0.6f, 1, entityToSpawn);
+										(float) Math.pow(this.getDistance(this.getAttackTarget()) - 2, 0.8) * 0.2f, 1, entityToSpawn);
 								entityToSpawn.setMotion(entityToSpawn.getMotion().add(0, 2, 0));
 								if (entityToSpawn instanceof MobEntity)
 									((MobEntity) entityToSpawn).onInitialSpawn((ServerWorld) world,

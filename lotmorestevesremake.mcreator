@@ -833,7 +833,7 @@
       "type": "rangeditem",
       "sortid": 54,
       "compiles": true,
-      "locked_code": false,
+      "locked_code": true,
       "registry_name": "minigun",
       "path": "~/Overworld/Items/Minigun"
     }

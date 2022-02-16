@@ -99,6 +99,8 @@ public class MinigunItem extends LotmorestevesremakeModElements.ModElement {
 
 	@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
 	public static class ArrowCustomEntity extends AbstractArrowEntity implements IRendersAsItem {
+		private int lifeTime;
+
 		public ArrowCustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			super(arrow, world);
 		}
@@ -140,13 +142,16 @@ public class MinigunItem extends LotmorestevesremakeModElements.ModElement {
 		@Override
 		public void tick() {
 			super.tick();
+			this.lifeTime++;
+			if (this.lifeTime > 10)
+				if (!world.isRemote)
+					this.remove();
 			double x = this.getPosX();
 			double y = this.getPosY();
 			double z = this.getPosZ();
 			World world = this.world;
 			Entity entity = this.func_234616_v_();
 			Entity imediatesourceentity = this;
-
 			MinigunWhileProjectileFlyingTickProcedure.executeProcedure(Stream
 					.of(new AbstractMap.SimpleEntry<>("world", world), new AbstractMap.SimpleEntry<>("x", x), new AbstractMap.SimpleEntry<>("y", y),
 							new AbstractMap.SimpleEntry<>("z", z))
