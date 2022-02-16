@@ -16,6 +16,7 @@ package net.mcreator.lotmorestevesremake;
 
 import net.minecraftforge.fml.common.Mod;
 
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.entity.LivingEntity;
 
@@ -28,6 +29,19 @@ public class CustomMathHelper {
 			}
 		}
 		return false;
+	}
+
+	public static AxisAlignedBB makeSphericalAttackRangeBetweenTarget(LivingEntity entityIn, LivingEntity targetIn, double height, double distTo,
+			double sizeX, double sizeY, double sizeZ) {
+		Vector3d posVector = new Vector3d(targetIn.getPosX() - entityIn.getPosX(), targetIn.getPosY() - entityIn.getPosY() - height,
+				targetIn.getPosZ() - entityIn.getPosZ());
+		posVector.normalize();
+		double x = entityIn.getPosX() + posVector.x * distTo;
+		double y = entityIn.getPosY() + height + distTo * posVector.y;
+		double z = entityIn.getPosZ() + posVector.z * distTo;
+		AxisAlignedBB attackRange = new AxisAlignedBB(x - (sizeX / 2d), y - (sizeY / 2), z - (sizeZ / 2d), x + (sizeX / 2d), y + (sizeY / 2),
+				z + (sizeZ / 2d));
+		return attackRange;
 	}
 
 	public static AxisAlignedBB makeSphericalAttackRange(LivingEntity entityIn, double height, double distTo, double sizeX, double sizeY,

@@ -800,21 +800,42 @@
       "path": "~/Overworld/Mobs/Monstrosteve"
     },
     {
-      "name": "Fdsa",
+      "name": "MinigunWhileProjectileFlyingTick",
       "type": "procedure",
       "sortid": 54,
       "compiles": true,
-      "locked_code": false,
-      "registry_name": "fdsa",
+      "locked_code": true,
+      "registry_name": "minigun_while_projectile_flying_tick",
       "metadata": {
         "dependencies": [
           {
-            "name": "entity",
-            "type": "entity"
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "name": "y",
+            "type": "number"
+          },
+          {
+            "name": "z",
+            "type": "number"
+          },
+          {
+            "name": "world",
+            "type": "world"
           }
         ]
       },
-      "path": "~/Overworld/Mobs/Monstrosteve"
+      "path": "~/Overworld/Items/Minigun"
+    },
+    {
+      "name": "Minigun",
+      "type": "rangeditem",
+      "sortid": 54,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "minigun",
+      "path": "~/Overworld/Items/Minigun"
     }
   ],
   "variable_elements": [],
@@ -914,9 +935,10 @@
       "subtitles.heavy_mechanical_steve": "",
       "item.lotmorestevesremake.tnt_armor_set_boots": "Tnt Boots",
       "item.lotmorestevesremake.smasteve_spawn_egg": "Smasteve Spawn Egg",
+      "item.lotmorestevesremake.minigun": "Minigun",
       "item.lotmorestevesremake.stegolem_spawn_egg": "Stegolem Spawn Egg",
-      "entity.lotmorestevesremake.stevindicator_big": "Stevindicator Big",
       "subtitles.strange_steve_hurt": "",
+      "entity.lotmorestevesremake.stevindicator_big": "Stevindicator Big",
       "entity.lotmorestevesremake.zteve": "Zteve",
       "entity.lotmorestevesremake.bouncy_steve": "Bouncy Steve",
       "item.lotmorestevesremake.ghosteve_spawn_egg": "Ghosteve Spawn Egg",
@@ -985,6 +1007,10 @@
               },
               {
                 "name": "TntArmorSet",
+                "children": []
+              },
+              {
+                "name": "Minigun",
                 "children": []
               }
             ]

@@ -31,6 +31,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Direction;
 import net.minecraft.util.DamageSource;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
@@ -43,12 +44,12 @@ import net.minecraft.network.IPacket;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.Item;
-import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.SpawnReason;
@@ -67,14 +68,17 @@ import net.minecraft.block.Block;
 import net.mcreator.lotmorestevesremake.procedures.MonstrosteveSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
+import net.mcreator.lotmorestevesremake.item.MinigunItem;
 import net.mcreator.lotmorestevesremake.entity.renderer.MonstrosteveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.CustomMathHelper;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 import java.util.stream.Stream;
+import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.EnumSet;
 import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
@@ -120,11 +124,11 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		public void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
 			AttributeModifierMap.MutableAttribute ammma = MobEntity.func_233666_p_();
 			ammma = ammma.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3);
-			ammma = ammma.createMutableAttribute(Attributes.MAX_HEALTH, 500);
+			ammma = ammma.createMutableAttribute(Attributes.MAX_HEALTH, 400);
 			ammma = ammma.createMutableAttribute(Attributes.FOLLOW_RANGE, 64);
 			ammma = ammma.createMutableAttribute(Attributes.ARMOR, 15);
 			ammma = ammma.createMutableAttribute(Attributes.ARMOR_TOUGHNESS, 15);
-			ammma = ammma.createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 5);
+			ammma = ammma.createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 3);
 			ammma = ammma.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.7);
 			ammma = ammma.createMutableAttribute(Attributes.ATTACK_DAMAGE, 8);
 			event.put(entity, ammma.create());
@@ -135,26 +139,14 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		private static final DataParameter<Integer> ATTACK_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 		private static final DataParameter<Boolean> SHOOT_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.BOOLEAN);
 		public int attackProgress;
-		public int bullet;
 		private float clientSideStandAnimation0;
 		private float clientSideStandAnimation;
+		public boolean shootActive;
 
 		protected void registerData() {
 			super.registerData();
 			this.dataManager.register(ATTACK_STATE, 0);
 			this.dataManager.register(SHOOT_STATE, false);
-		}
-
-		public void readAdditional(CompoundNBT compound) {
-			super.readAdditional(compound);
-			this.setShootState(compound.getBoolean("ShootState"));
-		}
-
-		public void writeAdditional(CompoundNBT compound) {
-			super.writeAdditional(compound);
-			if (this.getShootState()) {
-				compound.putBoolean("ShootState", true);
-			}
 		}
 
 		public void setAttackState(int value) {
@@ -194,26 +186,96 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
-			this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2, false) {
+			this.goalSelector.addGoal(1, new CustomEntity.LockAngle());
+			this.goalSelector.addGoal(1, new CustomEntity.ShootArrowGoal(this));
+			this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					if (!CustomEntity.this.getShootState()) {
 						if (CustomMathHelper.isEntityInBox(this.attacker.getAttackTarget(), this.attacker, 4) && !this.attacker.isSwingInProgress
-								&& CustomEntity.this.getAttackState() == 0 && CustomEntity.this.rand.nextInt(10) == 0) {
+								&& CustomEntity.this.getAttackState() == 0) {
 							this.attacker.swingArm(Hand.MAIN_HAND);
 							CustomEntity.this.setAttackState(1);
 							CustomEntity.this.attackProgress = 0;
+						} else if (!this.attacker.isSwingInProgress && CustomEntity.this.getAttackState() == 0
+								&& CustomEntity.this.rand.nextInt(70) == 0) {
+							this.attacker.swingArm(Hand.MAIN_HAND);
+							CustomEntity.this.setAttackState(2);
+							CustomEntity.this.attackProgress = 0;
 						}
-					} else if (!this.attacker.isSwingInProgress && CustomEntity.this.getAttackState() == 0
-							&& CustomEntity.this.rand.nextInt(60) == 0) {
-						this.attacker.swingArm(Hand.MAIN_HAND);
-						CustomEntity.this.setAttackState(2);
-						CustomEntity.this.attackProgress = 0;
 					}
 				}
 			});
 			this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1));
 			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-			this.goalSelector.addGoal(7, new LookAtGoal(this, LivingEntity.class, 8.0F));
+		}
+
+		public class LockAngle extends Goal {
+			public LockAngle() {
+				this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+			}
+
+			public boolean shouldExecute() {
+				return CustomEntity.this.getAttackTarget() != null && CustomEntity.this.getShootState();
+			}
+
+			public void tick() {
+				CustomEntity.this.getLookController().setLookPositionWithEntity(CustomEntity.this.getAttackTarget(), 180, 180);
+				CustomEntity.this.rotationYaw = CustomEntity.this.getYaw(1);
+			}
+		}
+
+		public class ShootArrowGoal extends Goal {
+			private Random random = new Random();
+			private int bullet;
+			private int shootCooltime = 200;
+			private CustomEntity entityIn;
+
+			public ShootArrowGoal(CustomEntity mob) {
+				entityIn = mob;
+			}
+
+			public boolean shouldExecute() {
+				return true;
+			}
+
+			public void tick() {
+				if (this.bullet > 0) {
+					entityIn.addPotionEffect(new EffectInstance(Effects.SLOWNESS, (int) 5, (int) 5));
+					if (entityIn.shootActive) {
+						this.bullet--;
+						entityIn.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 2, 1f);
+						if (this.bullet == 0)
+							this.shootCooltime = 120 + random.nextInt(120);
+						entityIn.rotationYaw = entityIn.getYaw(1);
+						for (int i = 0; i < 2; i++)
+							if (world instanceof ServerWorld) {
+								float f = (entityIn.renderYawOffset + (float) (180 * 1)) * ((float) Math.PI / 180F);
+								float f1 = MathHelper.cos(f);
+								float f2 = MathHelper.sin(f);
+								double x = entityIn.getPosX();
+								double y = entityIn.getPosY() + entityIn.getEyeHeight();
+								double z = entityIn.getPosZ();
+								AbstractArrowEntity entityToSpawn = new MinigunItem.ArrowCustomEntity(MinigunItem.arrow, entityIn, (World) world);
+								entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+								entityToSpawn.setDamage(2);
+								entityToSpawn.setKnockbackStrength(1);
+								entityIn.shoot(entityIn.getLookVec().x, entityIn.getLookVec().y, entityIn.getLookVec().z, 5, 15, entityToSpawn);
+								world.addEntity(entityToSpawn);
+							}
+					}
+					if (this.bullet == 0)
+						entityIn.playSound(SoundEvents.BLOCK_PISTON_CONTRACT, 2, 0.5f);
+				} else {
+					entityIn.setShootState(false);
+					if (this.shootCooltime > 0)
+						this.shootCooltime--;
+					else if (entityIn.getAttackTarget() != null) {
+						this.bullet = 20 + random.nextInt(31);
+						entityIn.playSound(SoundEvents.BLOCK_PISTON_EXTEND, 2, 0.5f);
+						entityIn.setShootState(true);
+					}
+				}
+			}
 		}
 
 		public void livingTick() {
@@ -223,8 +285,11 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 				this.clientSideStandAnimation0 = this.clientSideStandAnimation;
 				if (this.getShootState()) {
 					this.clientSideStandAnimation = MathHelper.clamp(this.clientSideStandAnimation + 1.0F, 0.0F, 6.0F);
+					if (this.clientSideStandAnimation == 6)
+						this.shootActive = true;
 				} else {
 					this.clientSideStandAnimation = MathHelper.clamp(this.clientSideStandAnimation - 1.0F, 0.0F, 6.0F);
+					this.shootActive = false;
 				}
 			}
 			if (this.collidedHorizontally && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
@@ -241,39 +306,6 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 				}
 				if (!flag && this.onGround) {
 					this.jump();
-				}
-			}
-		}
-
-		public void baseTick() {
-			super.baseTick();
-			if (this.bullet > 0) {
-				if (this.clientSideStandAnimation == 6) {
-					if (world instanceof ServerWorld) {
-						float f = (this.renderYawOffset + (float) (180 * 1)) * ((float) Math.PI / 180F);
-						float f1 = MathHelper.cos(f);
-						float f2 = MathHelper.sin(f);
-						double x = this.getPosX();
-						double y = this.getPosY() + this.getEyeHeight();
-						double z = this.getPosZ();
-						ArrowEntity entityToSpawn = new ArrowEntity(this.world, this);
-						//entityToSpawn.shoot(this.getLookVec().x, this.getLookVec().y, this.getLookVec().z, (float) 2, 4);
-						entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
-						entityToSpawn.setDamage(3);
-						if (this.getAttackTarget() != null)
-							this.shoot(this.getAttackTarget().getPosX() - this.getPosX(), this.getAttackTarget().getPosY() - this.getPosY() - 4,
-									this.getAttackTarget().getPosZ() - this.getPosZ(), 2, 8, entityToSpawn);
-						else
-							this.shoot(this.getLookVec().x, this.getLookVec().y, this.getLookVec().z, 2, 8, entityToSpawn);
-						world.addEntity(entityToSpawn);
-					}
-					this.bullet--;
-				}
-			} else {
-				this.setShootState(false);
-				if (this.rand.nextInt(20) == 0 && !this.isSwingInProgress) {
-					this.bullet = 20;
-					this.setShootState(true);
 				}
 			}
 		}
@@ -405,11 +437,17 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 								livingentity.addPotionEffect(new EffectInstance(CursedDiversionPotionEffect.potion, (int) 200, (int) 0));
 								if (livingentity.attackEntityFrom(DamageSource.causeMobDamage(this), 3 * this.getAttackDamage()
 										/ (float) MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.2), 1, 5))) {
+									Vector3d posVector = new Vector3d(livingentity.getPosX() - this.getPosX(), 0,
+											livingentity.getPosZ() - this.getPosZ());
+									posVector.normalize();
 									this.applyEnchantments(this, livingentity);
-									livingentity.applyKnockback(
+									livingentity.setMotion(posVector.scale(Math.pow(this.getKnockBackPower(), 0.5) * 0.1));
+									livingentity.setMotion(livingentity.getMotion().add(0, 1, 0));
+									//this.getKnockBackPower() / (float) MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5))
+									/*livingentity.applyKnockback(
 											this.getKnockBackPower()
 													/ (float) MathHelper.clamp(Math.pow(this.getDistanceSq(livingentity), 0.5), 1, 5),
-											-livingentity.getPosX() + this.getPosX(), -livingentity.getPosZ() + this.getPosZ());
+											-livingentity.getPosX() + this.getPosX(), -livingentity.getPosZ() + this.getPosZ());*/
 								}
 							}
 						}
@@ -454,6 +492,11 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 							this.rand.nextGaussian() * (double) 0.0075F * (double) inaccuracy)
 					.scale((double) velocity);
 			entityIn.setMotion(vector3d);
+			float f = MathHelper.sqrt(horizontalMag(vector3d));
+			entityIn.rotationYaw = (float) (MathHelper.atan2(vector3d.x, vector3d.z) * (double) (180F / (float) Math.PI));
+			entityIn.rotationPitch = (float) (MathHelper.atan2(vector3d.y, (double) f) * (double) (180F / (float) Math.PI));
+			entityIn.prevRotationYaw = entityIn.rotationYaw;
+			entityIn.prevRotationPitch = entityIn.rotationPitch;
 		}
 
 		public float getAttackDamage() {
