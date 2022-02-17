@@ -46,6 +46,8 @@ public class MonstrosteveRenderer {
 	public static class ModelRedstone_Monstrosteve extends EntityModel<Entity> {
 		private final ModelRenderer whole;
 		private final ModelRenderer body;
+		private final ModelRenderer leftDispenser;
+		private final ModelRenderer rightDispenser;
 		private final ModelRenderer head;
 		private final ModelRenderer jaw;
 		private final ModelRenderer leftShoulder;
@@ -65,6 +67,14 @@ public class MonstrosteveRenderer {
 			body.setRotationPoint(0.0F, -32.0F, 0.0F);
 			whole.addChild(body);
 			body.setTextureOffset(0, 0).addBox(-24.0F, -48.0F, -12.0F, 48.0F, 48.0F, 24.0F, 0.0F, false);
+			leftDispenser = new ModelRenderer(this);
+			leftDispenser.setRotationPoint(13.0F, -31.0F, 0.0F);
+			body.addChild(leftDispenser);
+			leftDispenser.setTextureOffset(168, 40).addBox(-8.0F, -16.0F, -8.0F, 16.0F, 16.0F, 16.0F, 0.0F, false);
+			rightDispenser = new ModelRenderer(this);
+			rightDispenser.setRotationPoint(-13.0F, -31.0F, 0.0F);
+			body.addChild(rightDispenser);
+			rightDispenser.setTextureOffset(168, 40).addBox(-8.0F, -16.0F, -8.0F, 16.0F, 16.0F, 16.0F, 0.0F, true);
 			head = new ModelRenderer(this);
 			head.setRotationPoint(0.0F, -35.0F, -11.0F);
 			body.addChild(head);

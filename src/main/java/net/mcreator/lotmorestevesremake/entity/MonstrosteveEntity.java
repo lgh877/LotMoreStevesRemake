@@ -197,7 +197,7 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 							CustomEntity.this.setAttackState(1);
 							CustomEntity.this.attackProgress = 0;
 						} else if (!this.attacker.isSwingInProgress && CustomEntity.this.getAttackState() == 0
-								&& CustomEntity.this.rand.nextInt(55) == 0) {
+								&& CustomEntity.this.rand.nextInt(40) == 0) {
 							this.attacker.swingArm(Hand.MAIN_HAND);
 							CustomEntity.this.setAttackState(2);
 							CustomEntity.this.attackProgress = 0;
@@ -256,7 +256,7 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 								double y = entityIn.getPosY() + entityIn.getEyeHeight();
 								double z = entityIn.getPosZ();
 								AbstractArrowEntity entityToSpawn = new MinigunItem.ArrowCustomEntity(MinigunItem.arrow, entityIn, (World) world);
-								entityToSpawn.setLocationAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
+								entityToSpawn.setLocationAndAngles(x, y, z, 0, 0);
 								entityToSpawn.setDamage(2);
 								entityToSpawn.setKnockbackStrength(1);
 								entityIn.shoot(entityIn.getLookVec().x, entityIn.getLookVec().y, entityIn.getLookVec().z, 5, 15, entityToSpawn);
