@@ -138,15 +138,18 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 	public static class CustomEntity extends AggressiveSteveEntity {
 		private static final DataParameter<Integer> ATTACK_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 		private static final DataParameter<Boolean> SHOOT_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.BOOLEAN);
+		private static final DataParameter<Boolean> SUMMON_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.BOOLEAN);
 		public int attackProgress;
-		private float clientSideStandAnimation0;
-		private float clientSideStandAnimation;
+		private float[] clientSideStandAnimation0 = new float[2];
+		private float[] clientSideStandAnimation = new float[2];
 		public boolean shootActive;
+		public boolean summonActive;
 
 		protected void registerData() {
 			super.registerData();
 			this.dataManager.register(ATTACK_STATE, 0);
 			this.dataManager.register(SHOOT_STATE, false);
+			this.dataManager.register(SUMMON_STATE, false);
 		}
 
 		public void setAttackState(int value) {
@@ -163,6 +166,14 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 
 		public boolean getShootState() {
 			return this.dataManager.get(SHOOT_STATE);
+		}
+
+		public void setSummonState(boolean value) {
+			this.dataManager.set(SUMMON_STATE, value);
+		}
+
+		public boolean getSummonState() {
+			return this.dataManager.get(SUMMON_STATE);
 		}
 
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
@@ -188,6 +199,7 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 			super.registerGoals();
 			this.goalSelector.addGoal(1, new CustomEntity.LockAngle());
 			this.goalSelector.addGoal(1, new CustomEntity.ShootArrowGoal(this));
+			this.goalSelector.addGoal(1, new CustomEntity.SummonGoal(this));
 			this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					if (!CustomEntity.this.getShootState()) {
@@ -224,6 +236,58 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 			}
 		}
 
+		public class SummonGoal extends Goal {
+			private Random random = new Random();
+			private int bullet;
+			private int shootCooltime = 350;
+			private CustomEntity entityIn;
+
+			public SummonGoal(CustomEntity mob) {
+				entityIn = mob;
+			}
+
+			public boolean shouldExecute() {
+				return true;
+			}
+
+			public void tick() {
+				if (this.bullet > 0) {
+					if (entityIn.summonActive) {
+						this.bullet--;
+						entityIn.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 2, 0.5f);
+						if (this.bullet == 0)
+							this.shootCooltime = 200 + random.nextInt(200);
+						entityIn.rotationYaw = entityIn.getYaw(1);
+						entityIn.prevRotationYaw = entityIn.rotationYaw;
+						if (this.bullet % 3 == 0)
+							if (world instanceof ServerWorld) {
+								float f = (entityIn.renderYawOffset + (float) (180 * (random.nextInt(2) * 2 - 1))) * ((float) Math.PI / 180F);
+								float f1 = MathHelper.cos(f);
+								float f2 = MathHelper.sin(f);
+								double x = entityIn.getPosX() + f1;
+								double y = entityIn.getPosY() + 7;
+								double z = entityIn.getPosZ() + f2;
+								Entity entityToSpawn = new StecubeEntity.CustomEntity(StecubeEntity.entity, (World) world);
+								entityToSpawn.setLocationAndAngles(x, y, z, 0, 0);
+								entityIn.shoot(entityIn.getLookVec().x, entityIn.getLookVec().y, entityIn.getLookVec().z, 2, 15, entityToSpawn);
+								world.addEntity(entityToSpawn);
+							}
+					}
+					if (this.bullet == 0)
+						entityIn.playSound(SoundEvents.BLOCK_PISTON_CONTRACT, 2, 0.5f);
+				} else {
+					entityIn.setSummonState(false);
+					if (this.shootCooltime > 0)
+						this.shootCooltime--;
+					else if (entityIn.getAttackTarget() != null) {
+						this.bullet = 10 + random.nextInt(10);
+						entityIn.playSound(SoundEvents.BLOCK_PISTON_EXTEND, 2, 0.5f);
+						entityIn.setSummonState(true);
+					}
+				}
+			}
+		}
+
 		public class ShootArrowGoal extends Goal {
 			private Random random = new Random();
 			private int bullet;
@@ -247,11 +311,9 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 						if (this.bullet == 0)
 							this.shootCooltime = 120 + random.nextInt(120);
 						entityIn.rotationYaw = entityIn.getYaw(1);
+						entityIn.prevRotationYaw = entityIn.rotationYaw;
 						for (int i = 0; i < 2; i++)
 							if (world instanceof ServerWorld) {
-								float f = (entityIn.renderYawOffset + (float) (180 * 1)) * ((float) Math.PI / 180F);
-								float f1 = MathHelper.cos(f);
-								float f2 = MathHelper.sin(f);
 								double x = entityIn.getPosX();
 								double y = entityIn.getPosY() + entityIn.getEyeHeight();
 								double z = entityIn.getPosZ();
@@ -282,14 +344,23 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 			super.livingTick();
 			if (this.isAlive()) {
 				this.attackProcedure();
-				this.clientSideStandAnimation0 = this.clientSideStandAnimation;
+				this.clientSideStandAnimation0[0] = this.clientSideStandAnimation[0];
+				this.clientSideStandAnimation0[1] = this.clientSideStandAnimation[1];
 				if (this.getShootState()) {
-					this.clientSideStandAnimation = MathHelper.clamp(this.clientSideStandAnimation + 1.0F, 0.0F, 6.0F);
-					if (this.clientSideStandAnimation == 6)
+					this.clientSideStandAnimation[0] = MathHelper.clamp(this.clientSideStandAnimation[0] + 1.0F, 0.0F, 6.0F);
+					if (this.clientSideStandAnimation[0] == 6)
 						this.shootActive = true;
 				} else {
-					this.clientSideStandAnimation = MathHelper.clamp(this.clientSideStandAnimation - 1.0F, 0.0F, 6.0F);
+					this.clientSideStandAnimation[0] = MathHelper.clamp(this.clientSideStandAnimation[0] - 1.0F, 0.0F, 6.0F);
 					this.shootActive = false;
+				}
+				if (this.getSummonState()) {
+					this.clientSideStandAnimation[1] = MathHelper.clamp(this.clientSideStandAnimation[1] + 1.0F, 0.0F, 17.0F);
+					if (this.clientSideStandAnimation[1] == 17)
+						this.summonActive = true;
+				} else {
+					this.clientSideStandAnimation[1] = MathHelper.clamp(this.clientSideStandAnimation[1] - 1.0F, 0.0F, 17.0F);
+					this.summonActive = false;
 				}
 			}
 			if (this.collidedHorizontally && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
@@ -311,8 +382,8 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		}
 
 		@OnlyIn(Dist.CLIENT)
-		public float getAnimationScale(float p_189795_1_) {
-			return MathHelper.lerp(p_189795_1_, this.clientSideStandAnimation0, this.clientSideStandAnimation);
+		public float getAnimationScale(float p_189795_1_, int i) {
+			return MathHelper.lerp(p_189795_1_, this.clientSideStandAnimation0[i], this.clientSideStandAnimation[i]);
 		}
 
 		static class Navigator extends GroundPathNavigator {

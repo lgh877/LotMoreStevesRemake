@@ -836,6 +836,35 @@
       "locked_code": true,
       "registry_name": "minigun",
       "path": "~/Overworld/Items/Minigun"
+    },
+    {
+      "name": "Adfsg",
+      "type": "procedure",
+      "sortid": 55,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "adfsg",
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "name": "y",
+            "type": "number"
+          },
+          {
+            "name": "z",
+            "type": "number"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      },
+      "path": "~/Overworld/Mobs/Monstrosteve"
     }
   ],
   "variable_elements": [],

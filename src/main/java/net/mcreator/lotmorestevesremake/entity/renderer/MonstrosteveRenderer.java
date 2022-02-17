@@ -132,18 +132,23 @@ public class MonstrosteveRenderer {
 			float headYaw = f3 / (180F / (float) Math.PI);
 			float pitch = f4 / (180F / (float) Math.PI);
 			float a1 = f2 - (float) entityM.ticksExisted;
-			float a2 = entityM.getAnimationScale(a1);
+			float a2 = entityM.getAnimationScale(a1, 0);
+			float a3 = entityM.getAnimationScale(a1, 1);
 			{//basic settings
-				this.leftLeg.rotationPointX = 16;
-				this.leftLeg.rotationPointY = -24;
-				this.leftLeg.rotationPointZ = 0;
-				this.rightLeg.rotationPointX = -16;
-				this.rightLeg.rotationPointY = -24;
-				this.rightLeg.rotationPointZ = 0;
+				this.leftLeg.setRotationPoint(16.0F, -24.0F, 0.0F);
+				this.rightLeg.setRotationPoint(-16.0F, -24.0F, 0.0F);
 				this.body.rotateAngleX = 0;
 				this.body.rotationPointY = -32;
 				this.head.rotationPointY = -35;
+				this.leftDispenser.setRotationPoint(13.0F, -31.0F, 0.0F);
+				this.rightDispenser.setRotationPoint(-13.0F, -31.0F, 0.0F);
 			}
+			this.leftDispenser.rotateAngleX = pitch * (a3 / 17);
+			this.leftDispenser.rotateAngleY = headYaw * (a3 / 17);
+			this.leftDispenser.rotationPointY -= a3;
+			this.rightDispenser.rotateAngleX = pitch * (a3 / 17);
+			this.rightDispenser.rotateAngleY = headYaw * (a3 / 17);
+			this.rightDispenser.rotationPointY -= a3;
 			this.jaw.rotationPointY = a2;
 			this.whole.rotateAngleZ = MathHelper.sin(f * 0.5f) * f1 * 0.1f;
 			this.head.rotateAngleY = headYaw;
