@@ -139,6 +139,8 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		private static final DataParameter<Integer> ATTACK_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 		private static final DataParameter<Boolean> SHOOT_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.BOOLEAN);
 		private static final DataParameter<Boolean> SUMMON_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.BOOLEAN);
+		private static final DataParameter<Integer> DEATH_TICKS = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
+		public int prevDeathTicks;
 		public int attackProgress;
 		private float[] clientSideStandAnimation0 = new float[2];
 		private float[] clientSideStandAnimation = new float[2];
@@ -148,8 +150,27 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		protected void registerData() {
 			super.registerData();
 			this.dataManager.register(ATTACK_STATE, 0);
+			this.dataManager.register(DEATH_TICKS, 0);
 			this.dataManager.register(SHOOT_STATE, false);
 			this.dataManager.register(SUMMON_STATE, false);
+		}
+
+		public void readAdditional(CompoundNBT compound) {
+			super.readAdditional(compound);
+			this.dataManager.set(DEATH_TICKS, compound.getInt("deathTicks"));
+		}
+
+		public void writeAdditional(CompoundNBT compound) {
+			super.writeAdditional(compound);
+			compound.putInt("deathTicks", this.getDeathTicks());
+		}
+
+		public void setDeathTicks(int value) {
+			this.dataManager.set(DEATH_TICKS, value);
+		}
+
+		public int getDeathTicks() {
+			return this.dataManager.get(DEATH_TICKS);
 		}
 
 		public void setAttackState(int value) {
@@ -261,12 +282,12 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 						entityIn.prevRotationYaw = entityIn.rotationYaw;
 						if (this.bullet % 3 == 0)
 							if (world instanceof ServerWorld) {
-								float f = (entityIn.renderYawOffset + (float) (180 * (random.nextInt(2) * 2 - 1))) * ((float) Math.PI / 180F);
+								float f = (entityIn.renderYawOffset + (float) (180 * (random.nextInt(3) - 1))) * ((float) Math.PI / 180F);
 								float f1 = MathHelper.cos(f);
 								float f2 = MathHelper.sin(f);
-								double x = entityIn.getPosX() + f1;
-								double y = entityIn.getPosY() + 7;
-								double z = entityIn.getPosZ() + f2;
+								double x = entityIn.getPosX() + f1 * 1.5;
+								double y = entityIn.getPosY() + 8;
+								double z = entityIn.getPosZ() + f2 * 1.5;
 								Entity entityToSpawn = new StecubeEntity.CustomEntity(StecubeEntity.entity, (World) world);
 								entityToSpawn.setLocationAndAngles(x, y, z, 0, 0);
 								entityIn.shoot(entityIn.getLookVec().x, entityIn.getLookVec().y, entityIn.getLookVec().z, 2, 15, entityToSpawn);
@@ -338,6 +359,23 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 					}
 				}
 			}
+		}
+
+		protected void onDeathUpdate() {
+			this.prevDeathTicks = this.getDeathTicks();
+			this.setDeathTicks(this.getDeathTicks() + 1);
+			if (this.getDeathTicks() > 200)
+				this.remove();
+		}
+
+		protected void collideWithEntity(Entity entityIn) {
+			if (this.isAlive())
+				super.collideWithEntity(entityIn);
+		}
+
+		@OnlyIn(Dist.CLIENT)
+		public float getDeathAnimationScale(float p_189795_1_) {
+			return MathHelper.lerp(p_189795_1_, this.prevDeathTicks, this.getDeathTicks());
 		}
 
 		public void livingTick() {

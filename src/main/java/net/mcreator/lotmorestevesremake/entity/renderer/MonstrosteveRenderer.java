@@ -33,7 +33,11 @@ public class MonstrosteveRenderer {
 					}
 
 					protected void preRenderCallback(LivingEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
-						matrixStackIn.scale(1.5f, 1.5f, 1.5f);
+						MonstrosteveEntity.CustomEntity entityM = (MonstrosteveEntity.CustomEntity) entitylivingbaseIn;
+						float deathTicks = entityM.getDeathAnimationScale(partialTickTime);
+						float deathTicks2 = MathHelper.clamp((deathTicks - 160) / 40, 0, 1);
+						this.shadowSize = (1 - deathTicks2) * 3;
+						matrixStackIn.scale((1 - deathTicks2) * 1.5f, (1 - deathTicks2) * 1.5f, (1 - deathTicks2) * 1.5f);
 					}
 				};
 			});
@@ -134,6 +138,8 @@ public class MonstrosteveRenderer {
 			float a1 = f2 - (float) entityM.ticksExisted;
 			float a2 = entityM.getAnimationScale(a1, 0);
 			float a3 = entityM.getAnimationScale(a1, 1);
+			float deathTicks = entityM.getDeathAnimationScale(a1);
+			float deathTicks2 = (float) Math.pow((double) MathHelper.clamp(deathTicks / 100, 0, 1), 18);
 			{//basic settings
 				this.leftLeg.setRotationPoint(16.0F, -24.0F, 0.0F);
 				this.rightLeg.setRotationPoint(-16.0F, -24.0F, 0.0F);
@@ -150,13 +156,22 @@ public class MonstrosteveRenderer {
 			this.rightDispenser.rotateAngleY = headYaw * (a3 / 17);
 			this.rightDispenser.rotationPointY -= a3;
 			this.jaw.rotationPointY = a2;
+			this.whole.rotateAngleX = MathHelper.sin(deathTicks2 * pi / 2) * pi / 2;
 			this.whole.rotateAngleZ = MathHelper.sin(f * 0.5f) * f1 * 0.1f;
+			this.head.rotateAngleZ = MathHelper.clamp(deathTicks, 0, 40) * pi / 20;
 			this.head.rotateAngleY = headYaw;
 			this.head.rotateAngleX = pitch;
-			this.leftShoulder.rotateAngleX = (MathHelper.cos(f * 0.2f) - 2) * f1 * 0.2f;
-			this.leftShoulder.rotateAngleZ = 0;
-			this.rightShoulder.rotateAngleX = (MathHelper.cos(f * 0.2f + pi) - 2) * f1 * 0.2f;
-			this.rightShoulder.rotateAngleZ = 0;
+			if (e.isAlive()) {
+				this.leftShoulder.rotateAngleX = (MathHelper.cos(f * 0.2f) - 2) * f1 * 0.2f;
+				this.rightShoulder.rotateAngleX = (MathHelper.cos(f * 0.2f + pi) - 2) * f1 * 0.2f;
+				this.body.rotateAngleY = 0;
+			} else {
+				this.leftShoulder.rotateAngleX = +MathHelper.clamp(deathTicks, 0, 40) * pi / 20 + MathHelper.sin(deathTicks2 * pi);
+				this.rightShoulder.rotateAngleX = -MathHelper.clamp(deathTicks, 0, 40) * pi / 20 + MathHelper.sin(deathTicks2 * pi);
+				this.body.rotateAngleY = MathHelper.clamp(deathTicks, 0, 40) * pi / 20;
+			}
+			this.leftShoulder.rotateAngleZ = -MathHelper.sin(deathTicks2 * pi / 2) * pi * 0.3f;
+			this.rightShoulder.rotateAngleZ = MathHelper.sin(deathTicks2 * pi / 2) * pi * 0.3f;
 			this.leftLeg.rotateAngleX = MathHelper.cos(f * 0.5f + pi * 1.4f) * f1 * 0.4f;
 			this.leftLeg.rotationPointY += MathHelper.clamp(MathHelper.sin(f * 0.5f) * f1 * 5, -Float.POSITIVE_INFINITY, 0);
 			this.leftLeg.rotationPointZ += MathHelper.cos(f * 0.5f + pi) * f1 * 5;
