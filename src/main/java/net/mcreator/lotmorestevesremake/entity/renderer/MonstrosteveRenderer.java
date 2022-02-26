@@ -178,7 +178,7 @@ public class MonstrosteveRenderer {
 			this.rightLeg.rotateAngleX = MathHelper.cos(f * 0.5F + pi * 0.4f) * f1 * 0.4f;
 			this.rightLeg.rotationPointY += MathHelper.clamp(MathHelper.sin(f * 0.5f + pi) * f1 * 5, -Float.POSITIVE_INFINITY, 0);
 			this.rightLeg.rotationPointZ = MathHelper.cos(f * 0.5f) * f1 * 5;
-			if (entityM.isSwingInProgress) {
+			if (entityM.prevSwingProgress > 0) {
 				if (entityM.getAttackState() == 1) {
 					if (this.swingProgress < 0.8f) {
 						float a = this.swingProgress * 1.25f;

@@ -46,8 +46,8 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.Item;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -218,10 +218,11 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
-			this.goalSelector.addGoal(1, new CustomEntity.LockAngle());
+			this.goalSelector.addGoal(0, new CustomEntity.LockAngle());
 			this.goalSelector.addGoal(1, new CustomEntity.ShootArrowGoal(this));
 			this.goalSelector.addGoal(1, new CustomEntity.SummonGoal(this));
-			this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false) {
+			this.goalSelector.addGoal(1, new CustomEntity.MoveAttackGoal(this, 1.2, 0, 48));
+			/*this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					if (!CustomEntity.this.getShootState()) {
 						if (CustomMathHelper.isEntityInBox(this.attacker.getAttackTarget(), this.attacker, 4) && !this.attacker.isSwingInProgress
@@ -238,8 +239,151 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 					}
 				}
 			});
+			*/
 			this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1));
 			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+		}
+
+		public class MoveAttackGoal<T extends MonsterEntity> extends Goal {
+			private final T entity;
+			private final double moveSpeedAmp;
+			private int attackTime = -1;
+			private final float attackRadius;
+			private int attackCooldown;
+			private final float maxAttackDistance;
+			private int seeTime;
+			private boolean strafingClockwise;
+			private boolean strafingBackwards;
+			private int strafingTime = -1;
+
+			public MoveAttackGoal(T mob, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn) {
+				this.entity = mob;
+				this.moveSpeedAmp = moveSpeedAmpIn;
+				this.attackCooldown = attackCooldownIn;
+				this.attackRadius = maxAttackDistanceIn;
+				this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
+				this.setMutexFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
+			}
+
+			public void setAttackCooldown(int attackCooldownIn) {
+				this.attackCooldown = attackCooldownIn;
+			}
+
+			/**
+			 * Returns whether execution should begin. You can also read and cache any state
+			 * necessary for execution in this method as well.
+			 */
+			public boolean shouldExecute() {
+				return this.entity.getAttackTarget() == null ? false : true;
+			}
+
+			/**
+			 * Returns whether an in-progress EntityAIBase should continue executing
+			 */
+			public boolean shouldContinueExecuting() {
+				return (this.shouldExecute() || !this.entity.getNavigator().noPath());
+			}
+
+			/**
+			 * Execute a one shot task or start executing a continuous task
+			 */
+			public void startExecuting() {
+				super.startExecuting();
+				this.entity.setAggroed(true);
+			}
+
+			/**
+			 * Reset the task's internal state. Called when this task is interrupted by
+			 * another one
+			 */
+			public void resetTask() {
+				super.resetTask();
+				this.entity.setAggroed(true);
+				this.seeTime = 0;
+				this.attackTime = -1;
+			}
+
+			/**
+			 * Keep ticking a continuous task that has already been started
+			 */
+			public void tick() {
+				LivingEntity livingentity = this.entity.getAttackTarget();
+				if (livingentity != null) {
+					double d0 = this.entity.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
+					boolean flag = this.entity.getEntitySenses().canSee(livingentity);
+					boolean flag1 = this.seeTime > 0;
+					if (flag != flag1) {
+						this.seeTime = 0;
+					}
+					if (flag) {
+						++this.seeTime;
+					} else {
+						--this.seeTime;
+					}
+					if (!(d0 > (double) this.maxAttackDistance) && this.seeTime >= 20) {
+						this.entity.getNavigator().clearPath();
+						++this.strafingTime;
+					} else {
+						this.entity.getNavigator().tryMoveToEntityLiving(livingentity, this.moveSpeedAmp);
+						this.strafingTime = -1;
+					}
+					if (this.strafingTime >= 20) {
+						if ((double) this.entity.getRNG().nextFloat() < 0.3D) {
+							this.strafingClockwise = !this.strafingClockwise;
+						}
+						if ((double) this.entity.getRNG().nextFloat() < 0.3D) {
+							this.strafingBackwards = !this.strafingBackwards;
+						}
+						this.strafingTime = 0;
+					}
+					if (this.strafingTime > -1) {
+						if (d0 > (double) (this.maxAttackDistance * 0.75F)) {
+							this.strafingBackwards = false;
+						} else if (d0 < (double) (this.maxAttackDistance * 0.25F)) {
+							this.strafingBackwards = true;
+						}
+						//this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+						this.entity.setMoveForward(this.strafingBackwards ? -1F : 1F);
+						this.entity.setMoveStrafing(this.strafingClockwise ? 0.5F : -0.5F);
+						this.entity.faceEntity(livingentity, 180.0F, 180.0F);
+					} else {
+						this.entity.getLookController().setLookPositionWithEntity(livingentity, 180.0F, 180.0F);
+					}
+					/*if (this.entity.isHandActive()) {
+						if (!flag && this.seeTime < -60) {
+							this.entity.resetActiveHand();
+						} else if (flag) {
+							int i = this.entity.getItemInUseMaxCount();
+							if (i >= 80) {
+								float f = MathHelper.sqrt(d0) / this.attackRadius;
+								float lvt_5_1_ = MathHelper.clamp(f, 0.1F, 1.0F);
+								this.entity.resetActiveHand();
+								this.entity.attackEntityWithRangedAttack(livingentity, lvt_5_1_);
+								this.attackTime = this.attackCooldown;
+							}
+						}
+					} else if (--this.attackTime <= 0 && this.seeTime >= -60) {
+						this.entity.setActiveHand(ProjectileHelper.getWeaponHoldingHand(this.entity, item -> item instanceof ShieldItem));
+					}
+					*/
+					this.checkAndPerformAttack(livingentity, d0);
+				}
+			}
+
+			protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+				if (!CustomEntity.this.getShootState()) {
+					if (CustomMathHelper.isEntityInBox(this.entity.getAttackTarget(), this.entity, 4) && !this.entity.isSwingInProgress
+							&& CustomEntity.this.getAttackState() == 0) {
+						this.entity.swingArm(Hand.MAIN_HAND);
+						CustomEntity.this.setAttackState(1);
+						CustomEntity.this.attackProgress = 0;
+					} else if (!this.entity.isSwingInProgress && CustomEntity.this.getAttackState() == 0 && CustomEntity.this.rand.nextInt(40) == 0) {
+						this.entity.swingArm(Hand.MAIN_HAND);
+						CustomEntity.this.setAttackState(2);
+						CustomEntity.this.attackProgress = 0;
+					}
+				}
+			}
 		}
 
 		public class LockAngle extends Goal {

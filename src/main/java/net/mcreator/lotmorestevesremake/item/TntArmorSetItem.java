@@ -17,6 +17,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -25,7 +26,6 @@ import net.minecraft.client.util.ITooltipFlag;
 
 import net.mcreator.lotmorestevesremake.procedures.TntArmorSetBodyTickEventProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.ArmorsOfStevesItemGroup;
-import net.mcreator.lotmorestevesremake.SteveModArmor;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 
 import java.util.stream.Stream;
@@ -94,7 +94,7 @@ public class TntArmorSetItem extends LotmorestevesremakeModElements.ModElement {
 				return 0f;
 			}
 		};
-		elements.items.add(() -> new SteveModArmor(armormaterial, EquipmentSlotType.CHEST, new Item.Properties().group(ArmorsOfStevesItemGroup.tab)) {
+		elements.items.add(() -> new ArmorItem(armormaterial, EquipmentSlotType.CHEST, new Item.Properties().group(ArmorsOfStevesItemGroup.tab)) {
 			@Override
 			public void addInformation(ItemStack itemstack, World world, List<ITextComponent> list, ITooltipFlag flag) {
 				super.addInformation(itemstack, world, list, flag);
@@ -136,7 +136,7 @@ public class TntArmorSetItem extends LotmorestevesremakeModElements.ModElement {
 						.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 			}
 		}.setRegistryName("tnt_armor_set_chestplate"));
-		elements.items.add(() -> new SteveModArmor(armormaterial, EquipmentSlotType.FEET, new Item.Properties().group(ArmorsOfStevesItemGroup.tab)) {
+		elements.items.add(() -> new ArmorItem(armormaterial, EquipmentSlotType.FEET, new Item.Properties().group(ArmorsOfStevesItemGroup.tab)) {
 			@Override
 			public void addInformation(ItemStack itemstack, World world, List<ITextComponent> list, ITooltipFlag flag) {
 				super.addInformation(itemstack, world, list, flag);
