@@ -49,7 +49,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
-import net.mcreator.lotmorestevesremake.procedures.StegolemSpawnConditionProcedure;
+import net.mcreator.lotmorestevesremake.procedures.LimpSteveSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.SmasteveRenderer;
@@ -95,7 +95,7 @@ public class SmasteveEntity extends LotmorestevesremakeModElements.ModElement {
 					int x = pos.getX();
 					int y = pos.getY();
 					int z = pos.getZ();
-					return StegolemSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
+					return LimpSteveSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
 							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 				});
 		DungeonHooks.addDungeonMob(entity, 180);

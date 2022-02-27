@@ -48,8 +48,8 @@ public class AggressiveSteveEntity extends MonsterEntity {
 
 	@Override
 	public boolean isOnSameTeam(Entity entityIn) {
-		if (super.isOnSameTeam(entityIn))
-			return true;
+		if (this.getTeam() != null)
+			return super.isOnSameTeam(entityIn);
 		else if (EntityTypeTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:we_are_steves")).contains(entityIn.getType()))
 			return true;
 		else

@@ -35,6 +35,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -568,6 +569,10 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 			return MathHelper.lerp(p_189795_1_, this.clientSideStandAnimation0[i], this.clientSideStandAnimation[i]);
 		}
 
+		protected PathNavigator createNavigator(World worldIn) {
+			return new CustomEntity.Navigator(this, worldIn);
+		}
+
 		static class Navigator extends GroundPathNavigator {
 			public Navigator(MobEntity p_i50754_1_, World p_i50754_2_) {
 				super(p_i50754_1_, p_i50754_2_);
@@ -812,7 +817,8 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		@Override
 		public void updateAITasks() {
 			super.updateAITasks();
-			this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+			if (this.isAggressive())
+				this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 		}
 	}
 }
