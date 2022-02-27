@@ -17,17 +17,20 @@ package net.mcreator.lotmorestevesremake;
 import net.minecraftforge.fml.common.Mod;
 
 import net.minecraft.world.World;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EntityType;
@@ -40,10 +43,15 @@ import net.mcreator.lotmorestevesremake.entity.StevagerEntity;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AggressiveSteveEntity extends MonsterEntity {
 	public float swimmingSpeed = 1;
+	public final SwimmerPathNavigator waterNavigator;
+	public final GroundPathNavigator groundNavigator;
 
-	public AggressiveSteveEntity(EntityType<? extends MonsterEntity> type, World world) {
-		super(type, world);
+	public AggressiveSteveEntity(EntityType<? extends MonsterEntity> type, World worldIn) {
+		super(type, worldIn);
 		setNoAI(false);
+		this.waterNavigator = new SwimmerPathNavigator(this, worldIn);
+		this.groundNavigator = new GroundPathNavigator(this, worldIn);
+		//this.moveController = new AggressiveSteveEntity.MoveHelperController(this);
 	}
 
 	@Override
@@ -59,30 +67,10 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(8, new SwimGoal(this) {
-			public void tick() {
-				if (AggressiveSteveEntity.this.getAttackTarget() != null) {
-					float speed = (float) AggressiveSteveEntity.this.getAttributeValue(Attributes.MOVEMENT_SPEED);
-					if (AggressiveSteveEntity.this.getAttackTarget().getPosY() < AggressiveSteveEntity.this.getPosY()) {
-						AggressiveSteveEntity.this.setMotion(AggressiveSteveEntity.this.getMotion().add(0, -speed * 0.1f, 0));
-						AggressiveSteveEntity.this.applyKnockback(speed * 0.2f * AggressiveSteveEntity.this.swimmingSpeed,
-								-AggressiveSteveEntity.this.getAttackTarget().getPosX() + AggressiveSteveEntity.this.getPosX(),
-								-AggressiveSteveEntity.this.getAttackTarget().getPosZ() + AggressiveSteveEntity.this.getPosZ());
-						AggressiveSteveEntity.this.faceEntity(AggressiveSteveEntity.this.getAttackTarget(), 40, 40);
-					} else {
-						AggressiveSteveEntity.this.applyKnockback(speed * 0.2f * AggressiveSteveEntity.this.swimmingSpeed,
-								-AggressiveSteveEntity.this.getAttackTarget().getPosX() + AggressiveSteveEntity.this.getPosX(),
-								-AggressiveSteveEntity.this.getAttackTarget().getPosZ() + AggressiveSteveEntity.this.getPosZ());
-						AggressiveSteveEntity.this.faceEntity(AggressiveSteveEntity.this.getAttackTarget(), 40, 40);
-						super.tick();
-					}
-				} else
-					super.tick();
-			}
-		});
+		this.goalSelector.addGoal(1, new SwimGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AggressiveSteveEntity.class)).setCallsForHelp());
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
 	}
 
@@ -91,6 +79,16 @@ public class AggressiveSteveEntity extends MonsterEntity {
 			this.setAttackTarget((LivingEntity) entityIn);
 		}
 		super.collideWithEntity(entityIn);
+	}
+
+	public void travel(Vector3d travelVector) {
+		if (this.isServerWorld() && this.isInWater()) {
+			this.moveRelative(0.1F, travelVector);
+			this.move(MoverType.SELF, this.getMotion());
+			this.setMotion(this.getMotion().scale(0.9D));
+		} else {
+			super.travel(travelVector);
+		}
 	}
 
 	@Override

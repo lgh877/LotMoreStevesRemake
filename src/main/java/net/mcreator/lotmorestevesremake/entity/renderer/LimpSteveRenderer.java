@@ -10,6 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.model.ModelHelper;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.MobRenderer;
 
@@ -189,6 +190,14 @@ public class LimpSteveRenderer {
 				for (int i = 0; i < 5; i++) {
 					this.leftArm[i].rotateAngleZ = 0;
 					this.rightArm[i].rotateAngleZ = 0;
+				}
+			}
+			for (int i = 0; i < 5; i++) {
+				ModelHelper.func_239101_a_(this.rightArm[i], this.leftArm[i], f2 * 2);
+				if (i > 0) {
+					this.back[i - 1].rotateAngleX = MathHelper.sin(f2 * 0.03f + pi * (i - 1) * 0.2f) * 0.1f;
+					this.back[i - 1].rotateAngleY = MathHelper.sin(f2 * 0.01f + pi * (i - 1) * 0.2f) * 0.1f;
+					this.back[i - 1].rotateAngleZ = MathHelper.cos(f2 * 0.05f + pi * (i - 1) * 0.2f) * 0.1f;
 				}
 			}
 			this.leftThigh.rotateAngleX = MathHelper.cos(f * 0.5F) * f1 * 0.6f;

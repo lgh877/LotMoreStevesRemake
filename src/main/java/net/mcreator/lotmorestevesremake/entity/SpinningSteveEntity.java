@@ -139,7 +139,7 @@ public class SpinningSteveEntity extends LotmorestevesremakeModElements.ModEleme
 		protected void registerGoals() {
 			super.registerGoals();
 			this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2, false));
-			this.goalSelector.addGoal(5, new RandomWalkingGoal(this, 1));
+			this.goalSelector.addGoal(5, new RandomWalkingGoal(this, 1, 1));
 			this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
 			this.goalSelector.addGoal(8, new SwimGoal(this));
 		}

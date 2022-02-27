@@ -122,7 +122,7 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 		public CustomEntity(EntityType<CustomEntity> type, World world) {
 			super(type, world);
-			experienceValue = 70;
+			experienceValue = 40;
 			setNoAI(false);
 			this.stepHeight = 1.5f;
 		}

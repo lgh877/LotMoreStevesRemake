@@ -140,7 +140,7 @@ public class MicroSteveEntity extends LotmorestevesremakeModElements.ModElement 
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
-			this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1));
+			this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1, 1));
 			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
 			this.goalSelector.addGoal(6, new BreakDoorGoal(this, e -> true));
 			this.goalSelector.addGoal(3, new FollowMobGoal(this, (float) 1, 10, 5));
