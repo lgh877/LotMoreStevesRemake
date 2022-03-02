@@ -31,6 +31,13 @@ public class CustomMathHelper {
 		return false;
 	}
 
+	public static AxisAlignedBB makeAttackRange(double x, double y, double z, double height, double sizeX, double sizeY, double sizeZ) {
+		y += height;
+		AxisAlignedBB attackRange = new AxisAlignedBB(x - (sizeX / 2d), y - (sizeY / 2), z - (sizeZ / 2d), x + (sizeX / 2d), y + (sizeY / 2),
+				z + (sizeZ / 2d));
+		return attackRange;
+	}
+
 	public static AxisAlignedBB makeSphericalAttackRangeBetweenTarget(LivingEntity entityIn, LivingEntity targetIn, double height, double distTo,
 			double sizeX, double sizeY, double sizeZ) {
 		Vector3d posVector = new Vector3d(targetIn.getPosX() - entityIn.getPosX(), targetIn.getPosY() - entityIn.getPosY() - height,

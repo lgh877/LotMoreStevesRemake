@@ -80,7 +80,7 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 3, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 4, 1, 1));
 	}
 
 	@Override
@@ -112,12 +112,18 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 	public static class CustomEntity extends AggressiveSteveEntity {
 		public float[] prevSwingProgress2 = new float[5];
-		public float[] prevRotationPitch2 = new float[5];
-		public float[] prevRotationHeadYaw2 = new float[5];
 		public int attack;
 
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);
+		}
+
+		protected float getSoundPitch() {
+			return super.getSoundPitch() * 0.5f;
+		}
+
+		protected float getSoundVolume() {
+			return 2f;
 		}
 
 		public CustomEntity(EntityType<CustomEntity> type, World world) {
@@ -200,13 +206,9 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 		public void baseTick() {
 			for (int i = 0; i < 4; i++) {
-				prevRotationPitch2[4 - i] = prevRotationPitch2[3 - i];
-				prevRotationHeadYaw2[4 - i] = prevRotationHeadYaw2[3 - i];
 				prevSwingProgress2[4 - i] = prevSwingProgress2[3 - i];
 			}
 			prevSwingProgress2[0] = prevSwingProgress;
-			prevRotationPitch2[0] = prevRotationPitch;
-			prevRotationHeadYaw2[0] = prevRotationYawHead;
 			super.baseTick();
 		}
 
@@ -253,28 +255,6 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 					++f;
 				}
 				return this.prevSwingProgress2[value - 2] + f * partialTime;
-			}
-		}
-
-		public float getHeadYaw(float partialTime, int value) {
-			if (value == 0)
-				return MathHelper.lerp(partialTime, this.prevRotationYawHead, this.rotationYawHead);
-			else if (value == 1)
-				return MathHelper.lerp(partialTime, this.prevRotationHeadYaw2[0], this.prevRotationYaw);
-			else {
-				value = MathHelper.clamp(value, 0, 5);
-				return MathHelper.lerp(partialTime, this.prevRotationHeadYaw2[value - 1], this.prevRotationHeadYaw2[value - 2]);
-			}
-		}
-
-		public float getPitch(float partialTime, int value) {
-			if (value == 0)
-				return super.getPitch(partialTime);
-			else if (value == 1)
-				return MathHelper.lerp(partialTime, this.prevRotationPitch2[0], this.prevRotationPitch);
-			else {
-				value = MathHelper.clamp(value, 0, 5);
-				return MathHelper.lerp(partialTime, this.prevRotationPitch2[value - 1], this.prevRotationPitch2[value - 2]);
 			}
 		}
 

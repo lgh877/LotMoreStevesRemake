@@ -2,22 +2,22 @@
   "_fv": 24,
   "_type": "livingentity",
   "definition": {
-    "mobName": "Stevager",
+    "mobName": "Flateve",
     "mobLabel": "",
-    "mobModelName": "ModelStevager",
-    "mobModelTexture": "stevager.png",
+    "mobModelName": "Modelstecube",
+    "mobModelTexture": "original_steve.png",
     "mobModelGlowTexture": "",
     "modelWidth": 1.5,
-    "modelHeight": 2.0,
-    "modelShadowSize": 1.1,
+    "modelHeight": 0.75,
+    "modelShadowSize": 1.2,
     "mountedYOffset": 0.0,
     "hasSpawnEgg": true,
     "spawnEggBaseColor": {
-      "value": -16751002,
+      "value": -16764007,
       "falpha": 0.0
     },
     "spawnEggDotColor": {
-      "value": -10092493,
+      "value": -16737793,
       "falpha": 0.0
     },
     "creativeTab": {
@@ -46,14 +46,14 @@
     },
     "mobBehaviourType": "Mob",
     "mobCreatureType": "UNDEFINED",
-    "attackStrength": 8,
-    "attackKnockback": 1.5,
-    "knockbackResistance": 0.75,
-    "movementSpeed": 0.3,
+    "attackStrength": 2,
+    "attackKnockback": 0.0,
+    "knockbackResistance": 0.2,
+    "movementSpeed": 0.25,
     "armorBaseValue": 0.0,
     "trackingRange": 64,
-    "health": 100,
-    "xpAmount": 20,
+    "health": 30,
+    "xpAmount": 15,
     "waterMob": false,
     "flyingMob": false,
     "guiBoundTo": "<NONE>",
@@ -83,17 +83,17 @@
       "value": ""
     },
     "hurtSound": {
-      "value": "CUSTOM:heavy_mechanical_steve"
+      "value": "CUSTOM:hostile_steve_hurt"
     },
     "deathSound": {
-      "value": "CUSTOM:heavy_mechanical_steve"
+      "value": "CUSTOM:hostile_steve_hurt"
     },
     "stepSound": {
-      "value": "entity.ravager.step"
+      "value": ""
     },
     "spawnParticles": false,
     "particleToSpawn": {
-      "value": "EXPLOSION_NORMAL"
+      "value": "CUSTOM:SteveFaceParticle"
     },
     "particleSpawningShape": "Spread",
     "particleSpawningRadious": 0.5,
@@ -112,12 +112,12 @@
     "spawnThisMob": true,
     "doesDespawnWhenIdle": true,
     "spawningCondition": {
-      "name": "StegolemSpawnCondition"
+      "name": "StevillagersSpawnCondition"
     },
-    "spawningProbability": 6,
-    "mobSpawningType": "creature",
+    "spawningProbability": 1,
+    "mobSpawningType": "ambient",
     "minNumberOfMobsPerGroup": 1,
-    "maxNumberOfMobsPerGroup": 1,
+    "maxNumberOfMobsPerGroup": 3,
     "restrictionBiomes": [],
     "spawnInDungeons": false
   }

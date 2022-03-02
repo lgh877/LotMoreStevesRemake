@@ -113,7 +113,7 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 			this(entity, world);
 		}
 
-		public CustomEntity(EntityType<CustomEntity> type, World world) {
+		public CustomEntity(EntityType<? extends CustomEntity> type, World world) {
 			super(type, world);
 			experienceValue = 10;
 			setNoAI(false);
@@ -124,7 +124,7 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 		}
 
 		protected float getSoundPitch() {
-			return 1.5f;
+			return super.getSoundPitch() * 1.5f;
 		}
 
 		@Override
@@ -154,12 +154,16 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 			return super.onLivingFall(distance * 0.75f, damageMultiplier);
 		}
 
+		protected int getJumpChance() {
+			return 40;
+		}
+
 		public void livingTick() {
 			super.livingTick();
 			if (GroundPathHelper.isGroundNavigator(this))
 				((GroundPathNavigator) this.getNavigator()).setBreakDoors(true);
 			this.setLeftHanded(false);
-			if ((this.onGround || this.collidedHorizontally) && this.rand.nextInt(40) == 0 && this.getAttackTarget() != null) {
+			if ((this.onGround || this.collidedHorizontally) && this.rand.nextInt(this.getJumpChance()) == 0 && this.getAttackTarget() != null) {
 				this.applyKnockback(2, -this.getAttackTarget().getPosX() + this.getPosX(), -this.getAttackTarget().getPosZ() + this.getPosZ());
 			}
 		}

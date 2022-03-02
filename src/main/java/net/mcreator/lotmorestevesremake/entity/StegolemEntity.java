@@ -293,13 +293,13 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 		@Override
 		public net.minecraft.util.SoundEvent getHurtSound(DamageSource ds) {
 			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS
-					.getValue(new ResourceLocation("lotmorestevesremake:mechanical_steve_hurt"));
+					.getValue(new ResourceLocation("lotmorestevesremake:great_boy_steve_hurt"));
 		}
 
 		@Override
 		public net.minecraft.util.SoundEvent getDeathSound() {
 			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS
-					.getValue(new ResourceLocation("lotmorestevesremake:mechanical_steve_hurt"));
+					.getValue(new ResourceLocation("lotmorestevesremake:great_boy_steve_hurt"));
 		}
 	}
 }

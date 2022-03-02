@@ -17,7 +17,6 @@ package net.mcreator.lotmorestevesremake;
 import net.minecraftforge.fml.common.Mod;
 
 import net.minecraft.world.World;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.tags.EntityTypeTags;
@@ -30,7 +29,6 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EntityType;
@@ -42,7 +40,6 @@ import net.mcreator.lotmorestevesremake.entity.StevagerEntity;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AggressiveSteveEntity extends MonsterEntity {
-	public float swimmingSpeed = 1;
 	public final SwimmerPathNavigator waterNavigator;
 	public final GroundPathNavigator groundNavigator;
 
@@ -51,7 +48,6 @@ public class AggressiveSteveEntity extends MonsterEntity {
 		setNoAI(false);
 		this.waterNavigator = new SwimmerPathNavigator(this, worldIn);
 		this.groundNavigator = new GroundPathNavigator(this, worldIn);
-		//this.moveController = new AggressiveSteveEntity.MoveHelperController(this);
 	}
 
 	@Override
@@ -67,7 +63,7 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new SwimGoal(this));
+		this.goalSelector.addGoal(6, new SwimGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AggressiveSteveEntity.class)).setCallsForHelp());
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
@@ -79,16 +75,6 @@ public class AggressiveSteveEntity extends MonsterEntity {
 			this.setAttackTarget((LivingEntity) entityIn);
 		}
 		super.collideWithEntity(entityIn);
-	}
-
-	public void travel(Vector3d travelVector) {
-		if (this.isServerWorld() && this.isInWater()) {
-			this.moveRelative(0.1F, travelVector);
-			this.move(MoverType.SELF, this.getMotion());
-			this.setMotion(this.getMotion().scale(0.9D));
-		} else {
-			super.travel(travelVector);
-		}
 	}
 
 	@Override

@@ -52,8 +52,6 @@ public class LotmorestevesremakeModElements {
 				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "bouncy_steve_death")));
 		sounds.put(new ResourceLocation("lotmorestevesremake", "mechanical_steve_hurt"),
 				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "mechanical_steve_hurt")));
-		sounds.put(new ResourceLocation("lotmorestevesremake", "zteve_hurt"),
-				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "zteve_hurt")));
 		sounds.put(new ResourceLocation("lotmorestevesremake", "strange_steve_hurt"),
 				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "strange_steve_hurt")));
 		sounds.put(new ResourceLocation("lotmorestevesremake", "nameless_steve_hurt"),
@@ -66,6 +64,8 @@ public class LotmorestevesremakeModElements {
 				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "great_boy_steve_hurt")));
 		sounds.put(new ResourceLocation("lotmorestevesremake", "heavy_mechanical_steve"),
 				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "heavy_mechanical_steve")));
+		sounds.put(new ResourceLocation("lotmorestevesremake", "zteve_hurt"),
+				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "zteve_hurt")));
 		try {
 			ModFileScanData modFileInfo = ModList.get().getModFileById("lotmorestevesremake").getFile().getScanResult();
 			Set<ModFileScanData.AnnotationData> annotations = modFileInfo.getAnnotations();

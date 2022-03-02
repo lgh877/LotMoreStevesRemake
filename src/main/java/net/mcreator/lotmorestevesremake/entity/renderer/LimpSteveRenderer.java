@@ -10,7 +10,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.model.ModelHelper;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.MobRenderer;
 
@@ -170,9 +169,15 @@ public class LimpSteveRenderer {
 			}
 			this.leftArm[0].rotateAngleX = MathHelper.clamp(f4 / degToRad, -pi, 0);
 			this.rightArm[0].rotateAngleX = MathHelper.clamp(f4 / degToRad, -pi, 0);
-			for (int i = 0; i < 4; i++) {
-				this.leftArm[i + 1].rotateAngleX = -Math.abs((f4 / degToRad) * 0.6f);
-				this.rightArm[i + 1].rotateAngleX = -Math.abs((f4 / degToRad) * 0.6f);
+			for (int i = 0; i < 5; i++) {
+				this.leftArm[i].rotateAngleY = 0;
+				this.leftArm[i].rotateAngleZ = 0;
+				this.rightArm[i].rotateAngleY = 0;
+				this.rightArm[i].rotateAngleZ = 0;
+				if (i > 0) {
+					this.leftArm[i].rotateAngleX = -Math.abs((f4 / degToRad) * 0.6f);
+					this.rightArm[i].rotateAngleX = -Math.abs((f4 / degToRad) * 0.6f);
+				}
 			}
 			if (e.swingProgress > 0 || e.prevSwingProgress2[4] > 0) {
 				for (int i = 0; i < 5; i++) {
@@ -180,24 +185,24 @@ public class LimpSteveRenderer {
 					//
 					a = a * a * a;
 					this.leftArm[i].rotateAngleX += MathHelper.sin(a * pi * 2);
-					this.leftArm[i].rotateAngleZ = -MathHelper.sin(a * pi * 2) * 0.5f;
+					this.leftArm[i].rotateAngleZ += -MathHelper.sin(a * pi * 2) * 0.5f;
 					this.rightArm[i].rotateAngleX += MathHelper.sin(a * pi * 2);
-					this.rightArm[i].rotateAngleZ = MathHelper.sin(a * pi * 2) * 0.5f;
+					this.rightArm[i].rotateAngleZ += MathHelper.sin(a * pi * 2) * 0.5f;
 					if (i > 0)
 						this.back[i - 1].rotateAngleX += -MathHelper.sin(a * pi * 2) * 0.4f;
 				}
-			} else {
-				for (int i = 0; i < 5; i++) {
-					this.leftArm[i].rotateAngleZ = 0;
-					this.rightArm[i].rotateAngleZ = 0;
-				}
 			}
 			for (int i = 0; i < 5; i++) {
-				ModelHelper.func_239101_a_(this.rightArm[i], this.leftArm[i], f2 * 2);
+				this.leftArm[i].rotateAngleX += MathHelper.sin(f2 * 0.07f + pi * i * 0.4f) * 0.1f;
+				this.leftArm[i].rotateAngleY += MathHelper.sin(f2 * 0.05f + pi * i * 0.4f) * 0.1f;
+				this.leftArm[i].rotateAngleZ += -Math.abs(MathHelper.sin(f2 * 0.03f + pi * i * 0.4f)) * 0.1f;
+				this.rightArm[i].rotateAngleX += MathHelper.sin(f2 * 0.03f + pi * i * 0.4f) * 0.1f;
+				this.rightArm[i].rotateAngleY += MathHelper.sin(f2 * 0.05f + pi * i * 0.4f) * 0.1f;
+				this.rightArm[i].rotateAngleZ += Math.abs(MathHelper.sin(f2 * 0.07f + pi * i * 0.4f)) * 0.1f;
 				if (i > 0) {
-					this.back[i - 1].rotateAngleX = MathHelper.sin(f2 * 0.03f + pi * (i - 1) * 0.2f) * 0.1f;
-					this.back[i - 1].rotateAngleY = MathHelper.sin(f2 * 0.01f + pi * (i - 1) * 0.2f) * 0.1f;
-					this.back[i - 1].rotateAngleZ = MathHelper.cos(f2 * 0.05f + pi * (i - 1) * 0.2f) * 0.1f;
+					this.back[i - 1].rotateAngleX += MathHelper.sin(f2 * 0.03f + pi * (i - 1) * 0.3f) * 0.1f;
+					this.back[i - 1].rotateAngleY += MathHelper.sin(f2 * 0.01f + pi * (i - 1) * 0.3f) * 0.1f;
+					this.back[i - 1].rotateAngleZ = MathHelper.cos(f2 * 0.05f + pi * (i - 1) * 0.3f) * 0.1f;
 				}
 			}
 			this.leftThigh.rotateAngleX = MathHelper.cos(f * 0.5F) * f1 * 0.6f;

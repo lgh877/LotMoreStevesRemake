@@ -14,46 +14,67 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Hand;
 import net.minecraft.util.DamageSource;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.pathfinding.WalkNodeProcessor;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathFinder;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.network.IPacket;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.Item;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.monster.RavagerEntity;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Block;
 
-import net.mcreator.lotmorestevesremake.procedures.StevillagersSpawnConditionProcedure;
+import net.mcreator.lotmorestevesremake.procedures.StegolemSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.StevagerRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
+import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
+
+import javax.annotation.Nullable;
 
 import java.util.stream.Stream;
 import java.util.Map;
-import java.util.List;
 import java.util.HashMap;
 import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class StevagerEntity extends LotmorestevesremakeModElements.ModElement {
-	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.MONSTER)
-			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(CustomEntity::new)
-			.size(1.95f, 2.2f)).build("stevager").setRegistryName("stevager");
+	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.CREATURE)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(CustomEntity::new).size(1.5f, 2f))
+					.build("stevager").setRegistryName("stevager");
 
 	public StevagerEntity(LotmorestevesremakeModElements instance) {
 		super(instance, 16);
@@ -71,7 +92,7 @@ public class StevagerEntity extends LotmorestevesremakeModElements.ModElement {
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(entity, 3, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(entity, 6, 1, 1));
 	}
 
 	@Override
@@ -81,7 +102,7 @@ public class StevagerEntity extends LotmorestevesremakeModElements.ModElement {
 					int x = pos.getX();
 					int y = pos.getY();
 					int z = pos.getZ();
-					return StevillagersSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
+					return StegolemSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
 							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 				});
 	}
@@ -94,36 +115,23 @@ public class StevagerEntity extends LotmorestevesremakeModElements.ModElement {
 			ammma = ammma.createMutableAttribute(Attributes.MAX_HEALTH, 100);
 			ammma = ammma.createMutableAttribute(Attributes.FOLLOW_RANGE, 64);
 			ammma = ammma.createMutableAttribute(Attributes.ARMOR, 0);
-			ammma = ammma.createMutableAttribute(Attributes.ATTACK_DAMAGE, 12);
+			ammma = ammma.createMutableAttribute(Attributes.ATTACK_DAMAGE, 6);
 			ammma = ammma.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.75);
 			ammma = ammma.createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1.5);
 			event.put(entity, ammma.create());
 		}
 	}
 
-	public static class CustomEntity extends RavagerEntity {
+	public static class CustomEntity extends AggressiveSteveEntity {
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);
-		}
-
-		public boolean isOnSameTeam(Entity entityIn) {
-			if (super.isOnSameTeam(entityIn))
-				return true;
-			else if (EntityTypeTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:we_are_steves"))
-					.contains(entityIn.getType()))
-				return true;
-			else
-				return false;
-		}
-
-		protected float getSoundPitch() {
-			return 0.6f;
 		}
 
 		public CustomEntity(EntityType<CustomEntity> type, World world) {
 			super(type, world);
 			experienceValue = 20;
 			setNoAI(false);
+			stepHeight = 1;
 		}
 
 		@Override
@@ -131,85 +139,131 @@ public class StevagerEntity extends LotmorestevesremakeModElements.ModElement {
 			return NetworkHooks.getEntitySpawningPacket(this);
 		}
 
-		@Override
-		protected void registerGoals() {
-			this.goalSelector.addGoal(0, new SwimGoal(this));
-			this.goalSelector.addGoal(4, new CustomEntity.AttackGoal2());
-			this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.4D));
-			this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setCallsForHelp());
-			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
-			this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
-			this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
+		protected void updateMovementGoalFlags() {
+			boolean flag = !(this.getControllingPassenger() instanceof MobEntity) || EntityTypeTags.getCollection()
+					.getTagByID(new ResourceLocation("lotmorestevesremake:we_are_steves")).contains(this.getControllingPassenger().getType());
+			boolean flag1 = !(this.getRidingEntity() instanceof BoatEntity);
+			this.goalSelector.setFlag(Goal.Flag.MOVE, flag);
+			this.goalSelector.setFlag(Goal.Flag.JUMP, flag && flag1);
+			this.goalSelector.setFlag(Goal.Flag.LOOK, flag);
+			this.goalSelector.setFlag(Goal.Flag.TARGET, flag);
 		}
 
-		public LivingEntity getSteveInBox(double sizeup) {
-			for (LivingEntity entity : this.world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(sizeup))) {
-				if (EntityTypeTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:we_are_steves")).contains(entity.getType())
-						&& !entity.isPassenger() && !entity.isBeingRidden() && entity.isAlive()) {
-					return entity;
+		public boolean canBeSteered() {
+			return !this.isAIDisabled() && this.getControllingPassenger() instanceof LivingEntity;
+		}
+
+		@Nullable
+		public Entity getControllingPassenger() {
+			return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
+		}
+
+		@Override
+		protected void registerGoals() {
+			super.registerGoals();
+			this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2, false) {
+				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+					double d0 = this.getAttackReachSqr(enemy);
+					if (distToEnemySqr <= d0 && !this.attacker.isSwingInProgress) {
+						this.attacker.swingArm(Hand.MAIN_HAND);
+						this.attacker.attackEntityAsMob(enemy);
+					}
 				}
+
+				protected double getAttackReachSqr(LivingEntity attackTarget) {
+					float f = CustomEntity.this.getWidth() - 0.1F;
+					return (double) (f * 2.0F * f * 2.0F + attackTarget.getWidth());
+				}
+			});
+			this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, (float) 6));
+			this.goalSelector.addGoal(4, new LookAtGoal(this, ServerPlayerEntity.class, (float) 6));
+			this.goalSelector.addGoal(4, new LookAtGoal(this, MobEntity.class, (float) 6));
+			this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1));
+			this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
+		}
+
+		public double getMountedYOffset() {
+			return 1.2;
+		}
+
+		@Override
+		protected void updateArmSwingProgress() {
+			int i = 10;
+			if (this.isSwingInProgress) {
+				++this.swingProgressInt;
+				if (this.swingProgressInt >= i) {
+					this.swingProgressInt = 0;
+					this.isSwingInProgress = false;
+				}
+			} else {
+				this.swingProgressInt = 0;
 			}
-			return null;
+			this.swingProgress = (float) this.swingProgressInt / (float) i;
+		}
+
+		protected PathNavigator createNavigator(World worldIn) {
+			return new CustomEntity.Navigator(this, worldIn);
+		}
+
+		static class Navigator extends GroundPathNavigator {
+			public Navigator(MobEntity p_i50754_1_, World p_i50754_2_) {
+				super(p_i50754_1_, p_i50754_2_);
+			}
+
+			protected PathFinder getPathFinder(int p_179679_1_) {
+				this.nodeProcessor = new CustomEntity.Processor();
+				return new PathFinder(this.nodeProcessor, p_179679_1_);
+			}
+		}
+
+		static class Processor extends WalkNodeProcessor {
+			private Processor() {
+			}
+
+			protected PathNodeType func_215744_a(IBlockReader p_215744_1_, boolean p_215744_2_, boolean p_215744_3_, BlockPos p_215744_4_,
+					PathNodeType p_215744_5_) {
+				return p_215744_5_ == PathNodeType.LEAVES
+						? PathNodeType.OPEN
+						: super.func_215744_a(p_215744_1_, p_215744_2_, p_215744_3_, p_215744_4_, p_215744_5_);
+			}
+		}
+
+		public boolean attackEntityAsMob(Entity entityIn) {
+			this.playSound(SoundEvents.BLOCK_PISTON_EXTEND, this.getSoundVolume(), this.getSoundPitch());
+			return super.attackEntityAsMob(entityIn);
 		}
 
 		public void livingTick() {
 			super.livingTick();
-			if (this.isAlive()) {
-				/*if (this.isBeingRidden()) {
-					if ((this.getControllingPassenger() instanceof MobEntity)
-							&& ((MobEntity) this.getControllingPassenger()).getAttackTarget() != null)
-						this.setAttackTarget(((MobEntity) this.getControllingPassenger()).getAttackTarget());
-					this.healRiders(this.getPassengers());
-				} else {
-					if (rand.nextInt(40) == 0) {
-						LivingEntity steveH = this.getSteveInBox(5);
-						if (steveH != null && steveH.getHealth() / steveH.getMaxHealth() < 0.5f) {
-							steveH.startRiding(this, true);
-						}
+			if (this.collidedHorizontally && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+				boolean flag = false;
+				AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(0.2D);
+				for (BlockPos blockpos : BlockPos.getAllInBoxMutable(MathHelper.floor(axisalignedbb.minX), MathHelper.floor(axisalignedbb.minY),
+						MathHelper.floor(axisalignedbb.minZ), MathHelper.floor(axisalignedbb.maxX), MathHelper.floor(axisalignedbb.maxY),
+						MathHelper.floor(axisalignedbb.maxZ))) {
+					BlockState blockstate = this.world.getBlockState(blockpos);
+					Block block = blockstate.getBlock();
+					if (block instanceof LeavesBlock) {
+						flag = this.world.destroyBlock(blockpos, true, this) || flag;
 					}
 				}
-				*/
-			}
-		}
-
-		private void healRiders(List<Entity> entities) {
-			LivingEntity entityL;
-			for (Entity entity : entities) {
-				if (entity instanceof LivingEntity) {
-					entityL = (LivingEntity) entity;
-					if (EntityTypeTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:we_are_steves"))
-							.contains(entityL.getType()) && entityL.isAlive() && rand.nextInt(10) == 0) {
-						entityL.setHealth(entityL.getHealth() + 1);
-					} else if (rand.nextInt(70) == 0) {
-						if (!this.world.isRemote)
-							entity.dismount();
-						if (!EntityTypeTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:we_are_steves"))
-								.contains(entity.getType()))
-							entity.setMotion(entity.getMotion().add((rand.nextFloat() - 0.5f) * 2, 1, (rand.nextFloat() - 0.5f) * 2));
-					}
-				} else if (rand.nextInt(70) == 0) {
-					if (!this.world.isRemote)
-						entity.dismount();
-					entity.setMotion(entity.getMotion().add((rand.nextFloat() - 0.5f) * 2, 1, (rand.nextFloat() - 0.5f) * 2));
+				if (!flag && this.onGround) {
+					this.jump();
 				}
 			}
 		}
 
-		class AttackGoal2 extends MeleeAttackGoal {
-			public AttackGoal2() {
-				super(CustomEntity.this, 1.0D, true);
+		@Nullable
+		public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason,
+				@Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+			spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+			if ((double) worldIn.getRandom().nextFloat() < 0.2D) {
+				StevindicatorEntity.CustomEntity entityToSpawn = new StevindicatorEntity.CustomEntity(StevindicatorEntity.entity, this.world);
+				entityToSpawn.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
+				entityToSpawn.onInitialSpawn(worldIn, difficultyIn, reason, (ILivingEntityData) null, (CompoundNBT) null);
+				entityToSpawn.startRiding(this);
 			}
-
-			protected double getAttackReachSqr(LivingEntity attackTarget) {
-				float f = CustomEntity.this.getWidth() - 0.1F;
-				return (double) (f * 2.0F * f * 2.0F + attackTarget.getWidth());
-			}
-		}
-
-		public boolean attackEntityFrom(DamageSource damagesource, float amount) {
-			if (damagesource.getTrueSource() instanceof LivingEntity && this.isOnSameTeam(damagesource.getTrueSource()))
-				return false;
-			return super.attackEntityFrom(damagesource, amount);
+			return spawnDataIn;
 		}
 
 		@Override
@@ -218,25 +272,25 @@ public class StevagerEntity extends LotmorestevesremakeModElements.ModElement {
 		}
 
 		@Override
-		public double getMountedYOffset() {
-			return 1.7;
+		public void playStepSound(BlockPos pos, BlockState blockIn) {
+			this.playSound((net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.step")), 0.15f,
+					1);
 		}
 
-		@Override
-		public net.minecraft.util.SoundEvent getAmbientSound() {
-			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(""));
+		protected float getSoundPitch() {
+			return super.getSoundPitch() * 0.7f;
 		}
 
 		@Override
 		public net.minecraft.util.SoundEvent getHurtSound(DamageSource ds) {
 			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS
-					.getValue(new ResourceLocation("lotmorestevesremake:hostile_steve_hurt"));
+					.getValue(new ResourceLocation("lotmorestevesremake:great_boy_steve_hurt"));
 		}
 
 		@Override
 		public net.minecraft.util.SoundEvent getDeathSound() {
 			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS
-					.getValue(new ResourceLocation("lotmorestevesremake:hostile_steve_hurt"));
+					.getValue(new ResourceLocation("lotmorestevesremake:great_boy_steve_hurt"));
 		}
 	}
 }

@@ -32,7 +32,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "bouncy_steve",
-      "path": "~/Overworld/Mobs/BouncySteve"
+      "path": "~/Overworld/Mobs/Random/BouncySteve"
     },
     {
       "name": "WeAreSteves",
@@ -49,7 +49,7 @@
       "compiles": true,
       "locked_code": false,
       "registry_name": "bouncy_steve_loot_table",
-      "path": "~/Overworld/Mobs/BouncySteve"
+      "path": "~/Overworld/Mobs/Random/BouncySteve"
     },
     {
       "name": "WeaponsOfSteves",
@@ -216,7 +216,7 @@
           }
         ]
       },
-      "path": "~/Overworld/Mobs/BouncySteve"
+      "path": "~/Overworld/Mobs/Random/BouncySteve"
     },
     {
       "name": "GiantBouncySteve",
@@ -225,7 +225,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "giant_bouncy_steve",
-      "path": "~/Overworld/Mobs/BouncySteve"
+      "path": "~/Overworld/Mobs/Random/BouncySteve"
     },
     {
       "name": "SlimySteveEntity",
@@ -234,7 +234,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "slimy_steve_entity",
-      "path": "~/Overworld/Mobs/BouncySteve"
+      "path": "~/Overworld/Mobs/Random/BouncySteve"
     },
     {
       "name": "GiantBouncySteveLootTable",
@@ -243,7 +243,7 @@
       "compiles": true,
       "locked_code": false,
       "registry_name": "giant_bouncy_steve_loot_table",
-      "path": "~/Overworld/Mobs/BouncySteve"
+      "path": "~/Overworld/Mobs/Random/BouncySteve"
     },
     {
       "name": "MeetTheStevesAdvancement",
@@ -260,7 +260,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stevager",
-      "path": "~/Overworld/Mobs/Stevillagers"
+      "path": "~/Overworld/Mobs/Random/Stevillagers"
     },
     {
       "name": "InfectionEvent",
@@ -311,7 +311,7 @@
           }
         ]
       },
-      "path": "~/Overworld/Mobs/Stevillagers"
+      "path": "~/Overworld/Mobs/Random/Stevillagers"
     },
     {
       "name": "Stevindicator",
@@ -320,7 +320,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stevindicator",
-      "path": "~/Overworld/Mobs/Stevillagers"
+      "path": "~/Overworld/Mobs/Random/Stevillagers"
     },
     {
       "name": "SteveFaceParticle",
@@ -388,7 +388,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stevindicator_big",
-      "path": "~/Overworld/Mobs/Stevillagers"
+      "path": "~/Overworld/Mobs/Random/Stevillagers"
     },
     {
       "name": "StevindicatorDetectBlockGoal",
@@ -397,7 +397,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stevindicator_detect_block_goal",
-      "path": "~/Overworld/Mobs/Stevillagers"
+      "path": "~/Overworld/Mobs/Random/Stevillagers"
     },
     {
       "name": "StegolemSpawnCondition",
@@ -415,7 +415,7 @@
           }
         ]
       },
-      "path": "~/Overworld/Mobs/Stegolem"
+      "path": "~/Overworld/Mobs/Random/Stegolem"
     },
     {
       "name": "Stegolem",
@@ -424,7 +424,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stegolem",
-      "path": "~/Overworld/Mobs/Stegolem"
+      "path": "~/Overworld/Mobs/Random/Stegolem"
     },
     {
       "name": "SpinningSteve",
@@ -433,7 +433,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "spinning_steve",
-      "path": "~/Overworld/Mobs/SpinningSteve"
+      "path": "~/Overworld/Mobs/Random/SpinningSteve"
     },
     {
       "name": "MicroSteve",
@@ -442,7 +442,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "micro_steve",
-      "path": "~/Overworld/Mobs/MicroSteve"
+      "path": "~/Overworld/Mobs/Random/MicroSteve"
     },
     {
       "name": "StevesAmbushEvent",
@@ -480,7 +480,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "zteve",
-      "path": "~/Overworld/Mobs/Zteve"
+      "path": "~/Overworld/Mobs/Undead/Zteve"
     },
     {
       "name": "Stecube",
@@ -489,7 +489,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stecube",
-      "path": "~/Overworld/Mobs/Stecuve"
+      "path": "~/Overworld/Mobs/Random/Stecuve"
     },
     {
       "name": "SeeThroughWallsTargetGoal",
@@ -527,7 +527,7 @@
           }
         ]
       },
-      "path": "~/Overworld/Mobs/Zteve"
+      "path": "~/Overworld/Mobs/Undead/Zteve"
     },
     {
       "name": "MiniZteve",
@@ -536,7 +536,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "mini_zteve",
-      "path": "~/Overworld/Mobs/Zteve"
+      "path": "~/Overworld/Mobs/Undead/Zteve"
     },
     {
       "name": "HouseRelatedBlocks",
@@ -553,7 +553,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "smasteve",
-      "path": "~/Overworld/Mobs/Smasteve"
+      "path": "~/Overworld/Mobs/Random/Smasteve"
     },
     {
       "name": "CustomMathHelper",
@@ -671,7 +671,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "nameless_steve",
-      "path": "~/Overworld/Mobs/NamelessSteve"
+      "path": "~/Overworld/Mobs/Random/NamelessSteve"
     },
     {
       "name": "NamelessSteveSpawnCondition",
@@ -689,7 +689,7 @@
           }
         ]
       },
-      "path": "~/Overworld/Mobs/NamelessSteve"
+      "path": "~/Overworld/Mobs/Random/NamelessSteve"
     },
     {
       "name": "Ghosteve",
@@ -737,7 +737,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "great_boy_steve",
-      "path": "~/Overworld/Mobs/GreatBoySteve"
+      "path": "~/Overworld/Mobs/Random/GreatBoySteve"
     },
     {
       "name": "CanCauseInfection",
@@ -779,7 +779,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "monstrosteve",
-      "path": "~/Overworld/Mobs/Monstrosteve"
+      "path": "~/Overworld/Mobs/Random/Monstrosteve"
     },
     {
       "name": "MonstrosteveSpawnCondition",
@@ -797,7 +797,7 @@
           }
         ]
       },
-      "path": "~/Overworld/Mobs/Monstrosteve"
+      "path": "~/Overworld/Mobs/Random/Monstrosteve"
     },
     {
       "name": "MinigunWhileProjectileFlyingTick",
@@ -844,7 +844,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "limp_steve",
-      "path": "~/Overworld/Mobs/LimpSteve"
+      "path": "~/Overworld/Mobs/Random/LimpSteve"
     },
     {
       "name": "LimpSteveSpawnCondition",
@@ -862,7 +862,16 @@
           }
         ]
       },
-      "path": "~/Overworld/Mobs/LimpSteve"
+      "path": "~/Overworld/Mobs/Random/LimpSteve"
+    },
+    {
+      "name": "Flateve",
+      "type": "livingentity",
+      "sortid": 57,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "flateve",
+      "path": "~/Overworld/Mobs/Random/Stecuve"
     }
   ],
   "variable_elements": [],
@@ -887,14 +896,6 @@
       "name": "mechanical_steve_hurt",
       "files": [
         "mechanical_steve_hurt"
-      ],
-      "category": "hostile",
-      "subtitle": ""
-    },
-    {
-      "name": "zteve_hurt",
-      "files": [
-        "zteve_hurt"
       ],
       "category": "hostile",
       "subtitle": ""
@@ -951,6 +952,14 @@
       ],
       "category": "hostile",
       "subtitle": ""
+    },
+    {
+      "name": "zteve_hurt",
+      "files": [
+        "zteve_hurt"
+      ],
+      "category": "hostile",
+      "subtitle": ""
     }
   ],
   "language_map": {
@@ -992,6 +1001,7 @@
       "subtitles.mechanical_steve_hurt": "",
       "entity.lotmorestevesremake.stecube": "Stecube",
       "subtitles.zteve_hurt": "",
+      "item.lotmorestevesremake.flateve_spawn_egg": "Flateve Spawn Egg",
       "entity.lotmorestevesremake.stevager": "Stevager",
       "entity.lotmorestevesremake.spinning_steve": "Spinning Steve",
       "subtitles.hostile_steve_hurt": "",
@@ -1002,6 +1012,7 @@
       "subtitles.bouncy_steve_death": "",
       "item.lotmorestevesremake.zteve_spawn_egg": "Zteve Spawn Egg",
       "item.lotmorestevesremake.spinning_steve_spawn_egg": "Spinning Steve Spawn Egg",
+      "entity.lotmorestevesremake.flateve": "Flateve",
       "item.lotmorestevesremake.giant_bouncy_steve_spawn_egg": "Giant Bouncy Steve Spawn Egg",
       "advancements.gaining_slime_bomb_launcher_recipe.descr": "Kill the giant bouncy Steve",
       "entity.lotmorestevesremake.monstrosteve": "Monstrosteve",
@@ -1048,52 +1059,62 @@
             "name": "Mobs",
             "children": [
               {
-                "name": "BouncySteve",
-                "children": []
+                "name": "Random",
+                "children": [
+                  {
+                    "name": "BouncySteve",
+                    "children": []
+                  },
+                  {
+                    "name": "Stevillagers",
+                    "children": []
+                  },
+                  {
+                    "name": "Stegolem",
+                    "children": []
+                  },
+                  {
+                    "name": "SpinningSteve",
+                    "children": []
+                  },
+                  {
+                    "name": "MicroSteve",
+                    "children": []
+                  },
+                  {
+                    "name": "Stecuve",
+                    "children": []
+                  },
+                  {
+                    "name": "Smasteve",
+                    "children": []
+                  },
+                  {
+                    "name": "NamelessSteve",
+                    "children": []
+                  },
+                  {
+                    "name": "GreatBoySteve",
+                    "children": []
+                  },
+                  {
+                    "name": "Monstrosteve",
+                    "children": []
+                  },
+                  {
+                    "name": "LimpSteve",
+                    "children": []
+                  }
+                ]
               },
               {
-                "name": "Stevillagers",
-                "children": []
-              },
-              {
-                "name": "Stegolem",
-                "children": []
-              },
-              {
-                "name": "SpinningSteve",
-                "children": []
-              },
-              {
-                "name": "MicroSteve",
-                "children": []
-              },
-              {
-                "name": "Zteve",
-                "children": []
-              },
-              {
-                "name": "Stecuve",
-                "children": []
-              },
-              {
-                "name": "Smasteve",
-                "children": []
-              },
-              {
-                "name": "NamelessSteve",
-                "children": []
-              },
-              {
-                "name": "GreatBoySteve",
-                "children": []
-              },
-              {
-                "name": "Monstrosteve",
-                "children": []
-              },
-              {
-                "name": "LimpSteve",
-                "children": []
+                "name": "Undead",
+                "children": [
+                  {
+                    "name": "Zteve",
+                    "children": []
+                  }
+                ]
               }
             ]
           },
@@ -1151,7 +1172,7 @@
   "workspaceSettings": {
     "modid": "lotmorestevesremake",
     "modName": "LotMoreStevesRemake",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "author": "±ÔÇõ, MCreator",
     "websiteURL": "https://mcreator.net",
     "license": "Academic Free License v3.0",
