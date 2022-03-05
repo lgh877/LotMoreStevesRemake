@@ -90,7 +90,7 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 					int y = pos.getY();
 					int z = pos.getZ();
 					return SpawnInOverworldOnlyProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll)) && Math.random() < 0.05;
+							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll)) && Math.random() < 0.1;
 				});
 	}
 
@@ -109,6 +109,8 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 	}
 
 	public static class CustomEntity extends AggressiveSteveEntity {
+		public boolean noWeapon;
+
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);
 		}
@@ -117,6 +119,7 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 			super(type, world);
 			experienceValue = 10;
 			setNoAI(false);
+			this.setCanPickUpLoot(true);
 		}
 
 		protected float getSoundVolume() {
@@ -136,6 +139,12 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 		protected void registerGoals() {
 			super.registerGoals();
 			this.goalSelector.addGoal(6, new BreakDoorGoal(this, e -> true));
+			this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1));
+			this.goalSelector.addGoal(3, new LookRandomlyGoal(this));
+			this.applyEntityAI();
+		}
+
+		protected void applyEntityAI() {
 			this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					double d0 = this.getAttackReachSqr(enemy);
@@ -146,8 +155,6 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 					}
 				}
 			});
-			this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1));
-			this.goalSelector.addGoal(3, new LookRandomlyGoal(this));
 		}
 
 		public boolean onLivingFall(float distance, float damageMultiplier) {
@@ -174,19 +181,6 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 			float maxHP = (float) this.getAttributeValue(Attributes.MAX_HEALTH);
 			float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
 			float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-			if (this.rand.nextFloat() < 0.2f) {
-				int i = this.rand.nextInt(5);
-				if (i == 0) {
-					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
-				} else if (i == 1) {
-					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
-				} else if (i == 2) {
-					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.STONE_SHOVEL));
-				} else if (i == 3)
-					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.WOODEN_PICKAXE));
-				else
-					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.WOODEN_SWORD));
-			}
 			if (rand.nextInt(50) == 0) {
 				int a = rand.nextInt(3);
 				if (a == 0)
@@ -220,6 +214,19 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 			}
 			this.setHealth(this.getMaxHealth());
 			this.setEnchantmentBasedOnDifficulty(difficulty);
+			if (this.rand.nextFloat() < 0.2f && !this.noWeapon) {
+				int i = this.rand.nextInt(5);
+				if (i == 0) {
+					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
+				} else if (i == 1) {
+					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
+				} else if (i == 2) {
+					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.STONE_SHOVEL));
+				} else if (i == 3)
+					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.WOODEN_PICKAXE));
+				else
+					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.WOODEN_SWORD));
+			}
 			return retval;
 		}
 

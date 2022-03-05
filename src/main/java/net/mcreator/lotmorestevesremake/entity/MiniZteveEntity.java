@@ -26,7 +26,6 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.CreatureAttribute;
 
 import net.mcreator.lotmorestevesremake.procedures.ZteveSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
@@ -118,11 +117,6 @@ public class MiniZteveEntity extends LotmorestevesremakeModElements.ModElement {
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
-		}
-
-		@Override
-		public CreatureAttribute getCreatureAttribute() {
-			return CreatureAttribute.UNDEFINED;
 		}
 
 		@Override

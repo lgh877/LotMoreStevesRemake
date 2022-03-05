@@ -119,7 +119,7 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 		}
 
 		protected float getSoundPitch() {
-			return super.getSoundPitch() * 0.5f;
+			return super.getSoundPitch() * 0.7f;
 		}
 
 		protected float getSoundVolume() {
@@ -265,12 +265,14 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 		@Override
 		public net.minecraft.util.SoundEvent getHurtSound(DamageSource ds) {
-			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("lotmorestevesremake:zteve_hurt"));
+			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS
+					.getValue(new ResourceLocation("lotmorestevesremake:weird_steve_hurt"));
 		}
 
 		@Override
 		public net.minecraft.util.SoundEvent getDeathSound() {
-			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("lotmorestevesremake:zteve_hurt"));
+			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS
+					.getValue(new ResourceLocation("lotmorestevesremake:weird_steve_hurt"));
 		}
 	}
 }

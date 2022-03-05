@@ -46,8 +46,6 @@ public class LotmorestevesremakeModElements {
 	public static Map<ResourceLocation, net.minecraft.util.SoundEvent> sounds = new HashMap<>();
 
 	public LotmorestevesremakeModElements() {
-		sounds.put(new ResourceLocation("lotmorestevesremake", "hostile_steve_hurt"),
-				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "hostile_steve_hurt")));
 		sounds.put(new ResourceLocation("lotmorestevesremake", "bouncy_steve_death"),
 				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "bouncy_steve_death")));
 		sounds.put(new ResourceLocation("lotmorestevesremake", "mechanical_steve_hurt"),
@@ -64,8 +62,12 @@ public class LotmorestevesremakeModElements {
 				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "great_boy_steve_hurt")));
 		sounds.put(new ResourceLocation("lotmorestevesremake", "heavy_mechanical_steve"),
 				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "heavy_mechanical_steve")));
+		sounds.put(new ResourceLocation("lotmorestevesremake", "hostile_steve_hurt"),
+				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "hostile_steve_hurt")));
 		sounds.put(new ResourceLocation("lotmorestevesremake", "zteve_hurt"),
 				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "zteve_hurt")));
+		sounds.put(new ResourceLocation("lotmorestevesremake", "weird_steve_hurt"),
+				new net.minecraft.util.SoundEvent(new ResourceLocation("lotmorestevesremake", "weird_steve_hurt")));
 		try {
 			ModFileScanData modFileInfo = ModList.get().getModFileById("lotmorestevesremake").getFile().getScanResult();
 			Set<ModFileScanData.AnnotationData> annotations = modFileInfo.getAnnotations();

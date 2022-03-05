@@ -1,13 +1,4 @@
 {
-  "hostile_steve_hurt": {
-    "category": "hostile",
-    "sounds": [
-      {
-        "name": "lotmorestevesremake:steve_hurt",
-        "stream": false
-      }
-    ]
-  },
   "bouncy_steve_death": {
     "category": "hostile",
     "sounds": [
@@ -100,11 +91,29 @@
       }
     ]
   },
+  "hostile_steve_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:steve_hurt",
+        "stream": false
+      }
+    ]
+  },
   "zteve_hurt": {
     "category": "hostile",
     "sounds": [
       {
         "name": "lotmorestevesremake:zteve_hurt",
+        "stream": false
+      }
+    ]
+  },
+  "weird_steve_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "lotmorestevesremake:weird_steve_hurt",
         "stream": false
       }
     ]

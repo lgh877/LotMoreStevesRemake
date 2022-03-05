@@ -350,27 +350,12 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 					} else {
 						this.entity.getLookController().setLookPositionWithEntity(livingentity, 180.0F, 180.0F);
 					}
-					/*if (this.entity.isHandActive()) {
-						if (!flag && this.seeTime < -60) {
-							this.entity.resetActiveHand();
-						} else if (flag) {
-							int i = this.entity.getItemInUseMaxCount();
-							if (i >= 80) {
-								float f = MathHelper.sqrt(d0) / this.attackRadius;
-								float lvt_5_1_ = MathHelper.clamp(f, 0.1F, 1.0F);
-								this.entity.resetActiveHand();
-								this.entity.attackEntityWithRangedAttack(livingentity, lvt_5_1_);
-								this.attackTime = this.attackCooldown;
-							}
-						}
-					} else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-						this.entity.setActiveHand(ProjectileHelper.getWeaponHoldingHand(this.entity, item -> item instanceof ShieldItem));
-					}
-					*/
+					//this is not needed. I put this only for making the mob use melee attacks.
 					this.checkAndPerformAttack(livingentity, d0);
 				}
 			}
 
+			//this is not needed. I put this only for making the mob use melee attacks.
 			protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 				if (!CustomEntity.this.getShootState()) {
 					if (CustomMathHelper.isEntityInBox(this.entity.getAttackTarget(), this.entity, 4) && !this.entity.isSwingInProgress

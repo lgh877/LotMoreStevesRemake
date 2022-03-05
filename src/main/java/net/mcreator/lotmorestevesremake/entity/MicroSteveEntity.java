@@ -52,7 +52,6 @@ import net.minecraft.entity.CreatureAttribute;
 
 import net.mcreator.lotmorestevesremake.procedures.SpawnInOverworldOnlyProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
-import net.mcreator.lotmorestevesremake.item.TntArmorSetItem;
 import net.mcreator.lotmorestevesremake.entity.renderer.MicroSteveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
@@ -125,7 +124,6 @@ public class MicroSteveEntity extends LotmorestevesremakeModElements.ModElement 
 			this.setCanPickUpLoot(true);
 			experienceValue = 6;
 			setNoAI(false);
-			this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(TntArmorSetItem.boots));
 		}
 
 		protected boolean shouldDrown() {

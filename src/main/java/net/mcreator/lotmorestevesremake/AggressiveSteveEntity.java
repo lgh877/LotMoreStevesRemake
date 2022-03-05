@@ -64,7 +64,7 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(6, new SwimGoal(this));
-		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AggressiveSteveEntity.class)).setCallsForHelp());
+		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp());
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
