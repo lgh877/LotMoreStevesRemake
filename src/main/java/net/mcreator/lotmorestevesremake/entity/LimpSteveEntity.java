@@ -143,7 +143,7 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 			super.registerGoals();
 			this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-					if (CustomMathHelper.isEntityInBox(enemy, this.attacker, 3) && !this.attacker.isSwingInProgress) {
+					if (CustomMathHelper.isEntityInBox(enemy, this.attacker, CustomEntity.this.getWidth() * 3) && !this.attacker.isSwingInProgress) {
 						this.attacker.swingArm(Hand.MAIN_HAND);
 						CustomEntity.this.attack = 0;
 					}
@@ -156,7 +156,7 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 		@Override
 		protected void updateArmSwingProgress() {
-			int i = 15;
+			int i = (int) (this.getWidth() * 10);
 			if (this.isSwingInProgress) {
 				++this.swingProgressInt;
 				if (this.swingProgressInt >= i) {
@@ -175,7 +175,7 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 				this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1, 0.5f);
 				if (this.getAttackTarget() != null) {
 					this.getAttackTarget().hurtResistantTime = 0;
-					if (CustomMathHelper.isEntityInBox(this.getAttackTarget(), this, 3)) {
+					if (CustomMathHelper.isEntityInBox(this.getAttackTarget(), this, this.getWidth() * 3)) {
 						this.attackEntityAsMob(this.getAttackTarget());
 					}
 				}

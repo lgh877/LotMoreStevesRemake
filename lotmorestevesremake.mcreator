@@ -880,6 +880,24 @@
       "compiles": true,
       "locked_code": false,
       "registry_name": "other_mobs"
+    },
+    {
+      "name": "MutantCreeper",
+      "type": "tag",
+      "sortid": 59,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "mutant_creeper",
+      "path": "~/Steves/Overworld/Mobs/Random/QuadropedalSteve"
+    },
+    {
+      "name": "QuadropedalSteve",
+      "type": "livingentity",
+      "sortid": 59,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "quadropedal_steve",
+      "path": "~/Steves/Overworld/Mobs/Random/QuadropedalSteve"
     }
   ],
   "variable_elements": [],
@@ -981,10 +999,10 @@
   "language_map": {
     "en_us": {
       "entity.lotmorestevesremake.stegolem": "Stegolem",
-      "item.lotmorestevesremake.mini_zteve_spawn_egg": "Mini Zteve Spawn Egg",
       "item.lotmorestevesremake.micro_steve_spawn_egg": "Micro Steve Spawn Egg",
-      "subtitles.heavy_mechanical_steve": "",
+      "item.lotmorestevesremake.mini_zteve_spawn_egg": "Mini Zteve Spawn Egg",
       "entity.lotmorestevesremake.ghosteve": "Ghosteve",
+      "subtitles.heavy_mechanical_steve": "",
       "item.lotmorestevesremake.tnt_armor_set_boots": "Tnt Boots",
       "item.lotmorestevesremake.smasteve_spawn_egg": "Smasteve Spawn Egg",
       "item.lotmorestevesremake.minigun": "Minigun",
@@ -1016,6 +1034,7 @@
       "entity.lotmorestevesremake.stevindicator": "Stevindicator",
       "entity.lotmorestevesremake.giant_bouncy_steve": "Giant Bouncy Steve",
       "subtitles.mechanical_steve_hurt": "",
+      "entity.lotmorestevesremake.quadropedal_steve": "Quadropedal Steve",
       "subtitles.weird_steve_hurt": "",
       "entity.lotmorestevesremake.stecube": "Stecube",
       "subtitles.zteve_hurt": "",
@@ -1023,6 +1042,7 @@
       "entity.lotmorestevesremake.stevager": "Stevager",
       "entity.lotmorestevesremake.spinning_steve": "Spinning Steve",
       "subtitles.hostile_steve_hurt": "",
+      "item.lotmorestevesremake.quadropedal_steve_spawn_egg": "Quadropedal Steve Spawn Egg",
       "entity.lotmorestevesremake.smasteve": "Smasteve",
       "item.lotmorestevesremake.limp_steve_spawn_egg": "Limp Steve Spawn Egg",
       "itemGroup.tabmeet_the_steves": "Meet The Steves!",
@@ -1145,6 +1165,10 @@
                       },
                       {
                         "name": "Human",
+                        "children": []
+                      },
+                      {
+                        "name": "QuadropedalSteve",
                         "children": []
                       }
                     ]
