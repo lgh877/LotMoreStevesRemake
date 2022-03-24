@@ -45,7 +45,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
@@ -171,10 +170,7 @@ public class SmasteveEntity extends LotmorestevesremakeModElements.ModElement {
 		}
 
 		protected void applyEntityAI() {
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.CRAFTING_TABLE, this, 1, (int) 6));
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.FURNACE, this, 1, (int) 6));
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.BLAST_FURNACE, this, 1, (int) 6));
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.BOOKSHELF, this, 1, (int) 6));
+			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(this, 1, (int) 5));
 		}
 
 		public float getAttackDamage() {

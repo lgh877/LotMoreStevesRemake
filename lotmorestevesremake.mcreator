@@ -32,7 +32,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "bouncy_steve",
-      "path": "~/Steves/Overworld/Mobs/Random/BouncySteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/BouncySteve"
     },
     {
       "name": "WeAreSteves",
@@ -49,7 +49,7 @@
       "compiles": true,
       "locked_code": false,
       "registry_name": "bouncy_steve_loot_table",
-      "path": "~/Steves/Overworld/Mobs/Random/BouncySteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/BouncySteve"
     },
     {
       "name": "WeaponsOfSteves",
@@ -216,7 +216,7 @@
           }
         ]
       },
-      "path": "~/Steves/Overworld/Mobs/Random/BouncySteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/BouncySteve"
     },
     {
       "name": "GiantBouncySteve",
@@ -225,7 +225,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "giant_bouncy_steve",
-      "path": "~/Steves/Overworld/Mobs/Random/BouncySteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/BouncySteve"
     },
     {
       "name": "SlimySteveEntity",
@@ -234,7 +234,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "slimy_steve_entity",
-      "path": "~/Steves/Overworld/Mobs/Random/BouncySteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/BouncySteve"
     },
     {
       "name": "GiantBouncySteveLootTable",
@@ -243,7 +243,7 @@
       "compiles": true,
       "locked_code": false,
       "registry_name": "giant_bouncy_steve_loot_table",
-      "path": "~/Steves/Overworld/Mobs/Random/BouncySteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/BouncySteve"
     },
     {
       "name": "MeetTheStevesAdvancement",
@@ -415,7 +415,7 @@
           }
         ]
       },
-      "path": "~/Steves/Overworld/Mobs/Random/Stegolem"
+      "path": "~/Steves/Overworld/Mobs/Random/common/Stegolem"
     },
     {
       "name": "Stegolem",
@@ -424,7 +424,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stegolem",
-      "path": "~/Steves/Overworld/Mobs/Random/Stegolem"
+      "path": "~/Steves/Overworld/Mobs/Random/common/Stegolem"
     },
     {
       "name": "SpinningSteve",
@@ -433,7 +433,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "spinning_steve",
-      "path": "~/Steves/Overworld/Mobs/Random/SpinningSteve"
+      "path": "~/Steves/Overworld/Mobs/Random/mechanical/SpinningSteve"
     },
     {
       "name": "MicroSteve",
@@ -442,7 +442,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "micro_steve",
-      "path": "~/Steves/Overworld/Mobs/Random/MicroSteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/MicroSteve"
     },
     {
       "name": "StevesAmbushEvent",
@@ -489,7 +489,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stecube",
-      "path": "~/Steves/Overworld/Mobs/Random/Stecuve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/Stecuve"
     },
     {
       "name": "SeeThroughWallsTargetGoal",
@@ -553,7 +553,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "smasteve",
-      "path": "~/Steves/Overworld/Mobs/Random/Smasteve"
+      "path": "~/Steves/Overworld/Mobs/Random/weirdos/Smasteve"
     },
     {
       "name": "CustomMathHelper",
@@ -671,7 +671,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "nameless_steve",
-      "path": "~/Steves/Overworld/Mobs/Random/NamelessSteve"
+      "path": "~/Steves/Overworld/Mobs/Random/hero/NamelessSteve"
     },
     {
       "name": "NamelessSteveSpawnCondition",
@@ -689,7 +689,7 @@
           }
         ]
       },
-      "path": "~/Steves/Overworld/Mobs/Random/NamelessSteve"
+      "path": "~/Steves/Overworld/Mobs/Random/hero/NamelessSteve"
     },
     {
       "name": "Ghosteve",
@@ -737,7 +737,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "great_boy_steve",
-      "path": "~/Steves/Overworld/Mobs/Random/GreatBoySteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/GreatBoySteve"
     },
     {
       "name": "CanCauseInfection",
@@ -779,7 +779,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "monstrosteve",
-      "path": "~/Steves/Overworld/Mobs/Random/Monstrosteve"
+      "path": "~/Steves/Overworld/Mobs/Random/mechanical/Monstrosteve"
     },
     {
       "name": "MonstrosteveSpawnCondition",
@@ -797,7 +797,7 @@
           }
         ]
       },
-      "path": "~/Steves/Overworld/Mobs/Random/Monstrosteve"
+      "path": "~/Steves/Overworld/Mobs/Random/mechanical/Monstrosteve"
     },
     {
       "name": "MinigunWhileProjectileFlyingTick",
@@ -844,7 +844,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "limp_steve",
-      "path": "~/Steves/Overworld/Mobs/Random/LimpSteve"
+      "path": "~/Steves/Overworld/Mobs/Random/weirdos/LimpSteve"
     },
     {
       "name": "LimpSteveSpawnCondition",
@@ -862,7 +862,7 @@
           }
         ]
       },
-      "path": "~/Steves/Overworld/Mobs/Random/LimpSteve"
+      "path": "~/Steves/Overworld/Mobs/Random/weirdos/LimpSteve"
     },
     {
       "name": "Flateve",
@@ -871,15 +871,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "flateve",
-      "path": "~/Steves/Overworld/Mobs/Random/Stecuve"
-    },
-    {
-      "name": "OtherMobs",
-      "type": "tab",
-      "sortid": 58,
-      "compiles": true,
-      "locked_code": false,
-      "registry_name": "other_mobs"
+      "path": "~/Steves/Overworld/Mobs/Random/common/Stecuve"
     },
     {
       "name": "MutantCreeper",
@@ -888,7 +880,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "mutant_creeper",
-      "path": "~/Steves/Overworld/Mobs/Random/QuadropedalSteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/QuadropedalSteve"
     },
     {
       "name": "QuadropedalSteve",
@@ -897,7 +889,25 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "quadropedal_steve",
-      "path": "~/Steves/Overworld/Mobs/Random/QuadropedalSteve"
+      "path": "~/Steves/Overworld/Mobs/Random/common/QuadropedalSteve"
+    },
+    {
+      "name": "HungryZteve",
+      "type": "livingentity",
+      "sortid": 60,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "hungry_zteve",
+      "path": "~/Steves/Overworld/Mobs/Undead/HungryZteve"
+    },
+    {
+      "name": "MiniStevug",
+      "type": "livingentity",
+      "sortid": 61,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "mini_stevug",
+      "path": "~/Steves/Overworld/Mobs/Arthropod/MiniStevug"
     }
   ],
   "variable_elements": [],
@@ -999,14 +1009,15 @@
   "language_map": {
     "en_us": {
       "entity.lotmorestevesremake.stegolem": "Stegolem",
-      "item.lotmorestevesremake.micro_steve_spawn_egg": "Micro Steve Spawn Egg",
       "item.lotmorestevesremake.mini_zteve_spawn_egg": "Mini Zteve Spawn Egg",
-      "entity.lotmorestevesremake.ghosteve": "Ghosteve",
+      "item.lotmorestevesremake.micro_steve_spawn_egg": "Micro Steve Spawn Egg",
       "subtitles.heavy_mechanical_steve": "",
+      "entity.lotmorestevesremake.ghosteve": "Ghosteve",
       "item.lotmorestevesremake.tnt_armor_set_boots": "Tnt Boots",
       "item.lotmorestevesremake.smasteve_spawn_egg": "Smasteve Spawn Egg",
       "item.lotmorestevesremake.minigun": "Minigun",
       "item.lotmorestevesremake.stegolem_spawn_egg": "Stegolem Spawn Egg",
+      "item.lotmorestevesremake.hungry_zteve_spawn_egg": "Hungry Zteve Spawn Egg",
       "subtitles.strange_steve_hurt": "",
       "entity.lotmorestevesremake.stevindicator_big": "Stevindicator Big",
       "entity.lotmorestevesremake.zteve": "Zteve",
@@ -1025,7 +1036,6 @@
       "entity.lotmorestevesremake.mini_zteve": "Mini Zteve",
       "advancements.meet_the_steves_advancement.title": "Meet The Steves!",
       "item.lotmorestevesremake.tnt_armor_set_chestplate": "Tnt Vest",
-      "itemGroup.tabother_mobs": "Other Mobs",
       "entity.lotmorestevesremake.great_boy_steve": "Great Boy Steve",
       "advancements.meet_the_steves_advancement.descr": "So, you\u0027ve meet them.",
       "item.lotmorestevesremake.tnt_armor_set_helmet": "Tnt Armor Set Helmet",
@@ -1048,6 +1058,7 @@
       "itemGroup.tabmeet_the_steves": "Meet The Steves!",
       "itemGroup.tabweapons_of_steves": "Weapons Of Steves",
       "subtitles.bouncy_steve_death": "",
+      "entity.lotmorestevesremake.hungry_zteve": "Hungry Zteve",
       "item.lotmorestevesremake.zteve_spawn_egg": "Zteve Spawn Egg",
       "item.lotmorestevesremake.spinning_steve_spawn_egg": "Spinning Steve Spawn Egg",
       "entity.lotmorestevesremake.flateve": "Flateve",
@@ -1057,7 +1068,9 @@
       "item.lotmorestevesremake.monstrosteve_spawn_egg": "Monstrosteve Spawn Egg",
       "item.lotmorestevesremake.slime_bomb": "Slime Bomb Launcher",
       "subtitles.nameless_steve_death": "",
+      "item.lotmorestevesremake.mini_stevug_spawn_egg": "Mini Stevug Spawn Egg",
       "item.lotmorestevesremake.tnt_armor_set_leggings": "Tnt Armor Set Leggings",
+      "entity.lotmorestevesremake.mini_stevug": "Mini Stevug",
       "item.lotmorestevesremake.stevindicator_spawn_egg": "Stevindicator Spawn Egg",
       "subtitles.ghosteve_hurt": "",
       "gamerule.canCauseInfection.description": "Determines if CursedDiversionEffect cause infection.",
@@ -1120,56 +1133,76 @@
                     "name": "Random",
                     "children": [
                       {
-                        "name": "BouncySteve",
-                        "children": []
-                      },
-                      {
                         "name": "Stevillagers",
                         "children": []
                       },
                       {
-                        "name": "Stegolem",
-                        "children": []
+                        "name": "common",
+                        "children": [
+                          {
+                            "name": "BouncySteve",
+                            "children": []
+                          },
+                          {
+                            "name": "Stegolem",
+                            "children": []
+                          },
+                          {
+                            "name": "MicroSteve",
+                            "children": []
+                          },
+                          {
+                            "name": "Stecuve",
+                            "children": []
+                          },
+                          {
+                            "name": "Human",
+                            "children": []
+                          },
+                          {
+                            "name": "QuadropedalSteve",
+                            "children": []
+                          },
+                          {
+                            "name": "GreatBoySteve",
+                            "children": []
+                          }
+                        ]
                       },
                       {
-                        "name": "SpinningSteve",
-                        "children": []
+                        "name": "weirdos",
+                        "children": [
+                          {
+                            "name": "LimpSteve",
+                            "children": []
+                          },
+                          {
+                            "name": "Smasteve",
+                            "children": []
+                          }
+                        ]
                       },
                       {
-                        "name": "MicroSteve",
-                        "children": []
+                        "name": "mechanical",
+                        "children": [
+                          {
+                            "name": "Monstrosteve",
+                            "children": []
+                          },
+                          {
+                            "name": "SpinningSteve",
+                            "children": []
+                          }
+                        ]
                       },
                       {
-                        "name": "Stecuve",
-                        "children": []
-                      },
-                      {
-                        "name": "Smasteve",
-                        "children": []
-                      },
-                      {
-                        "name": "NamelessSteve",
-                        "children": []
-                      },
-                      {
-                        "name": "GreatBoySteve",
-                        "children": []
-                      },
-                      {
-                        "name": "Monstrosteve",
-                        "children": []
-                      },
-                      {
-                        "name": "LimpSteve",
-                        "children": []
-                      },
-                      {
-                        "name": "Human",
-                        "children": []
-                      },
-                      {
-                        "name": "QuadropedalSteve",
-                        "children": []
+                        "name": "hero",
+                        "children": [
+                          {
+                            "name": "NamelessSteve",
+                            "children": []
+                          }
+                        ]
                       }
                     ]
                   },
@@ -1179,12 +1212,21 @@
                       {
                         "name": "Zteve",
                         "children": []
+                      },
+                      {
+                        "name": "HungryZteve",
+                        "children": []
                       }
                     ]
                   },
                   {
                     "name": "Arthropod",
-                    "children": []
+                    "children": [
+                      {
+                        "name": "MiniStevug",
+                        "children": []
+                      }
+                    ]
                   }
                 ]
               },

@@ -59,6 +59,7 @@ import net.minecraft.block.Blocks;
 import net.mcreator.lotmorestevesremake.procedures.StevillagersSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.StevindicatorRenderer;
+import net.mcreator.lotmorestevesremake.StevindicatorDetectBlockGoal;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.CustomMathHelper;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
@@ -194,6 +195,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 			this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, (float) 6));
 			this.goalSelector.addGoal(4, new LookAtGoal(this, ServerPlayerEntity.class, (float) 6));
 			this.goalSelector.addGoal(4, new LookAtGoal(this, MobEntity.class, (float) 6));
+			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(this, 1, (int) 5));
 			this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					double d0 = this.getAttackReachSqr(enemy);
@@ -251,7 +253,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 				this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
 				if (this.getAttackTarget() != null) {
 					this.getAttackTarget().hurtResistantTime = 0;
-					if (CustomMathHelper.isEntityInBox(this.getAttackTarget(), this, 1.5)) {
+					if (this.getEntitySenses().canSee(this.getAttackTarget()) && CustomMathHelper.isEntityInBox(this.getAttackTarget(), this, 1.5)) {
 						this.attackEntityAsMob(this.getAttackTarget());
 					}
 				}

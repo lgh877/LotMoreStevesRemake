@@ -42,7 +42,6 @@ import net.minecraft.block.Block;
 import net.mcreator.lotmorestevesremake.procedures.StevillagersSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.StevindicatorBigRenderer;
-import net.mcreator.lotmorestevesremake.StevindicatorDetectBlockGoal;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 
 import java.util.stream.Stream;
@@ -133,14 +132,6 @@ public class StevindicatorBigEntity extends LotmorestevesremakeModElements.ModEl
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
-			this.applyEntityAI();
-		}
-
-		protected void applyEntityAI() {
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.CRAFTING_TABLE, this, 1, (int) 6));
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.FURNACE, this, 1, (int) 6));
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.BLAST_FURNACE, this, 1, (int) 6));
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(Blocks.BOOKSHELF, this, 1, (int) 6));
 		}
 
 		@Override

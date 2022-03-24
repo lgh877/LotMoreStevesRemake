@@ -23,11 +23,12 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Hand;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.block.Block;
 
 import javax.annotation.Nullable;
 
@@ -35,13 +36,11 @@ import java.util.Random;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class StevindicatorDetectBlockGoal extends MoveToBlockGoal {
-	private final Block block;
 	private final MobEntity entity;
 	private int breakingTime;
 
-	public StevindicatorDetectBlockGoal(Block blockIn, CreatureEntity creature, double speed, int yMax) {
+	public StevindicatorDetectBlockGoal(CreatureEntity creature, double speed, int yMax) {
 		super(creature, speed, 64, yMax);
-		this.block = blockIn;
 		this.entity = creature;
 	}
 
@@ -105,23 +104,27 @@ public class StevindicatorDetectBlockGoal extends MoveToBlockGoal {
 		BlockPos blockpos = this.entity.getPosition();
 		BlockPos blockpos1 = this.findTarget(blockpos, world);
 		Random random = this.entity.getRNG();
-		if (this.getIsAboveDestination() && blockpos1 != null) {
-			if (!this.entity.isSwingInProgress) {
-				this.entity.swingArm(Hand.MAIN_HAND);
+		if (blockpos1 != null) {
+			if (this.getIsAboveDestination()) {
+				if (!this.entity.isSwingInProgress)
+					this.entity.swingArm(Hand.MAIN_HAND);
+				else if (this.entity.swingProgress > 0.4f && !this.entity.world.isRemote() && random.nextInt(4) == 0)
+					world.destroyBlock(blockpos1, true, this.entity);
+				return;
 			}
-			if (this.entity.swingProgress > 0.4f && !this.entity.world.isRemote() && random.nextInt(10) == 0)
-				world.destroyBlock(blockpos1, true, this.entity);
 		}
 	}
 
 	@Nullable
 	private BlockPos findTarget(BlockPos pos, IBlockReader worldIn) {
-		if (worldIn.getBlockState(pos).isIn(this.block)) {
+		if (BlockTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:house_related_blocks"))
+				.contains(worldIn.getBlockState(pos).getBlock())) {
 			return pos;
 		} else {
 			BlockPos[] ablockpos = new BlockPos[]{pos.down(), pos.west(), pos.east(), pos.north(), pos.south(), pos.down().down()};
 			for (BlockPos blockpos : ablockpos) {
-				if (worldIn.getBlockState(blockpos).isIn(this.block)) {
+				if (BlockTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:house_related_blocks"))
+						.contains(worldIn.getBlockState(pos).getBlock())) {
 					return blockpos;
 				}
 			}
@@ -130,6 +133,14 @@ public class StevindicatorDetectBlockGoal extends MoveToBlockGoal {
 	}
 
 	/**
+	 * protected boolean shouldMoveTo(IWorldReader worldIn, BlockPos pos) {
+		IChunk ichunk = worldIn.getChunk(pos.getX() >> 4, pos.getZ() >> 4, ChunkStatus.FULL, false);
+		if (ichunk == null) {
+			return false;
+		} else {
+			return ichunk.getBlockState(pos).isIn(this.block) && ichunk.getBlockState(pos.up()).isAir() && ichunk.getBlockState(pos.up(2)).isAir();
+		}
+	}
 	* Return true to set given position as destination
 	*/
 	protected boolean shouldMoveTo(IWorldReader worldIn, BlockPos pos) {
@@ -137,7 +148,8 @@ public class StevindicatorDetectBlockGoal extends MoveToBlockGoal {
 		if (ichunk == null) {
 			return false;
 		} else {
-			return ichunk.getBlockState(pos).isIn(this.block) && ichunk.getBlockState(pos.up()).isAir() && ichunk.getBlockState(pos.up(2)).isAir();
+			return BlockTags.getCollection().getTagByID(new ResourceLocation("lotmorestevesremake:house_related_blocks")).contains(
+					ichunk.getBlockState(pos).getBlock()) && ichunk.getBlockState(pos.up()).isAir() && ichunk.getBlockState(pos.up(2)).isAir();
 		}
 	}
 }
