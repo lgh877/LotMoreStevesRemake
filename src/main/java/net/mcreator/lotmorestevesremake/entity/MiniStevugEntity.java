@@ -14,22 +14,30 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Hand;
 import net.minecraft.util.DamageSource;
 import net.minecraft.network.IPacket;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.item.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
@@ -40,6 +48,8 @@ import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.MiniStevugRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
+
+import javax.annotation.Nullable;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class MiniStevugEntity extends LotmorestevesremakeModElements.ModElement {
@@ -124,6 +134,62 @@ public class MiniStevugEntity extends LotmorestevesremakeModElements.ModElement 
 			this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1));
 			this.goalSelector.addGoal(3, new LookRandomlyGoal(this));
 			this.goalSelector.addGoal(4, new SwimGoal(this));
+		}
+
+		public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason,
+				@Nullable ILivingEntityData livingdata, @Nullable CompoundNBT tag) {
+			ILivingEntityData retval = super.onInitialSpawn(world, difficulty, reason, livingdata, tag);
+			this.setEquipmentBasedOnDifficulty(difficulty);
+			this.setEnchantmentBasedOnDifficulty(difficulty);
+			return retval;
+		}
+
+		protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+			if (this.rand.nextFloat() < 0.2f) {
+				int i = this.rand.nextInt(10);
+				if (i < 3) {
+					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.WOODEN_PICKAXE));
+					this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.WOODEN_PICKAXE));
+				} else if (i < 5) {
+					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.WOODEN_SWORD));
+					this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.WOODEN_SWORD));
+				} else if (i < 7) {
+					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.STONE_PICKAXE));
+					this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.STONE_PICKAXE));
+				} else if (i == 9) {
+					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.STONE_SWORD));
+					this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.STONE_SWORD));
+				}
+			} else if (this.rand.nextFloat() < 0.03f) {
+				int i = this.rand.nextInt(4);
+				float maxHP = (float) this.getAttributeValue(Attributes.MAX_HEALTH);
+				float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+				if (i == 0) {
+					this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.FURNACE));
+					this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHP * 4);
+					this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed * 0.5f);
+					this.experienceValue *= 2;
+				} else if (i == 1) {
+					this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.SMOKER));
+					this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHP * 6);
+					this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed * 0.5f);
+					this.experienceValue *= 3;
+				} else if (i == 2) {
+					this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.BLAST_FURNACE));
+					this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHP * 8);
+					this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed * 0.5f);
+					this.experienceValue *= 4;
+				} else {
+					this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.SLIME_BLOCK));
+					this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHP * 3);
+					this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed * 1.5f);
+					this.experienceValue *= 3;
+				}
+			}
+		}
+
+		public boolean onLivingFall(float distance, float damageMultiplier) {
+			return super.onLivingFall(0, damageMultiplier);
 		}
 
 		@Override

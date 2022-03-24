@@ -117,7 +117,7 @@ public class StecubeEntity extends LotmorestevesremakeModElements.ModElement {
 
 		public CustomEntity(EntityType<? extends CustomEntity> type, World world) {
 			super(type, world);
-			experienceValue = 10;
+			experienceValue = 7;
 			setNoAI(false);
 			this.setCanPickUpLoot(true);
 		}

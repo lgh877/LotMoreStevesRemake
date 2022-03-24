@@ -908,6 +908,15 @@
       "locked_code": true,
       "registry_name": "mini_stevug",
       "path": "~/Steves/Overworld/Mobs/Arthropod/MiniStevug"
+    },
+    {
+      "name": "Asdf",
+      "type": "livingentity",
+      "sortid": 62,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "asdf",
+      "path": "~/Steves/Overworld/Mobs/Arthropod/MiniStevug"
     }
   ],
   "variable_elements": [],
@@ -1074,9 +1083,11 @@
       "item.lotmorestevesremake.stevindicator_spawn_egg": "Stevindicator Spawn Egg",
       "subtitles.ghosteve_hurt": "",
       "gamerule.canCauseInfection.description": "Determines if CursedDiversionEffect cause infection.",
+      "item.lotmorestevesremake.asdf_spawn_egg": "Asdf Spawn Egg",
       "itemGroup.tabarmors_of_steves": "Armors Of Steves",
       "subtitles.nameless_steve_hurt": "",
-      "item.lotmorestevesremake.stecube_spawn_egg": "Stecube Spawn Egg"
+      "item.lotmorestevesremake.stecube_spawn_egg": "Stecube Spawn Egg",
+      "entity.lotmorestevesremake.asdf": "Asdf"
     }
   },
   "foldersRoot": {

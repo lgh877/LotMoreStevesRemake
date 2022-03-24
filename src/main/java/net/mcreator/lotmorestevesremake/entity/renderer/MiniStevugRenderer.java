@@ -8,10 +8,16 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.HandSide;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.IHasHead;
+import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
+import net.minecraft.client.renderer.entity.layers.HeadLayer;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 
 import net.mcreator.lotmorestevesremake.entity.MiniStevugEntity;
 
@@ -26,6 +32,19 @@ public class MiniStevugRenderer {
 		public void registerModels(ModelRegistryEvent event) {
 			RenderingRegistry.registerEntityRenderingHandler(MiniStevugEntity.entity, renderManager -> {
 				return new MobRenderer(renderManager, new ModelMini_Stevug(), 0.5f) {
+					{
+						this.addLayer(new HeadLayer<MiniStevugEntity.CustomEntity, ModelMini_Stevug<MiniStevugEntity.CustomEntity>>(this));
+						this.addLayer(new HeldItemLayer<MiniStevugEntity.CustomEntity, ModelMini_Stevug<MiniStevugEntity.CustomEntity>>(this) {
+							public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn,
+									MiniStevugEntity.CustomEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+									float ageInTicks, float netHeadYaw, float headPitch) {
+								matrixStackIn.translate(0, -0.2, 0.5);
+								super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
+										ageInTicks, netHeadYaw, headPitch);
+							}
+						});
+					}
+
 					@Override
 					public ResourceLocation getEntityTexture(Entity entity) {
 						return new ResourceLocation("lotmorestevesremake:textures/mini_stevug.png");
@@ -38,7 +57,7 @@ public class MiniStevugRenderer {
 	// Made with Blockbench 4.1.5
 	// Exported for Minecraft version 1.15 - 1.16 with MCP mappings
 	// Paste this class into your mod and generate all required imports
-	public static class ModelMini_Stevug extends EntityModel<Entity> {
+	public static class ModelMini_Stevug<T extends MiniStevugEntity.CustomEntity> extends EntityModel<T> implements IHasHead, IHasArm {
 		private final ModelRenderer head;
 		private final ModelRenderer leftEye;
 		private final ModelRenderer rightEye;
@@ -120,9 +139,9 @@ public class MiniStevugRenderer {
 			rightThirdThigh.addChild(rightThirdShank);
 			rightThirdShank.setTextureOffset(0, 18).addBox(-5.0F, -2.0F, -1.5F, 6.0F, 4.0F, 4.0F, -1.0F, true);
 			leftHand = new ModelRenderer(this);
-			leftHand.setRotationPoint(3.0F, 12.0F, -4.0F);
+			leftHand.setRotationPoint(1.0F, 12.0F, -3.0F);
 			rightHand = new ModelRenderer(this);
-			rightHand.setRotationPoint(-3.0F, 12.0F, -4.0F);
+			rightHand.setRotationPoint(-1.0F, 12.0F, -3.0F);
 		}
 
 		@Override
@@ -139,7 +158,7 @@ public class MiniStevugRenderer {
 			modelRenderer.rotateAngleZ = z;
 		}
 
-		public void setRotationAngles(Entity e, float f, float f1, float f2, float f3, float f4) {
+		public void setRotationAngles(T e, float f, float f1, float f2, float f3, float f4) {
 			float pi = (float) Math.PI;
 			float Tmove1 = MathHelper.sin(f * 0.6F) * f1;
 			float Tmove2 = MathHelper.sin(f * 0.6F + pi * 0.33f) * f1;
@@ -150,11 +169,20 @@ public class MiniStevugRenderer {
 			//
 			this.head.rotationPointY = 20 + MathHelper.sin(f * 1.2F) * f1;
 			//
-			this.leftEye.rotationPointX = 2 + (float) MathHelper.clamp(-f3 / 20, -0.5, 0.5);
-			this.leftEye.rotationPointY = -4 + (float) MathHelper.clamp(-f4 / 20, -0.5, 0.5);
+			this.leftEye.rotationPointX = 2 + (float) MathHelper.clamp(-f3 / 30, -0.5, 0.5);
+			this.leftEye.rotationPointY = -4 + (float) MathHelper.clamp(f4 / 30, -0.5, 0.5);
 			//
-			this.rightEye.rotationPointX = -2 + (float) MathHelper.clamp(-f3 / 20, -0.5, 0.5);
-			this.rightEye.rotationPointY = -4 + (float) MathHelper.clamp(-f4 / 20, -0.5, 0.5);
+			this.rightEye.rotationPointX = -2 + (float) MathHelper.clamp(-f3 / 30, -0.5, 0.5);
+			this.rightEye.rotationPointY = -4 + (float) MathHelper.clamp(f4 / 30, -0.5, 0.5);
+			//
+			this.leftHand.rotateAngleX = -pi / 4 + MathHelper.sin(f2 * 0.04f) * 0.2f;
+			this.rightHand.rotateAngleX = -pi / 4 + MathHelper.cos(f2 * 0.04f) * 0.2f;
+			if (this.swingProgress > 0) {
+				float a = 1 - this.swingProgress;
+				a = a * a * a;
+				this.leftHand.rotateAngleX += MathHelper.sin(a * pi);
+				this.rightHand.rotateAngleX += MathHelper.sin(a * pi);
+			}
 			//
 			this.leftFirstThigh.rotateAngleY = Tmove1;
 			this.leftFirstThigh.rotateAngleZ = Smove1;
@@ -179,6 +207,18 @@ public class MiniStevugRenderer {
 			this.rightThirdThigh.rotateAngleY = -Smove3;
 			this.rightThirdThigh.rotateAngleZ = -Tmove3;
 			this.rightThirdShank.rotateAngleZ = -pi / 2;
+		}
+
+		public ModelRenderer getModelHead() {
+			return this.head;
+		}
+
+		public void translateHand(HandSide sideIn, MatrixStack matrixStackIn) {
+			this.getArmForSide(sideIn).translateRotate(matrixStackIn);
+		}
+
+		protected ModelRenderer getArmForSide(HandSide side) {
+			return side == HandSide.LEFT ? this.leftHand : this.rightHand;
 		}
 	}
 }
