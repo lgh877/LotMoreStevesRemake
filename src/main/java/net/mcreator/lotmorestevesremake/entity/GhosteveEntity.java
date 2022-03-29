@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.DungeonHooks;
 
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
@@ -60,7 +61,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.block.BlockState;
 
-import net.mcreator.lotmorestevesremake.procedures.GhosteveSpawningConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.GhosteveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
@@ -68,12 +68,8 @@ import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 import javax.annotation.Nullable;
 
-import java.util.stream.Stream;
 import java.util.Random;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.EnumSet;
-import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
@@ -97,19 +93,14 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 100, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 50, 1, 1));
 	}
 
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS,
-				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
-					int x = pos.getX();
-					int y = pos.getY();
-					int z = pos.getZ();
-					return GhosteveSpawningConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
-				});
+				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AggressiveSteveEntity::customSpawningConditionInLight);
+		DungeonHooks.addDungeonMob(entity, 180);
 	}
 
 	private static class EntityAttributesRegisterHandler {
@@ -128,6 +119,10 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 	public static class CustomEntity extends AggressiveSteveEntity {
 		private static final DataParameter<Integer> AVOID = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
+
+		public static boolean whereToSpawn(IServerWorld worldIn) {
+			return true;
+		}
 
 		protected void registerData() {
 			super.registerData();

@@ -10,10 +10,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.DungeonHooks;
 
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -38,15 +40,10 @@ import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.CreatureAttribute;
 
-import net.mcreator.lotmorestevesremake.procedures.StegolemSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.GreatBoySteveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
-
-import java.util.stream.Stream;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.AbstractMap;
+import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class GreatBoySteveEntity extends LotmorestevesremakeModElements.ModElement {
@@ -76,13 +73,8 @@ public class GreatBoySteveEntity extends LotmorestevesremakeModElements.ModEleme
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> {
-					int x = pos.getX();
-					int y = pos.getY();
-					int z = pos.getZ();
-					return StegolemSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
-				});
+				AggressiveSteveEntity::customSpawningConditionInLight);
+		DungeonHooks.addDungeonMob(entity, 180);
 	}
 
 	private static class EntityAttributesRegisterHandler {
@@ -101,6 +93,10 @@ public class GreatBoySteveEntity extends LotmorestevesremakeModElements.ModEleme
 	public static class CustomEntity extends MonsterEntity {
 		private static final DataParameter<Integer> ATTACK_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 		private int attackProgress;
+
+		public static boolean whenToSpawn(IServerWorld worldIn) {
+			return worldIn.getWorldInfo().getDayTime() > 96000;
+		}
 
 		protected void registerData() {
 			super.registerData();

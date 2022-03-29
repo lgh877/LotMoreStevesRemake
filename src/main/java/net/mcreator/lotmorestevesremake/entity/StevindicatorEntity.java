@@ -10,7 +10,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -56,7 +55,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.block.Blocks;
 
-import net.mcreator.lotmorestevesremake.procedures.StevillagersSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.StevindicatorRenderer;
 import net.mcreator.lotmorestevesremake.StevindicatorDetectBlockGoal;
@@ -66,11 +64,7 @@ import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 import javax.annotation.Nullable;
 
-import java.util.stream.Stream;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.EnumSet;
-import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class StevindicatorEntity extends LotmorestevesremakeModElements.ModElement {
@@ -100,14 +94,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> {
-					int x = pos.getX();
-					int y = pos.getY();
-					int z = pos.getZ();
-					return StevillagersSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
-				});
-		DungeonHooks.addDungeonMob(entity, 180);
+				AggressiveSteveEntity::customSpawningConditionInLight);
 	}
 
 	private static class EntityAttributesRegisterHandler {
@@ -130,10 +117,10 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 		public boolean attack;
 		public int DancingTick;
 
-		/*public int red;
-		public int green;
-		public int blue;
-		*/
+		public static boolean whenToSpawn(IServerWorld worldIn) {
+			return worldIn.getWorldInfo().getDayTime() > 96000;
+		}
+
 		protected void registerData() {
 			super.registerData();
 			this.dataManager.register(RED, 0);

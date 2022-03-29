@@ -14,6 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Hand;
 import net.minecraft.util.DamageSource;
@@ -34,17 +35,12 @@ import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.CreatureAttribute;
 
-import net.mcreator.lotmorestevesremake.procedures.StevillagersSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.QuadropedalSteveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
-import java.util.stream.Stream;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.EnumSet;
-import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class QuadropedalSteveEntity extends LotmorestevesremakeModElements.ModElement {
@@ -74,13 +70,7 @@ public class QuadropedalSteveEntity extends LotmorestevesremakeModElements.ModEl
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> {
-					int x = pos.getX();
-					int y = pos.getY();
-					int z = pos.getZ();
-					return StevillagersSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
-				});
+				AggressiveSteveEntity::customSpawningConditionInLight);
 	}
 
 	private static class EntityAttributesRegisterHandler {
@@ -99,6 +89,10 @@ public class QuadropedalSteveEntity extends LotmorestevesremakeModElements.ModEl
 	public static class CustomEntity extends AggressiveSteveEntity {
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);
+		}
+
+		public static boolean whenToSpawn(IServerWorld worldIn) {
+			return worldIn.getWorldInfo().getDayTime() > 24000 * 3;
 		}
 
 		public CustomEntity(EntityType<CustomEntity> type, World world) {

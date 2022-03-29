@@ -1,9 +1,9 @@
 {
   "entity.lotmorestevesremake.stegolem": "Stegolem",
-  "item.lotmorestevesremake.mini_zteve_spawn_egg": "Mini Zteve Spawn Egg",
   "item.lotmorestevesremake.micro_steve_spawn_egg": "Micro Steve Spawn Egg",
-  "subtitles.heavy_mechanical_steve": "",
+  "item.lotmorestevesremake.mini_zteve_spawn_egg": "Mini Zteve Spawn Egg",
   "entity.lotmorestevesremake.ghosteve": "Ghosteve",
+  "subtitles.heavy_mechanical_steve": "",
   "item.lotmorestevesremake.tnt_armor_set_boots": "Tnt Boots",
   "item.lotmorestevesremake.smasteve_spawn_egg": "Smasteve Spawn Egg",
   "item.lotmorestevesremake.minigun": "Minigun",
@@ -65,9 +65,7 @@
   "item.lotmorestevesremake.stevindicator_spawn_egg": "Stevindicator Spawn Egg",
   "subtitles.ghosteve_hurt": "",
   "gamerule.canCauseInfection.description": "Determines if CursedDiversionEffect cause infection.",
-  "item.lotmorestevesremake.asdf_spawn_egg": "Asdf Spawn Egg",
   "itemGroup.tabarmors_of_steves": "Armors Of Steves",
   "subtitles.nameless_steve_hurt": "",
-  "item.lotmorestevesremake.stecube_spawn_egg": "Stecube Spawn Egg",
-  "entity.lotmorestevesremake.asdf": "Asdf"
+  "item.lotmorestevesremake.stecube_spawn_egg": "Stecube Spawn Egg"
 }

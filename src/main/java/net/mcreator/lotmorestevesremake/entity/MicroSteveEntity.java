@@ -50,18 +50,12 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 
-import net.mcreator.lotmorestevesremake.procedures.SpawnInOverworldOnlyProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.MicroSteveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 import javax.annotation.Nullable;
-
-import java.util.stream.Stream;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class MicroSteveEntity extends LotmorestevesremakeModElements.ModElement {
@@ -91,13 +85,7 @@ public class MicroSteveEntity extends LotmorestevesremakeModElements.ModElement 
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> {
-					int x = pos.getX();
-					int y = pos.getY();
-					int z = pos.getZ();
-					return SpawnInOverworldOnlyProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
-				});
+				AggressiveSteveEntity::customSpawningConditionInLight);
 		DungeonHooks.addDungeonMob(entity, 180);
 	}
 

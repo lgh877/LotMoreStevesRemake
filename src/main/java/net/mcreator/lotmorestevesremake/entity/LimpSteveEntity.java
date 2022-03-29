@@ -10,10 +10,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.DungeonHooks;
 
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
@@ -46,17 +48,11 @@ import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
-import net.mcreator.lotmorestevesremake.procedures.LimpSteveSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.LimpSteveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.CustomMathHelper;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
-
-import java.util.stream.Stream;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
@@ -80,19 +76,14 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 4, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 2, 1, 1));
 	}
 
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> {
-					int x = pos.getX();
-					int y = pos.getY();
-					int z = pos.getZ();
-					return LimpSteveSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
-				});
+				AggressiveSteveEntity::customSpawningConditionInLight);
+		DungeonHooks.addDungeonMob(entity, 180);
 	}
 
 	private static class EntityAttributesRegisterHandler {
@@ -113,6 +104,10 @@ public class LimpSteveEntity extends LotmorestevesremakeModElements.ModElement {
 	public static class CustomEntity extends AggressiveSteveEntity {
 		public float[] prevSwingProgress2 = new float[5];
 		public int attack;
+
+		public static boolean whenToSpawn(IServerWorld worldIn) {
+			return worldIn.getWorldInfo().getDayTime() > 24000 * 15;
+		}
 
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);

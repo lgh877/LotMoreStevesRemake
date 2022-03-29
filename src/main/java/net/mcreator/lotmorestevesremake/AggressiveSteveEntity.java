@@ -17,6 +17,8 @@ package net.mcreator.lotmorestevesremake;
 import net.minecraftforge.fml.common.Mod;
 
 import net.minecraft.world.World;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.tags.EntityTypeTags;
@@ -29,6 +31,7 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EntityType;
@@ -37,6 +40,8 @@ import net.minecraft.entity.Entity;
 import net.mcreator.lotmorestevesremake.world.CanCauseInfectionGameRule;
 import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
 import net.mcreator.lotmorestevesremake.entity.StevagerEntity;
+
+import java.util.Random;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AggressiveSteveEntity extends MonsterEntity {
@@ -75,6 +80,28 @@ public class AggressiveSteveEntity extends MonsterEntity {
 			this.setAttackTarget((LivingEntity) entityIn);
 		}
 		super.collideWithEntity(entityIn);
+	}
+
+	public static boolean whenToSpawn(IServerWorld worldIn) {
+		return true;
+	}
+
+	public static boolean whereToSpawn(IServerWorld worldIn) {
+		return (World.OVERWORLD) == (worldIn instanceof World ? (((World) worldIn).getDimensionKey()) : World.OVERWORLD);
+	}
+
+	public static boolean rarityForSpawn() {
+		return true;
+	}
+
+	public static boolean customSpawningConditionInLight(EntityType<? extends MonsterEntity> type, IServerWorld worldIn, SpawnReason reason,
+			BlockPos pos, Random randomIn) {
+		return canMonsterSpawnInLight(type, worldIn, reason, pos, randomIn) && whereToSpawn(worldIn) && whenToSpawn(worldIn) && rarityForSpawn();
+	}
+
+	public static boolean customSpawningCondition(EntityType<? extends MonsterEntity> type, IServerWorld worldIn, SpawnReason reason, BlockPos pos,
+			Random randomIn) {
+		return canMonsterSpawn(type, worldIn, reason, pos, randomIn) && whereToSpawn(worldIn) && whenToSpawn(worldIn) && rarityForSpawn();
 	}
 
 	@Override

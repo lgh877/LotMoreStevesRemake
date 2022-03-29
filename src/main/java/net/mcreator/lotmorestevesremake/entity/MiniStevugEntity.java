@@ -79,7 +79,7 @@ public class MiniStevugEntity extends LotmorestevesremakeModElements.ModElement 
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS,
-				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::canSpawnOn);
+				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AggressiveSteveEntity::customSpawningConditionInLight);
 	}
 
 	private static class EntityAttributesRegisterHandler {
@@ -97,6 +97,10 @@ public class MiniStevugEntity extends LotmorestevesremakeModElements.ModElement 
 	public static class CustomEntity extends AggressiveSteveEntity {
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);
+		}
+
+		public static boolean rarityForSpawn() {
+			return Math.random() < 0.2;
 		}
 
 		protected float getSoundVolume() {
@@ -189,7 +193,7 @@ public class MiniStevugEntity extends LotmorestevesremakeModElements.ModElement 
 		}
 
 		public boolean onLivingFall(float distance, float damageMultiplier) {
-			return super.onLivingFall(0, damageMultiplier);
+			return false;
 		}
 
 		@Override
