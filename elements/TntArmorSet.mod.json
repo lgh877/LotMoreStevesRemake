@@ -1,5 +1,5 @@
 {
-  "_fv": 24,
+  "_fv": 28,
   "_type": "armor",
   "definition": {
     "enableHelmet": false,
@@ -26,11 +26,11 @@
     "bootsName": "Tnt Boots",
     "helmetSpecialInfo": [],
     "bodySpecialInfo": [
-      "I'll never wear it. ¡×4Never."
+      "I'll never wear it. ï¿½ï¿½4Never."
     ],
     "leggingsSpecialInfo": [],
     "bootsSpecialInfo": [
-      "¡×4Safety First!"
+      "ï¿½ï¿½4Safety First!"
     ],
     "helmetModelName": "Default",
     "helmetModelPart": "Helmet",

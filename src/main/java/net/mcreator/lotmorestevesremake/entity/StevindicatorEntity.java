@@ -186,7 +186,7 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 			this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					double d0 = this.getAttackReachSqr(enemy);
-					if (distToEnemySqr * 0.1 <= d0 && !this.attacker.isSwingInProgress) {
+					if (distToEnemySqr * 0.03 <= d0 && !this.attacker.isSwingInProgress) {
 						float multiplier = 1;
 						if (attacker.getHealth() / attacker.getMaxHealth() < 0.5)
 							multiplier = 1.8f;

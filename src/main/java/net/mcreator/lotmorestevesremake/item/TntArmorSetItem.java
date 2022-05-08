@@ -98,7 +98,7 @@ public class TntArmorSetItem extends LotmorestevesremakeModElements.ModElement {
 			@Override
 			public void addInformation(ItemStack itemstack, World world, List<ITextComponent> list, ITooltipFlag flag) {
 				super.addInformation(itemstack, world, list, flag);
-				list.add(new StringTextComponent("I'll never wear it. ¡×4Never."));
+				list.add(new StringTextComponent("I'll never wear it. Never."));
 			}
 
 			@Override
@@ -140,7 +140,7 @@ public class TntArmorSetItem extends LotmorestevesremakeModElements.ModElement {
 			@Override
 			public void addInformation(ItemStack itemstack, World world, List<ITextComponent> list, ITooltipFlag flag) {
 				super.addInformation(itemstack, world, list, flag);
-				list.add(new StringTextComponent("¡×4Safety First!"));
+				list.add(new StringTextComponent("Safety First!"));
 			}
 
 			@Override

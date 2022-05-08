@@ -39,17 +39,12 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 
-import net.mcreator.lotmorestevesremake.procedures.StevillagersSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.FlateveRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
+import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 import javax.annotation.Nullable;
-
-import java.util.stream.Stream;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class FlateveEntity extends LotmorestevesremakeModElements.ModElement {
@@ -79,13 +74,7 @@ public class FlateveEntity extends LotmorestevesremakeModElements.ModElement {
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS,
-				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
-					int x = pos.getX();
-					int y = pos.getY();
-					int z = pos.getZ();
-					return StevillagersSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll)) && Math.random() < 0.05;
-				});
+				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AggressiveSteveEntity::customSpawningConditionInLight);
 	}
 
 	private static class EntityAttributesRegisterHandler {
@@ -104,6 +93,10 @@ public class FlateveEntity extends LotmorestevesremakeModElements.ModElement {
 
 	public static class CustomEntity extends StecubeEntity.CustomEntity {
 		public boolean noRiders;
+
+		public static boolean rarityForSpawn() {
+			return Math.random() < 0.05;
+		}
 
 		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
 			this(entity, world);

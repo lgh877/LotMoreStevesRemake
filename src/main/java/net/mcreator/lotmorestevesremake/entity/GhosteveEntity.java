@@ -15,6 +15,7 @@ import net.minecraftforge.common.DungeonHooks;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.util.math.vector.Vector3d;
@@ -73,7 +74,8 @@ import java.util.EnumSet;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
-	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.MONSTER).immuneToFire()
+	public static EntityType entity = (EntityType.Builder
+			.<CustomEntity>create(CustomEntity::new, EntityClassification.create("ghost", "ghost", 20, false, false, 128)).immuneToFire()
 			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(CustomEntity::new)
 			.size(0.6f, 1.8f)).build("ghosteve").setRegistryName("ghosteve");
 
@@ -93,13 +95,14 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 50, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.create("ghost", "ghost", 20, false, false, 128))
+				.add(new MobSpawnInfo.Spawners(entity, 1, 1, 1));
 	}
 
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS,
-				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AggressiveSteveEntity::customSpawningConditionInLight);
+				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomEntity::canSpawnOn);
 		DungeonHooks.addDungeonMob(entity, 180);
 	}
 
@@ -120,7 +123,7 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 	public static class CustomEntity extends AggressiveSteveEntity {
 		private static final DataParameter<Integer> AVOID = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 
-		public static boolean whereToSpawn(IServerWorld worldIn) {
+		public static boolean canSpawnOn(EntityType<? extends MobEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
 			return true;
 		}
 

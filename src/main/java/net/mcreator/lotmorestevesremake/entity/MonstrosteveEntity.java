@@ -19,6 +19,7 @@ import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.World;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.BossInfo;
 import net.minecraft.util.math.vector.Vector3d;
@@ -66,7 +67,6 @@ import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
-import net.mcreator.lotmorestevesremake.procedures.MonstrosteveSpawnConditionProcedure;
 import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.item.MinigunItem;
@@ -75,12 +75,8 @@ import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.CustomMathHelper;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
-import java.util.stream.Stream;
 import java.util.Random;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.EnumSet;
-import java.util.AbstractMap;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElement {
@@ -110,13 +106,7 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> {
-					int x = pos.getX();
-					int y = pos.getY();
-					int z = pos.getZ();
-					return MonstrosteveSpawnConditionProcedure.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world))
-							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
-				});
+				AggressiveSteveEntity::customSpawningConditionInLight);
 		DungeonHooks.addDungeonMob(entity, 180);
 	}
 
@@ -147,6 +137,15 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		private float[] clientSideStandAnimation = new float[2];
 		public boolean shootActive;
 		public boolean summonActive;
+
+		@OnlyIn(Dist.CLIENT)
+		public boolean isInRangeToRenderDist(double distance) {
+			return true;
+		}
+
+		public static boolean whenToSpawn(IServerWorld worldIn) {
+			return worldIn.getWorldInfo().getDayTime() > 24000 * 30;
+		}
 
 		protected void registerData() {
 			super.registerData();

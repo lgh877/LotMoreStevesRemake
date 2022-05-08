@@ -260,7 +260,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stevager",
-      "path": "~/Steves/Overworld/Mobs/Random/Stevillagers"
+      "path": "~/Steves/Overworld/Mobs/Stevillagers"
     },
     {
       "name": "InfectionEvent",
@@ -311,16 +311,16 @@
           }
         ]
       },
-      "path": "~/Steves/Overworld/Mobs/Random/Stevillagers"
+      "path": "~/Steves/Overworld/Mobs/Stevillagers"
     },
     {
       "name": "Stevindicator",
       "type": "livingentity",
       "sortid": 18,
-      "compiles": false,
+      "compiles": true,
       "locked_code": true,
       "registry_name": "stevindicator",
-      "path": "~/Steves/Overworld/Mobs/Random/Stevillagers"
+      "path": "~/Steves/Overworld/Mobs/Stevillagers"
     },
     {
       "name": "SteveFaceParticle",
@@ -388,7 +388,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stevindicator_big",
-      "path": "~/Steves/Overworld/Mobs/Random/Stevillagers"
+      "path": "~/Steves/Overworld/Mobs/Stevillagers"
     },
     {
       "name": "StevindicatorDetectBlockGoal",
@@ -397,7 +397,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "stevindicator_detect_block_goal",
-      "path": "~/Steves/Overworld/Mobs/Random/Stevillagers"
+      "path": "~/Steves/Overworld/Mobs/Stevillagers"
     },
     {
       "name": "StegolemSpawnCondition",
@@ -671,7 +671,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "nameless_steve",
-      "path": "~/Steves/Overworld/Mobs/Random/hero/NamelessSteve"
+      "path": "~/Steves/EveryDimension/Mobs/Hero/NamelessSteve"
     },
     {
       "name": "NamelessSteveSpawnCondition",
@@ -689,7 +689,7 @@
           }
         ]
       },
-      "path": "~/Steves/Overworld/Mobs/Random/hero/NamelessSteve"
+      "path": "~/Steves/EveryDimension/Mobs/Hero/NamelessSteve"
     },
     {
       "name": "Ghosteve",
@@ -698,7 +698,7 @@
       "compiles": true,
       "locked_code": true,
       "registry_name": "ghosteve",
-      "path": "~/Steves/EveryDimension/Mobs/Ghosteve"
+      "path": "~/Steves/EveryDimension/Mobs/Undead/Ghosteve"
     },
     {
       "name": "GhosteveSpawningCondition",
@@ -728,7 +728,7 @@
           }
         ]
       },
-      "path": "~/Steves/EveryDimension/Mobs/Ghosteve"
+      "path": "~/Steves/EveryDimension/Mobs/Undead/Ghosteve"
     },
     {
       "name": "GreatBoySteve",
@@ -908,6 +908,15 @@
       "locked_code": true,
       "registry_name": "mini_stevug",
       "path": "~/Steves/Overworld/Mobs/Arthropod/MiniStevug"
+    },
+    {
+      "name": "Spig",
+      "type": "livingentity",
+      "sortid": 62,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "spig",
+      "path": "~/Steves/Overworld/Mobs/Random/common/Spig"
     }
   ],
   "variable_elements": [],
@@ -1009,10 +1018,10 @@
   "language_map": {
     "en_us": {
       "entity.lotmorestevesremake.stegolem": "Stegolem",
-      "item.lotmorestevesremake.micro_steve_spawn_egg": "Micro Steve Spawn Egg",
       "item.lotmorestevesremake.mini_zteve_spawn_egg": "Mini Zteve Spawn Egg",
-      "entity.lotmorestevesremake.ghosteve": "Ghosteve",
+      "item.lotmorestevesremake.micro_steve_spawn_egg": "Micro Steve Spawn Egg",
       "subtitles.heavy_mechanical_steve": "",
+      "entity.lotmorestevesremake.ghosteve": "Ghosteve",
       "item.lotmorestevesremake.tnt_armor_set_boots": "Tnt Boots",
       "item.lotmorestevesremake.smasteve_spawn_egg": "Smasteve Spawn Egg",
       "item.lotmorestevesremake.minigun": "Minigun",
@@ -1029,7 +1038,7 @@
       "entity.lotmorestevesremake.limp_steve": "Limp Steve",
       "subtitles.great_boy_steve_hurt": "",
       "advancements.gaining_slime_bomb_launcher_recipe.title": "I love jelly!",
-      "item.lotmorestevesremake.nameless_steve_spawn_egg": "¡×0¡×o¡×m¡×n¡×lNameless Steve Spawn Egg",
+      "item.lotmorestevesremake.nameless_steve_spawn_egg": "ï¿½ï¿½0ï¿½ï¿½oï¿½ï¿½mï¿½ï¿½nï¿½ï¿½lNameless Steve Spawn Egg",
       "effect.cursed_diversion": "Cursed Diversion",
       "item.lotmorestevesremake.great_boy_steve_spawn_egg": "Great Boy Steve Spawn Egg",
       "item.lotmorestevesremake.stevindicator_big_spawn_egg": "Stevindicator Big Spawn Egg",
@@ -1039,17 +1048,19 @@
       "entity.lotmorestevesremake.great_boy_steve": "Great Boy Steve",
       "advancements.meet_the_steves_advancement.descr": "So, you\u0027ve meet them.",
       "item.lotmorestevesremake.tnt_armor_set_helmet": "Tnt Armor Set Helmet",
-      "entity.lotmorestevesremake.nameless_steve": "¡×0¡×o¡×m¡×n¡×lNameless Steve",
+      "entity.lotmorestevesremake.nameless_steve": "ï¿½ï¿½0ï¿½ï¿½oï¿½ï¿½mï¿½ï¿½nï¿½ï¿½lNameless Steve",
       "entity.lotmorestevesremake.micro_steve": "Micro Steve",
       "entity.lotmorestevesremake.stevindicator": "Stevindicator",
       "entity.lotmorestevesremake.giant_bouncy_steve": "Giant Bouncy Steve",
       "subtitles.mechanical_steve_hurt": "",
       "entity.lotmorestevesremake.quadropedal_steve": "Quadropedal Steve",
       "subtitles.weird_steve_hurt": "",
+      "entity.lotmorestevesremake.spig": "Spig",
       "entity.lotmorestevesremake.stecube": "Stecube",
       "subtitles.zteve_hurt": "",
       "item.lotmorestevesremake.flateve_spawn_egg": "Flateve Spawn Egg",
       "entity.lotmorestevesremake.stevager": "Stevager",
+      "item.lotmorestevesremake.spig_spawn_egg": "Spig Spawn Egg",
       "entity.lotmorestevesremake.spinning_steve": "Spinning Steve",
       "subtitles.hostile_steve_hurt": "",
       "item.lotmorestevesremake.quadropedal_steve_spawn_egg": "Quadropedal Steve Spawn Egg",
@@ -1133,10 +1144,6 @@
                     "name": "Random",
                     "children": [
                       {
-                        "name": "Stevillagers",
-                        "children": []
-                      },
-                      {
                         "name": "common",
                         "children": [
                           {
@@ -1165,6 +1172,10 @@
                           },
                           {
                             "name": "GreatBoySteve",
+                            "children": []
+                          },
+                          {
+                            "name": "Spig",
                             "children": []
                           }
                         ]
@@ -1197,12 +1208,7 @@
                       },
                       {
                         "name": "hero",
-                        "children": [
-                          {
-                            "name": "NamelessSteve",
-                            "children": []
-                          }
-                        ]
+                        "children": []
                       }
                     ]
                   },
@@ -1227,6 +1233,10 @@
                         "children": []
                       }
                     ]
+                  },
+                  {
+                    "name": "Stevillagers",
+                    "children": []
                   }
                 ]
               },
@@ -1243,7 +1253,33 @@
                 "name": "Mobs",
                 "children": [
                   {
-                    "name": "Ghosteve",
+                    "name": "Hero",
+                    "children": [
+                      {
+                        "name": "NamelessSteve",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Undead",
+                    "children": [
+                      {
+                        "name": "Ghosteve",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Random",
+                    "children": []
+                  },
+                  {
+                    "name": "Anthropod",
+                    "children": []
+                  },
+                  {
+                    "name": "Illager",
                     "children": []
                   }
                 ]
@@ -1270,7 +1306,7 @@
     "modid": "lotmorestevesremake",
     "modName": "LotMoreStevesRemake",
     "version": "0.7.0",
-    "author": "±ÔÇõ, MCreator",
+    "author": "ï¿½ï¿½ï¿½ï¿½, MCreator",
     "websiteURL": "https://mcreator.net",
     "license": "Academic Free License v3.0",
     "disableForgeVersionCheck": true,
@@ -1284,5 +1320,5 @@
     "modElementsPackage": "net.mcreator.lotmorestevesremake",
     "lockBaseModFiles": false
   },
-  "mcreatorVersion": 202100354000
+  "mcreatorVersion": 202200119518
 }
