@@ -10,6 +10,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.HandSide;
+import net.minecraft.util.Hand;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -148,8 +149,8 @@ public class SpigRenderer {
 
 		public void setRotationAngles(T e, float f, float f1, float f2, float f3, float f4) {
 			float armSwing = MathHelper.cos(f * 0.6662F) * f1;
-			HandSide handside = this.getMainHand(e);
-			ModelRenderer mainArm = this.getArmForSide(handside);
+			ModelRenderer mainArm = this.getArmForSide(this.getMainHand(e));
+			ModelRenderer offArm = this.getArmForSide(this.getOffHand(e));
 			this.bipedHead.rotateAngleY = f3 / (180F / (float) Math.PI);
 			this.bipedHead.rotateAngleX = f4 / (180F / (float) Math.PI);
 			this.bipedLeftArm.rotateAngleX = armSwing;
@@ -161,6 +162,17 @@ public class SpigRenderer {
 				a = a * a * a;
 				mainArm.rotateAngleX = -MathHelper.sin(a * (float) Math.PI) * 2;
 			}
+			if (!e.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+				mainArm.rotateAngleX -= (float) Math.PI / 4;
+			}
+			if (!e.getHeldItem(Hand.OFF_HAND).isEmpty()) {
+				offArm.rotateAngleX -= (float) Math.PI / 4;
+			}
+		}
+
+		protected HandSide getOffHand(T entityIn) {
+			HandSide handside = entityIn.getPrimaryHand();
+			return entityIn.swingingHand == Hand.MAIN_HAND ? handside.opposite() : handside;
 		}
 
 		public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

@@ -46,7 +46,6 @@ import net.minecraft.block.Block;
 
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.StegolemRenderer;
-import net.mcreator.lotmorestevesremake.StevindicatorDetectBlockGoal;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
@@ -104,6 +103,10 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 		private static final DataParameter<Integer> ATTACK_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 		public boolean isAttackSucceed = true;
 		public boolean isLanded;
+
+		protected boolean canDestroyBuildings() {
+			return false;
+		}
 
 		public static boolean whenToSpawn(IServerWorld worldIn) {
 			return worldIn.getWorldInfo().getDayTime() > 24000 * 10;
@@ -197,11 +200,6 @@ public class StegolemEntity extends LotmorestevesremakeModElements.ModElement {
 			});
 			this.goalSelector.addGoal(6, new RandomWalkingGoal(this, 1));
 			this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
-			this.applyEntityAI();
-		}
-
-		protected void applyEntityAI() {
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(this, 1, (int) 5));
 		}
 
 		public void livingTick() {

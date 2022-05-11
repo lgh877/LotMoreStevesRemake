@@ -104,15 +104,20 @@ public class StevindicatorDetectBlockGoal extends MoveToBlockGoal {
 		BlockPos blockpos = this.entity.getPosition();
 		BlockPos blockpos1 = this.findTarget(blockpos, world);
 		Random random = this.entity.getRNG();
-		if (blockpos1 != null) {
-			if (this.getIsAboveDestination()) {
+		if (this.func_220729_m()) {
+			if (/*this.getIsAboveDestination() || */entity.getDistanceSq(destinationBlock.getX(), destinationBlock.getY(),
+					destinationBlock.getZ()) < 4) {
 				if (!this.entity.isSwingInProgress)
-					this.entity.swingArm(Hand.MAIN_HAND);
-				else if (this.entity.swingProgress > 0.4f && !this.entity.world.isRemote() && random.nextInt(4) == 0)
-					world.destroyBlock(blockpos1, true, this.entity);
+					this.swingArmSettings();
+				else if (this.entity.swingProgress > 0.4f && !this.entity.world.isRemote() && random.nextInt(10) == 0)
+					world.destroyBlock(destinationBlock, true, this.entity);
 				return;
 			}
 		}
+	}
+
+	public void swingArmSettings() {
+		this.entity.swingArm(Hand.MAIN_HAND);
 	}
 
 	@Nullable

@@ -74,8 +74,7 @@ import java.util.EnumSet;
 
 @LotmorestevesremakeModElements.ModElement.Tag
 public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
-	public static EntityType entity = (EntityType.Builder
-			.<CustomEntity>create(CustomEntity::new, EntityClassification.create("ghost", "ghost", 20, false, false, 128)).immuneToFire()
+	public static EntityType entity = (EntityType.Builder.<CustomEntity>create(CustomEntity::new, EntityClassification.MONSTER).immuneToFire()
 			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(CustomEntity::new)
 			.size(0.6f, 1.8f)).build("ghosteve").setRegistryName("ghosteve");
 
@@ -95,14 +94,13 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 
 	@SubscribeEvent
 	public void addFeatureToBiomes(BiomeLoadingEvent event) {
-		event.getSpawns().getSpawner(EntityClassification.create("ghost", "ghost", 20, false, false, 128))
-				.add(new MobSpawnInfo.Spawners(entity, 1, 1, 1));
+		event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(entity, 1, 1, 1));
 	}
 
 	@Override
 	public void init(FMLCommonSetupEvent event) {
 		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS,
-				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomEntity::canSpawnOn);
+				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomEntity::canGhostSpawnOn);
 		DungeonHooks.addDungeonMob(entity, 180);
 	}
 
@@ -123,8 +121,10 @@ public class GhosteveEntity extends LotmorestevesremakeModElements.ModElement {
 	public static class CustomEntity extends AggressiveSteveEntity {
 		private static final DataParameter<Integer> AVOID = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 
-		public static boolean canSpawnOn(EntityType<? extends MobEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-			return true;
+		public static boolean canGhostSpawnOn(EntityType<? extends MobEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos,
+				Random randomIn) {
+			return (((World) worldIn).getDimensionKey() == World.OVERWORLD ? !((World) worldIn).isDaytime() : true)
+					&& canSpawnOn(typeIn, worldIn, reason, pos, randomIn);
 		}
 
 		protected void registerData() {

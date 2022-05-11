@@ -917,6 +917,32 @@
       "locked_code": true,
       "registry_name": "spig",
       "path": "~/Steves/Overworld/Mobs/Random/common/Spig"
+    },
+    {
+      "name": "ModCompat",
+      "type": "code",
+      "sortid": 63,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "mod_compat",
+      "path": "~/compat"
+    },
+    {
+      "name": "CustomDoorBreakGoal",
+      "type": "code",
+      "sortid": 64,
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "custom_door_break_goal"
+    },
+    {
+      "name": "SpigLootTable",
+      "type": "loottable",
+      "sortid": 65,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "spig_loot_table",
+      "path": "~/Steves/Overworld/Mobs/Random/common/Spig"
     }
   ],
   "variable_elements": [],
@@ -1209,6 +1235,10 @@
                       {
                         "name": "hero",
                         "children": []
+                      },
+                      {
+                        "name": "Ender",
+                        "children": []
                       }
                     ]
                   },
@@ -1299,6 +1329,10 @@
             ]
           }
         ]
+      },
+      {
+        "name": "compat",
+        "children": []
       }
     ]
   },

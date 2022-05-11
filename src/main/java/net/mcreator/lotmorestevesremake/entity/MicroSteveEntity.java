@@ -20,9 +20,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Hand;
-import net.minecraft.util.GroundPathHelper;
 import net.minecraft.util.DamageSource;
-import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.network.IPacket;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.item.SpawnEggItem;
@@ -37,7 +35,6 @@ import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.FollowMobGoal;
-import net.minecraft.entity.ai.goal.BreakDoorGoal;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.SpawnReason;
@@ -128,7 +125,6 @@ public class MicroSteveEntity extends LotmorestevesremakeModElements.ModElement 
 			super.registerGoals();
 			this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1, 1));
 			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-			this.goalSelector.addGoal(6, new BreakDoorGoal(this, e -> true));
 			this.goalSelector.addGoal(3, new FollowMobGoal(this, (float) 1, 10, 5));
 			this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
@@ -148,8 +144,6 @@ public class MicroSteveEntity extends LotmorestevesremakeModElements.ModElement 
 
 		public void livingTick() {
 			super.livingTick();
-			if (GroundPathHelper.isGroundNavigator(this))
-				((GroundPathNavigator) this.getNavigator()).setBreakDoors(true);
 			if (rand.nextInt(80) == 0) {
 				this.setSprinting(!this.isSprinting());
 				this.resetActiveHand();

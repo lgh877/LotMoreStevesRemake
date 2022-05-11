@@ -43,6 +43,7 @@ import net.minecraft.block.Block;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.StevindicatorBigRenderer;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
+import net.mcreator.lotmorestevesremake.CustomMathHelper;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 @LotmorestevesremakeModElements.ModElement.Tag
@@ -179,10 +180,9 @@ public class StevindicatorBigEntity extends LotmorestevesremakeModElements.ModEl
 						}
 					}
 				}
-				if (this.getAttackTarget() != null) {
-					this.getAttackTarget().hurtResistantTime = 0;
-					double d0 = this.getDistanceSq(this.getAttackTarget());
-					if (d0 <= this.getAttackReach(this.getAttackTarget())) {
+				if (this.getAttackTarget() != null && this.getEntitySenses().canSee(this.getAttackTarget())) {
+					if (CustomMathHelper.isEntityInBox(this.getAttackTarget(), this, 1.5)) {
+						this.getAttackTarget().hurtResistantTime = 0;
 						this.attackEntityAsMob(this.getAttackTarget());
 					}
 				}

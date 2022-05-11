@@ -138,6 +138,10 @@ public class MonstrosteveEntity extends LotmorestevesremakeModElements.ModElemen
 		public boolean shootActive;
 		public boolean summonActive;
 
+		protected boolean canDestroyBuildings() {
+			return false;
+		}
+
 		@OnlyIn(Dist.CLIENT)
 		public boolean isInRangeToRenderDist(double distance) {
 			return true;

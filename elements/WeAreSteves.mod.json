@@ -63,6 +63,12 @@
       },
       {
         "value": "CUSTOM:MiniStevug"
+      },
+      {
+        "value": "CUSTOM:Spig"
+      },
+      {
+        "value": "CUSTOM:QuadropedalSteve"
       }
     ],
     "name": "we_are_steves",

@@ -21,9 +21,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Hand;
-import net.minecraft.util.GroundPathHelper;
 import net.minecraft.util.DamageSource;
-import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.DataParameter;
@@ -36,12 +34,9 @@ import net.minecraft.item.Item;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.BreakDoorGoal;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.SpawnReason;
@@ -60,6 +55,7 @@ import net.mcreator.lotmorestevesremake.entity.renderer.StevindicatorRenderer;
 import net.mcreator.lotmorestevesremake.StevindicatorDetectBlockGoal;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.CustomMathHelper;
+import net.mcreator.lotmorestevesremake.CustomDoorBreakGoal;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
 
 import javax.annotation.Nullable;
@@ -177,12 +173,12 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 		@Override
 		protected void registerGoals() {
 			super.registerGoals();
-			this.goalSelector.addGoal(1, new BreakDoorGoal(this, e -> true));
+			this.goalSelector.addGoal(6, new CustomDoorBreakGoal(this, e -> true));
+			this.goalSelector.addGoal(6, new StevindicatorDetectBlockGoal(this, 1, (int) 5));
 			this.goalSelector.addGoal(1, new CustomEntity.LockAngle());
 			this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, (float) 6));
 			this.goalSelector.addGoal(4, new LookAtGoal(this, ServerPlayerEntity.class, (float) 6));
 			this.goalSelector.addGoal(4, new LookAtGoal(this, MobEntity.class, (float) 6));
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(this, 1, (int) 5));
 			this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2, false) {
 				protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 					double d0 = this.getAttackReachSqr(enemy);
@@ -197,54 +193,6 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 					}
 				}
 			});
-			this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1));
-			this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
-		}
-
-		protected double getAttackReach(LivingEntity attackTarget) {
-			return (double) (this.getWidth() * 2.0F * this.getWidth() * 2.0F + attackTarget.getWidth());
-		}
-
-		public boolean attackEntityFrom(DamageSource source, float amount) {
-			if (!this.isSwingInProgress) {
-				this.swingArm(Hand.MAIN_HAND);
-				this.attack = false;
-			}
-			return super.attackEntityFrom(source, amount);
-		}
-
-		public void swingArm(Hand hand) {
-			super.swingArm(hand);
-		}
-
-		public void livingTick() {
-			super.livingTick();
-			if (rand.nextInt(240) == 0)
-				this.DancingTick = 40;
-			if (this.DancingTick > 0)
-				this.DancingTick--;
-			if (GroundPathHelper.isGroundNavigator(this))
-				((GroundPathNavigator) this.getNavigator()).setBreakDoors(true);
-			if (this.isAlive()) {
-				this.attackProcedure();
-				if (this.DancingTick > 0 && this.getNavigator().hasPath())
-					this.setSprinting(true);
-				else
-					this.setSprinting(false);
-			}
-		}
-
-		public void attackProcedure() {
-			if (this.isSwingInProgress && !this.attack && this.swingProgress > 0.3f) {
-				this.attack = true;
-				this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
-				if (this.getAttackTarget() != null) {
-					this.getAttackTarget().hurtResistantTime = 0;
-					if (this.getEntitySenses().canSee(this.getAttackTarget()) && CustomMathHelper.isEntityInBox(this.getAttackTarget(), this, 1.5)) {
-						this.attackEntityAsMob(this.getAttackTarget());
-					}
-				}
-			}
 		}
 
 		@Override
@@ -265,6 +213,51 @@ public class StevindicatorEntity extends LotmorestevesremakeModElements.ModEleme
 				this.swingProgressInt = 0;
 			}
 			this.swingProgress = (float) this.swingProgressInt / (float) i;
+		}
+
+		protected double getAttackReach(LivingEntity attackTarget) {
+			return (double) (this.getWidth() * 2.0F * this.getWidth() * 2.0F + attackTarget.getWidth());
+		}
+
+		public boolean attackEntityFrom(DamageSource source, float amount) {
+			/*if (!this.isSwingInProgress) {
+				this.swingArm(Hand.MAIN_HAND);
+				this.attack = false;
+			}
+			*/
+			return super.attackEntityFrom(source, amount);
+		}
+
+		public void swingArm(Hand hand) {
+			super.swingArm(hand);
+		}
+
+		public void livingTick() {
+			super.livingTick();
+			if (rand.nextInt(240) == 0)
+				this.DancingTick = 40;
+			if (this.DancingTick > 0)
+				this.DancingTick--;
+			if (this.isAlive()) {
+				this.attackProcedure();
+				if (this.DancingTick > 0 && this.getNavigator().hasPath())
+					this.setSprinting(true);
+				else
+					this.setSprinting(false);
+			}
+		}
+
+		public void attackProcedure() {
+			if (this.isSwingInProgress && !this.attack && this.swingProgress > 0.3f) {
+				this.attack = true;
+				this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
+				if (this.getAttackTarget() != null && this.getEntitySenses().canSee(this.getAttackTarget())) {
+					if (CustomMathHelper.isEntityInBox(this.getAttackTarget(), this, 1.5)) {
+						this.getAttackTarget().hurtResistantTime = 0;
+						this.attackEntityAsMob(this.getAttackTarget());
+					}
+				}
+			}
 		}
 
 		public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason,

@@ -52,7 +52,6 @@ import net.minecraft.block.Block;
 import net.mcreator.lotmorestevesremake.potion.CursedDiversionPotionEffect;
 import net.mcreator.lotmorestevesremake.itemgroup.MeetTheStevesItemGroup;
 import net.mcreator.lotmorestevesremake.entity.renderer.SmasteveRenderer;
-import net.mcreator.lotmorestevesremake.StevindicatorDetectBlockGoal;
 import net.mcreator.lotmorestevesremake.LotmorestevesremakeModElements;
 import net.mcreator.lotmorestevesremake.CustomMathHelper;
 import net.mcreator.lotmorestevesremake.AggressiveSteveEntity;
@@ -108,6 +107,10 @@ public class SmasteveEntity extends LotmorestevesremakeModElements.ModElement {
 		private static final DataParameter<Integer> ATTACK_STATE = EntityDataManager.createKey(CustomEntity.class, DataSerializers.VARINT);
 		public int attackProgress;
 
+		protected boolean canDestroyBuildings() {
+			return false;
+		}
+
 		public static boolean whenToSpawn(IServerWorld worldIn) {
 			return worldIn.getWorldInfo().getDayTime() > 24000 * 15;
 		}
@@ -159,11 +162,6 @@ public class SmasteveEntity extends LotmorestevesremakeModElements.ModElement {
 			this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, (float) 6));
 			this.goalSelector.addGoal(4, new LookAtGoal(this, ServerPlayerEntity.class, (float) 6));
 			this.goalSelector.addGoal(4, new LookAtGoal(this, MobEntity.class, (float) 6));
-			this.applyEntityAI();
-		}
-
-		protected void applyEntityAI() {
-			this.goalSelector.addGoal(5, new StevindicatorDetectBlockGoal(this, 1, (int) 5));
 		}
 
 		public float getAttackDamage() {

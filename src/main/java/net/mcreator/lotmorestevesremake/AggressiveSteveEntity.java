@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.GroundPathHelper;
 import net.minecraft.util.DamageSource;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.potion.EffectInstance;
@@ -68,11 +69,25 @@ public class AggressiveSteveEntity extends MonsterEntity {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
+		if (this.canDestroyBuildings()) {
+			this.goalSelector.addGoal(6, new CustomDoorBreakGoal(this, e -> true));
+			this.goalSelector.addGoal(6, new StevindicatorDetectBlockGoal(this, 1, (int) 10));
+		}
 		this.goalSelector.addGoal(6, new SwimGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp());
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, PlayerEntity.class, false, false));
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, ServerPlayerEntity.class, false, false));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, MobEntity.class, false, false));
+	}
+
+	protected boolean canDestroyBuildings() {
+		return true;
+	}
+
+	public void livingTick() {
+		super.livingTick();
+		if (GroundPathHelper.isGroundNavigator(this))
+			((GroundPathNavigator) this.getNavigator()).setBreakDoors(true);
 	}
 
 	protected void collideWithEntity(Entity entityIn) {

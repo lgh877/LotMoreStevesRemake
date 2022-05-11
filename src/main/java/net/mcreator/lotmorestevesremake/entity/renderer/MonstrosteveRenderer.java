@@ -27,11 +27,41 @@ public class MonstrosteveRenderer {
 		public void registerModels(ModelRegistryEvent event) {
 			RenderingRegistry.registerEntityRenderingHandler(MonstrosteveEntity.entity, renderManager -> {
 				return new MobRenderer(renderManager, new ModelRedstone_Monstrosteve(), 3f) {
+					//private ResourceLocation DECAY_TEXTURE = new ResourceLocation("lotmorestevesremake:textures/cloud.png");
+					private final ModelRedstone_Monstrosteve model = new ModelRedstone_Monstrosteve();
+
 					@Override
 					public ResourceLocation getEntityTexture(Entity entity) {
 						return new ResourceLocation("lotmorestevesremake:textures/monstrosteve.png");
 					}
 
+					/*
+										public void render(Entity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn,
+												int packedLightIn) {
+											/*
+																	MonstrosteveEntity.CustomEntity entityM = (MonstrosteveEntity.CustomEntity) entityIn;
+																	float deathTicks = entityM.getDeathAnimationScale(partialTicks);
+																	float deathTicks2 = MathHelper.clamp((deathTicks - 160) / 40, 0, 1);
+																	matrixStackIn.push();
+																	matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
+																	matrixStackIn.translate(0.0D, (double) -1.501F, 0.0D);
+																	boolean flag = entityM.hurtTime > 0;
+																	if (deathTicks > 160) {
+																		//float f2 = (float) ((DgasfdaEntity.CustomEntity) entityIn).deathTicks / 40.0F;
+																		this.model.setRotationAngles(entityIn, 0, 0, 0, 0, 0);
+																		this.getEntityModel().copyModelAttributesTo(this.model);
+																		IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityAlpha(DECAY_TEXTURE, deathTicks2));
+																		this.model.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+																		IVertexBuilder ivertexbuilder1 = bufferIn.getBuffer(RenderType.getEntityDecal(this.getEntityTexture(entityIn)));
+																		this.model.render(matrixStackIn, ivertexbuilder1, packedLightIn, OverlayTexture.getPackedUV(0.0F, flag), 1.0F, 1.0F, 1.0F,
+																				1);
+																	}
+																	matrixStackIn.pop();
+																	if (deathTicks < 160)
+											
+											super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+										}
+					*/
 					protected void preRenderCallback(LivingEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
 						MonstrosteveEntity.CustomEntity entityM = (MonstrosteveEntity.CustomEntity) entitylivingbaseIn;
 						float deathTicks = entityM.getDeathAnimationScale(partialTickTime);

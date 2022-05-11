@@ -9,6 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.HandSide;
+import net.minecraft.util.Hand;
 import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -169,6 +170,7 @@ public class StevindicatorRenderer {
 			// entityM = (StevindicatorEntity.CustomEntity) e;
 			float armSwing = MathHelper.cos(f * 0.6662F) * f1;
 			boolean flag = entityM.getPrimaryHand() == HandSide.RIGHT;
+			ModelRenderer mainArm = this.getArmForSide(this.getMainHand(entityM));
 			this.head.rotateAngleY = f3 / (180F / (float) Math.PI);
 			this.head.rotateAngleX = f4 / (180F / (float) Math.PI);
 			this.head.rotationPointX = 0;
@@ -252,6 +254,11 @@ public class StevindicatorRenderer {
 			}
 			this.arms.rotateAngleX = 0;
 			ModelHelper.func_239101_a_(this.right_arm, this.left_arm, f2);
+		}
+
+		protected HandSide getMainHand(T entityIn) {
+			HandSide handside = entityIn.getPrimaryHand();
+			return entityIn.swingingHand == Hand.MAIN_HAND ? handside : handside.opposite();
 		}
 
 		public ModelRenderer getModelHead() {
